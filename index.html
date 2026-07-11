@@ -15,6 +15,7 @@
     --text-dim: #86888E;
     --accent: #7C8A6E;
     --hairline: #26282C;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   * { box-sizing: border-box; }
@@ -22,7 +23,7 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--bg);
+    background: radial-gradient(120% 80% at 50% -10%, rgba(124,138,110,0.06), transparent 60%), var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
@@ -72,17 +73,55 @@
     line-height: 1.55;
   }
 
-  /* ---- optional status / index line ---- */
-  .status {
+  /* ---- fintech terminal ticker ---- */
+  .ticker-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px 16px;
     font-family: 'Geist Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.16em;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-dim);
-    text-align: center;
-    margin: 0 0 56px;
-    opacity: 0.7;
+    margin: 0 0 40px;
   }
+  .ticker-seg { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .mkt-status { color: var(--text); }
+  .mkt-metric { color: var(--text-dim); }
+  .ticker-bar .markets { margin: 0; }
+  .pulse-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ade80;
+    animation: pulseDot 1.8s var(--ease) infinite;
+  }
+  @keyframes pulseDot {
+    0%   { box-shadow: 0 0 0 0 rgba(74,222,128,0.55); opacity: 1; }
+    70%  { box-shadow: 0 0 0 7px rgba(74,222,128,0); opacity: 0.7; }
+    100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); opacity: 1; }
+  }
+
+  /* ---- animated asset allocation bar ---- */
+  .alloc-bar {
+    display: flex;
+    gap: 3px;
+    height: 3px;
+    margin: 0 0 44px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .alloc-seg {
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: segFill 0.9s var(--ease) both;
+  }
+  .seg-tech  { flex: 4; background: var(--accent); animation-delay: 0.30s; }
+  .seg-fin   { flex: 3; background: rgba(231,229,223,0.55); animation-delay: 0.42s; }
+  .seg-web3  { flex: 2; background: rgba(124,138,110,0.7); animation-delay: 0.54s; }
+  .seg-cash  { flex: 1; background: rgba(134,136,142,0.5); animation-delay: 0.66s; }
+  @keyframes segFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
   /* ---- section groups (film chapters) ---- */
   .section {
@@ -130,11 +169,17 @@
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    padding: 14px 2px;
+    padding: 14px 12px;
+    border-radius: 10px;
     text-decoration: none;
     color: var(--text);
     border: none;
     background: none;
+    transition: background 0.4s var(--ease);
+  }
+  .link-row:hover,
+  .link-row:focus-visible {
+    background: rgba(255,255,255,0.03);
   }
   .link-row + .link-row {
     border-top: 1px solid var(--hairline);
@@ -172,7 +217,7 @@
     height: 1px;
     width: 0;
     background: var(--accent);
-    transition: width 0.25s ease;
+    transition: width 0.25s var(--ease);
   }
   .link-sub {
     font-size: 12.5px;
@@ -186,7 +231,7 @@
     color: var(--text-dim);
     font-size: 15px;
     flex-shrink: 0;
-    transition: transform 0.25s ease, color 0.25s ease;
+    transition: transform 0.4s var(--ease), color 0.4s var(--ease);
   }
   .link-row:hover .link-title::after,
   .link-row:focus-visible .link-title::after {
@@ -194,7 +239,7 @@
   }
   .link-row:hover .link-arrow,
   .link-row:focus-visible .link-arrow {
-    transform: translateX(3px);
+    transform: translateX(4px);
     color: var(--accent);
   }
   .link-row:focus-visible {
@@ -203,15 +248,22 @@
     border-radius: 2px;
   }
 
-  footer {
-    text-align: center;
+  #footer, .modular-footer-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 56px;
+    padding: 14px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
     font-family: 'Geist Mono', monospace;
     font-size: 10.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-dim);
-    opacity: 0.6;
-    margin-top: 64px;
+    opacity: 0.9;
   }
 
   /* ---- film-grain overlay (static, very subtle) ---- */
@@ -226,7 +278,7 @@
   }
 
   /* ---- hero breathing glow (halo ring, calm) ---- */
-  .avatar { position: relative; }
+  .avatar { position: relative; filter: drop-shadow(0 0 16px rgba(124,138,110,0.22)); }
   .avatar::before {
     content: "";
     position: absolute;
@@ -241,15 +293,26 @@
     50%      { opacity: 0.8; transform: scale(1.06); }
   }
 
-  /* ---- load fade-in ---- */
-  .wrap { animation: fadeIn 0.7s ease both; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  /* ---- cinematic staggered load ---- */
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .avatar   { animation: riseIn 0.7s var(--ease) both; }
+  .name,
+  .tagline  { animation: riseIn 0.7s var(--ease) 0.06s both; }
+  .ticker-bar,
+  .alloc-bar { animation: riseIn 0.7s var(--ease) 0.12s both; }
+  .section  { animation: riseIn 0.7s var(--ease) 0.20s both; }
+  .section:nth-of-type(2) { animation-delay: 0.28s; }
+  .section:nth-of-type(3) { animation-delay: 0.36s; }
+  footer     { animation: riseIn 0.7s var(--ease) 0.44s both; }
 
   /* ---- scroll reveal (only active when JS is on) ---- */
   .js .reveal {
     opacity: 0;
     transform: translateY(14px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
   }
   .js .reveal.is-visible {
     opacity: 1;
@@ -286,11 +349,21 @@
       transition: none;
       animation: none;
     }
+    .avatar, .name, .tagline, .ticker-bar, .alloc-bar, .section, footer {
+      animation: none !important;
+      opacity: 1;
+      transform: none;
+    }
+    .pulse-dot { animation: none; }
+    .alloc-seg { animation: none; transform: none; }
     .js .reveal {
       opacity: 1;
       transform: none;
       transition: none;
     }
+    .link-row { transition: none; }
+    .link-row:hover,
+    .link-row:focus-visible { background: transparent; }
   }
 </style>
 </head>
@@ -305,9 +378,18 @@
       <p class="tagline" id="tagline"></p>
     </div>
 
-    <p class="status" id="status" hidden></p>
+    <div class="ticker-bar">
+      <span class="ticker-seg mkt-status"><span class="pulse-dot" aria-hidden="true"></span><span id="status"></span></span>
+      <span class="ticker-seg mkt-metric">GAS: 16 GWEI // PING: 12MS</span>
+      <div class="markets" id="markets" aria-live="polite"></div>
+    </div>
 
-    <div class="markets" id="markets" aria-live="polite"></div>
+    <div class="alloc-bar" aria-hidden="true">
+      <span class="alloc-seg seg-tech"></span>
+      <span class="alloc-seg seg-fin"></span>
+      <span class="alloc-seg seg-web3"></span>
+      <span class="alloc-seg seg-cash"></span>
+    </div>
 
     <div id="sections"></div>
 
@@ -323,7 +405,7 @@
 const PROFILE = {
   name: "stxbandz",
   initial: "S",                       // letter shown in the avatar ring
-  tagline: "Builder, writer, investor — a quiet index of the things I make and recommend."
+  tagline: "— a quiet index of the things I make and recommend."
 };
 
 // Group your links into sections. Add/remove/reorder freely.
@@ -357,7 +439,7 @@ const SECTIONS = [
 // Optional low-contrast status / index line under the profile.
 // Leave as [] to hide it entirely.
 const TICKER_ITEMS = [
-  "Selected works", "2026", "By appointment"
+  "NY MARKET // OPEN"
 ];
 
 // Optional live crypto strip (editable). Leave as [] to hide it.
