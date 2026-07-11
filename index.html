@@ -44,6 +44,17 @@
     padding: 72px 24px 96px;
   }
 
+  /* ---- view switcher (hardware-accelerated opacity + transform) ---- */
+  .view { display: none; }
+  .view.active {
+    display: block;
+    animation: viewEnter 0.5s var(--ease) both;
+  }
+  @keyframes viewEnter {
+    from { opacity: 0; transform: translate3d(0, 12px, 0); }
+    to   { opacity: 1; transform: none; }
+  }
+
   /* ---- profile header ---- */
   .profile {
     text-align: center;
@@ -108,6 +119,52 @@
     70%  { box-shadow: 0 0 0 7px rgba(74,222,128,0); opacity: 0.7; }
     100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); opacity: 1; }
   }
+
+  /* ---- media protocol CTA (glassmorphic, below ticker) ---- */
+  .cta-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin: 0 0 36px;
+    padding: 15px 18px;
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--text);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+    animation: riseIn 0.7s var(--ease) 0.16s both;
+  }
+  .cta-button::before {
+    content: "";
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+    animation: pulseDot 1.8s var(--ease) infinite;
+  }
+  .cta-label { flex: 1; text-align: left; min-width: 0; }
+  .cta-tag { color: var(--text-dim); white-space: nowrap; }
+  .cta-arrow {
+    color: var(--accent);
+    font-size: 14px;
+    transition: transform 0.4s var(--ease);
+  }
+  .cta-button:hover,
+  .cta-button:focus-visible {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--accent);
+    outline: none;
+  }
+  .cta-button:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+  .cta-button:hover .cta-arrow,
+  .cta-button:focus-visible .cta-arrow { transform: translateX(4px); }
 
   /* ---- animated asset allocation bar ---- */
   .alloc-bar {
@@ -347,6 +404,132 @@
   .market.up .chg { color: var(--accent); }
   .market.down .chg { color: #B07A72; }
 
+  /* ---- gallery view (Aesthetic Air Force Asset Gallery) ---- */
+  .gallery-return {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 28px;
+    padding: 10px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+  .gallery-return:hover,
+  .gallery-return:focus-visible {
+    background: rgba(255,255,255,0.06);
+    border-color: var(--accent);
+    outline: none;
+  }
+  .gallery-return:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+
+  .gallery-title {
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .gallery-sub {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin: 0 0 28px;
+    line-height: 1.5;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media (min-width: 480px) {
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .gallery-card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    cursor: pointer;
+    outline: none;
+  }
+  .gallery-card:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+  .gallery-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(0.15) brightness(0.82) contrast(1.05);
+    transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
+  }
+  .gallery-card:hover img,
+  .gallery-card:focus-visible img {
+    transform: scale(1.05);
+    filter: grayscale(0) brightness(0.68) contrast(1.1);
+  }
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    background: linear-gradient(to top, rgba(14,15,17,0.92) 0%, rgba(14,15,17,0) 55%);
+    opacity: 0;
+    transition: opacity 0.45s var(--ease);
+  }
+  .gallery-card:hover .gallery-overlay,
+  .gallery-card:focus-visible .gallery-overlay { opacity: 1; }
+  .gallery-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .gallery-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 8px 12px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: rgba(124,138,110,0.12);
+    color: var(--text);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.4s var(--ease);
+  }
+  .gallery-dl:hover { background: rgba(124,138,110,0.22); }
+  .gallery-card.img-failed {
+    background: linear-gradient(135deg, #16181B, #20242a);
+  }
+  .gallery-card.img-failed img { display: none; }
+  .gallery-card.img-failed::after {
+    content: "ASSET UNAVAILABLE";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .chapter-rule::after,
     .link-title::after,
@@ -371,6 +554,10 @@
     .link-row { transition: none; }
     .link-row:hover,
     .link-row:focus-visible { background: transparent; }
+    .cta-button { animation: none; }
+    .view.active { animation: none; opacity: 1; transform: none; }
+    .gallery-card img,
+    .gallery-overlay { transition: none; }
   }
 </style>
 </head>
@@ -379,28 +566,50 @@
   <div class="grain" aria-hidden="true"></div>
 
   <div class="wrap">
-    <div class="profile">
-      <div class="avatar" id="avatarInitial">A</div>
-      <h1 class="name" id="displayName">Anthony</h1>
-      <p class="tagline" id="tagline"></p>
+
+    <!-- ============ PROFILE / TERMINAL VIEW ============ -->
+    <div id="profile-view" class="view active">
+      <div class="profile">
+        <div class="avatar" id="avatarInitial">A</div>
+        <h1 class="name" id="displayName">Anthony</h1>
+        <p class="tagline" id="tagline"></p>
+      </div>
+
+      <div class="ticker-bar">
+        <span class="ticker-seg mkt-status"><span class="pulse-dot" aria-hidden="true"></span><span id="status"></span></span>
+        <span class="ticker-seg mkt-metric">GAS: 16 GWEI // PING: 12MS // STATUS: NOMINAL</span>
+        <div class="markets" id="markets" aria-live="polite"></div>
+      </div>
+
+      <!-- Premium CTA: directly below the crypto ticker -->
+      <button class="cta-button" id="openGallery" type="button" aria-label="Open jet gallery">
+        <span class="cta-label">MEDIA  // ACCESS JET GALLERY</span>
+        <span class="cta-tag">SECURE</span>
+        <span class="cta-arrow" aria-hidden="true">↗</span>
+      </button>
+
+      <div class="alloc-bar" aria-hidden="true">
+        <span class="alloc-seg seg-tech"></span>
+        <span class="alloc-seg seg-fin"></span>
+        <span class="alloc-seg seg-web3"></span>
+        <span class="alloc-seg seg-cash"></span>
+      </div>
+
+      <div id="sections"></div>
+
+      <footer id="footer"></footer>
     </div>
 
-    <div class="ticker-bar">
-      <span class="ticker-seg mkt-status"><span class="pulse-dot" aria-hidden="true"></span><span id="status"></span></span>
-      <span class="ticker-seg mkt-metric">GAS: 16 GWEI // PING: 12MS // STATUS: NOMINAL</span>
-      <div class="markets" id="markets" aria-live="polite"></div>
+    <!-- ============ GALLERY VIEW (hidden by default) ============ -->
+    <div id="gallery-view" class="view" hidden>
+      <button class="gallery-return" id="returnTerminal" type="button">
+        ← RETURN TO TERMINAL
+      </button>
+      <h2 class="gallery-title">STEALTH  GALLERY</h2>
+      <p class="gallery-sub"> airframes — F-22 / F-35 / B-2. Select any frame to a local copy.</p>
+      <div id="gallery-grid" class="gallery-grid"></div>
     </div>
 
-    <div class="alloc-bar" aria-hidden="true">
-      <span class="alloc-seg seg-tech"></span>
-      <span class="alloc-seg seg-fin"></span>
-      <span class="alloc-seg seg-web3"></span>
-      <span class="alloc-seg seg-cash"></span>
-    </div>
-
-    <div id="sections"></div>
-
-    <footer id="footer"></footer>
   </div>
 
 <script>
@@ -456,6 +665,24 @@ const MARKETS = [
   { id: "bitcoin",  label: "BTC" },
   { id: "ethereum", label: "ETH" },
   { id: "solana",   label: "SOL" }
+];
+
+/* ---- Aesthetic Air Force Asset Gallery (editable) ----
+   url  : VERIFIED direct Unsplash image URL (images.unsplash.com/photo-...).
+          Must be a direct image file, not a page. CORS-enabled by Unsplash,
+          which is required for the blob download to work.
+   title: shown as the overlay caption + alt text.
+   file : sanitized at download time; just a human label here.            */
+const GALLERY = [
+  { title: "F-117 DIAMOND",     file: "stxbandz-stealth-01.jpg", url: "https://i.pinimg.com/736x/02/65/b3/0265b3cc53a312d496576af0d9354860.jpg" },
+  { title: "F-135 NIGHT LIGHTNING", file: "stxbandz-stealth-02.jpg", url: "https://i.pinimg.com/736x/1a/7f/ad/1a7fad8b684bec28e8f3fe86fb876a58.jpg" },
+  { title: "TWO FIGHTERS NIGHT",file: "stxbandz-stealth-03.jpg", url: "https://i.pinimg.com/736x/f1/fc/f2/f1fcf26dafb317410b2c0af4a610a22e.jpg" },
+  { title: "NIGHT FLIGHT",      file: "stxbandz-stealth-04.jpg", url: "https://i.pinimg.com/736x/73/dd/76/73dd76002c10e92968772234b84e99bd.jpg" },
+  { title: "AIR FORCE NIGHT",   file: "stxbandz-stealth-05.jpg", url: "https://i.pinimg.com/736x/d3/e9/c6/d3e9c67ff4d16c0cba20e84eb77bb07e.jpg" },
+  { title: "F-15 AFTERBURNER",  file: "stxbandz-stealth-06.jpg", url: "https://i.pinimg.com/736x/bf/99/f9/bf99f9725681f4b51742dc5e2b374b36.jpg" },
+  { title: "ARMY PLANE FORMATION", file: "stxbandz-stealth-07.jpg", url: "https://i.pinimg.com/736x/13/b8/86/13b886f931abe43215eed613c71ef952.jpg" },
+  { title: "MISSILE TRAIL",     file: "stxbandz-stealth-08.jpg", url: "https://i.pinimg.com/736x/96/fc/61/96fc61188f142d19526db40f17adaff1.jpg" },
+  { title: "F-22 RAPTOR WALL",  file: "stxbandz-stealth-09.jpg", url: "https://i.pinimg.com/736x/f9/26/e3/f926e3ef84866e9cea6a19646270780f.jpg" }
 ];
 
 /* =========================================================
@@ -631,6 +858,126 @@ function updateFill() {
 updateFill();
 window.addEventListener("scroll", updateFill, { passive: true });
 window.addEventListener("resize", updateFill);
+
+/* =========================================================
+   View Switcher + Asset Gallery (new)
+   ========================================================= */
+
+/** Hardware-accelerated view swap (opacity + transform only). */
+function switchView(target) {
+  const profile = byId("profile-view");
+  const gallery = byId("gallery-view");
+  const show = target === "gallery" ? gallery : profile;
+  const hide = target === "gallery" ? profile : gallery;
+
+  hide.hidden = true;
+  hide.classList.remove("active");
+
+  show.hidden = false;
+  show.classList.remove("active");
+  void show.offsetWidth;          // force reflow so the enter animation replays
+  show.classList.add("active");
+
+  window.scrollTo({ top: 0 });
+}
+
+/** Strip path traversal, control chars, and enforce a safe image extension. */
+function sanitizeFilename(name) {
+  const base = String(name || "").replace(/^.*[\\/]/, "");           // drop path
+  let clean = base.toLowerCase().replace(/[^a-z0-9._-]+/g, "-")      // allowlist
+                       .replace(/^-+|-+$/g, "")
+                       .slice(0, 80);
+  if (!clean) clean = "asset";
+  if (!/\.(jpe?g|png|webp|gif)$/i.test(clean)) clean += ".jpg";      // force extension
+  return clean;
+}
+
+/**
+ * Secure download pipeline:
+ *  fetch (CORS) -> blob -> sandboxed blob: URL -> programmatic download
+ *  -> deferred revoke to avoid memory leaks. Falls back to an isolated
+ *  new tab (opener=null) if the blob fetch is blocked.
+ */
+async function downloadImage(url, filename) {
+  const safeName = sanitizeFilename(filename);
+  try {
+    const res = await fetch(url, { mode: "cors" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = safeName;
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // Revoke after the browser has had time to start the download.
+    setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 4000);
+  } catch (err) {
+    // Graceful degradation: open source in a tab isolated from this window.
+    const w = window.open(url, "_blank");
+    if (w) { try { w.opener = null; } catch (e) {} }
+  }
+}
+
+/** Build the gallery grid from the GALLERY data block. */
+function renderGallery() {
+  const grid = byId("gallery-grid");
+  grid.replaceChildren();
+
+  GALLERY.forEach(function (item) {
+    const card = document.createElement("div");
+    card.className = "gallery-card";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", "Download " + item.title + " image");
+
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.alt = item.title;
+    img.src = item.url;
+    img.addEventListener("error", function () {
+      card.classList.add("img-failed");   // graceful placeholder, layout never breaks
+    });
+
+    const overlay = document.createElement("div");
+    overlay.className = "gallery-overlay";
+
+    const meta = document.createElement("div");
+    meta.className = "gallery-meta";
+    meta.textContent = item.title;
+
+    const dl = document.createElement("button");
+    dl.type = "button";
+    dl.className = "gallery-dl";
+    dl.textContent = "↓ DOWNLOAD";
+    dl.setAttribute("aria-label", "Download " + item.title);
+    dl.addEventListener("click", function (e) {
+      e.stopPropagation();                 // don't double-trigger the card
+      downloadImage(item.url, item.file);
+    });
+
+    overlay.append(meta, dl);
+    card.append(img, overlay);
+
+    const trigger = function () { downloadImage(item.url, item.file); };
+    card.addEventListener("click", trigger);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); trigger(); }
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+renderGallery();
+
+byId("openGallery").addEventListener("click", function () { switchView("gallery"); });
+byId("returnTerminal").addEventListener("click", function () { switchView("profile"); });
 </script>
 
 </body>
