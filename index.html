@@ -6,7 +6,7 @@
 <title>stxbandz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0E0F11;
@@ -214,16 +214,89 @@
     margin-top: 64px;
   }
 
+  /* ---- film-grain overlay (static, very subtle) ---- */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---- hero breathing glow (halo ring, calm) ---- */
+  .avatar { position: relative; }
+  .avatar::before {
+    content: "";
+    position: absolute;
+    inset: -16px;
+    border-radius: 50%;
+    z-index: -1;
+    background: radial-gradient(circle, rgba(124,138,110,0) 52%, rgba(124,138,110,0.32) 68%, rgba(124,138,110,0) 100%);
+    animation: breathe 9s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.4; transform: scale(0.94); }
+    50%      { opacity: 0.8; transform: scale(1.06); }
+  }
+
+  /* ---- load fade-in ---- */
+  .wrap { animation: fadeIn 0.7s ease both; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---- scroll reveal (only active when JS is on) ---- */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---- live markets strip ---- */
+  .markets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: center;
+    margin: 0 0 48px;
+  }
+  .markets:empty { display: none; }
+  .market { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .market .sym { color: var(--text); }
+  .market .price { font-variant-numeric: tabular-nums; }
+  .market.up .chg { color: var(--accent); }
+  .market.down .chg { color: #B07A72; }
+
   @media (prefers-reduced-motion: reduce) {
     .chapter-rule::after,
     .link-title::after,
-    .link-arrow {
+    .link-arrow,
+    .avatar::before,
+    .wrap {
+      transition: none;
+      animation: none;
+    }
+    .js .reveal {
+      opacity: 1;
+      transform: none;
       transition: none;
     }
   }
 </style>
 </head>
 <body>
+
+  <div class="grain" aria-hidden="true"></div>
 
   <div class="wrap">
     <div class="profile">
@@ -233,6 +306,8 @@
     </div>
 
     <p class="status" id="status" hidden></p>
+
+    <div class="markets" id="markets" aria-live="polite"></div>
 
     <div id="sections"></div>
 
@@ -265,9 +340,9 @@ const SECTIONS = [
   {
     label: "Trading/Fintech",
     links: [
-      { icon: "", title: "Broker name", subtitle: "referral link", url: "#" },
+      { icon: "", title: "PrizePicks Bonus", subtitle: "referral link", url: "https://prizepicks.onelink.me/FjtC/4u6k86qk" },
       { icon: "", title: "Trading platform", subtitle: "referral link", url: "#" },
-      { icon: "", title: "Fintech app", subtitle: "referral link", url: "#" }
+      { icon: "", title: "Linktree", subtitle: "referral link", url: "https://linktr.ee/Silksnypes" }
     ]
   },
   {
@@ -285,24 +360,44 @@ const TICKER_ITEMS = [
   "Selected works", "2026", "By appointment"
 ];
 
+// Optional live crypto strip (editable). Leave as [] to hide it.
+// id = CoinGecko coin id (see https://api.coingecko.com/api/v3/coins/list)
+// label = short ticker shown on the page.
+const MARKETS = [
+  { id: "bitcoin",  label: "BTC" },
+  { id: "ethereum", label: "ETH" },
+  { id: "solana",   label: "SOL" }
+];
+
 /* =========================================================
    Nothing below this line needs to be touched.
    ========================================================= */
 
-document.getElementById("displayName").textContent = PROFILE.name;
-document.getElementById("avatarInitial").textContent = PROFILE.initial;
-document.getElementById("tagline").textContent = PROFILE.tagline;
+/**
+ * @param {string} id
+ * @returns {HTMLElement}
+ */
+function byId(id) {
+  const el = document.getElementById(id);
+  if (!el) throw new Error("Missing element: #" + id);
+  return el;
+}
 
-const statusEl = document.getElementById("status");
+byId("displayName").textContent = PROFILE.name;
+byId("avatarInitial").textContent = PROFILE.initial;
+byId("tagline").textContent = PROFILE.tagline;
+
+const statusEl = byId("status");
 if (TICKER_ITEMS && TICKER_ITEMS.length) {
   statusEl.textContent = TICKER_ITEMS.join("  ·  ");
   statusEl.hidden = false;
 }
 
-const sectionsEl = document.getElementById("sections");
+const sectionsEl = byId("sections");
 SECTIONS.forEach((section, i) => {
   const sec = document.createElement("div");
   sec.className = "section";
+  sec.classList.add("reveal");
 
   const head = document.createElement("div");
   head.className = "section-head";
@@ -365,13 +460,80 @@ SECTIONS.forEach((section, i) => {
   sectionsEl.appendChild(sec);
 });
 
-document.getElementById("footer").textContent = "© 2026 — Selected Works";
+byId("footer").textContent = "© 2026 — Selected Works";
+
+document.documentElement.classList.add("js");
+
+/* scroll reveal - sections fade up as they enter the viewport */
+const revealEls = document.querySelectorAll(".reveal");
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+  revealEls.forEach(function (el) { io.observe(el); });
+} else {
+  revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+}
+
+/* live crypto strip - CoinGecko free API, refreshed every 60s */
+const marketsEl = byId("markets");
+const priceFmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+/**
+ * @param {any} data
+ */
+function renderMarkets(data) {
+  marketsEl.replaceChildren();
+  MARKETS.forEach(function (m) {
+    const coin = data && data[m.id];
+    if (!coin || typeof coin.usd !== "number") return;
+    const change = coin.usd_24h_change;
+    const up = typeof change !== "number" || change >= 0;
+    const item = document.createElement("span");
+    item.className = "market " + (up ? "up" : "down");
+    const sym = document.createElement("span");
+    sym.className = "sym";
+    sym.textContent = m.label;
+    const price = document.createElement("span");
+    price.className = "price";
+    price.textContent = priceFmt.format(coin.usd);
+    const chg = document.createElement("span");
+    chg.className = "chg";
+    chg.textContent = (up ? "▲" : "▼") + (typeof change === "number" ? Math.abs(change).toFixed(1) + "%" : "");
+    item.append(sym, price, chg);
+    marketsEl.appendChild(item);
+  });
+}
+
+async function refreshMarkets() {
+  if (!MARKETS.length) return;
+  const ids = MARKETS.map(function (m) { return m.id; }).join(",");
+  const url = "https://api.coingecko.com/api/v3/simple/price?ids=" + encodeURIComponent(ids) + "&vs_currencies=usd&include_24hr_change=true";
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    renderMarkets(await res.json());
+  } catch (err) {
+    /* keep last good values; an empty strip hides itself via CSS */
+  }
+}
+
+if (MARKETS.length) {
+  refreshMarkets();
+  setInterval(refreshMarkets, 60000);
+}
 
 /* chapter progress fill — calm scroll cue, no looping motion */
 const rules = document.querySelectorAll(".chapter-rule");
 function updateFill() {
   const vh = window.innerHeight;
   rules.forEach(rule => {
+    if (!(rule instanceof HTMLElement)) return;
     const r = rule.getBoundingClientRect();
     const progress = Math.min(Math.max((vh - r.top) / vh, 0), 1);
     rule.style.setProperty("--fill", (progress * 100).toFixed(1) + "%");
