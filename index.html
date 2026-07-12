@@ -8,9 +8,14 @@
   <meta property="og:title" content="stxbandz — index">
   <meta property="og:description" content="Builder, writer, investor — a quiet index of the things I make and recommend.">
   <meta property="og:url" content="https://YOUR-DOMAIN.netlify.app/">
+  <meta property="og:image" content="https://YOUR-DOMAIN.netlify.app/og-image.svg">
+  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="stxbandz — index">
   <meta name="twitter:description" content="Builder, writer, investor — a quiet index of the things I make and recommend.">
+  <meta name="twitter:image" content="https://YOUR-DOMAIN.netlify.app/og-image.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -530,6 +535,82 @@
     color: var(--text-dim);
   }
 
+  /* ---- fullscreen gallery viewer (wallpaper aesthetic) ---- */
+  .fullscreen-viewer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: #000;
+    opacity: 0;
+    animation: fadeIn 0.3s var(--ease) both;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .fullscreen-viewer.active { display: flex; }
+  .fullscreen-viewer { align-items: center; justify-content: center; }
+  .fullscreen-viewer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .fullscreen-viewer-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--text-dim);
+    border-radius: 50%;
+    background: rgba(0,0,0,0.7);
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+    z-index: 1000;
+  }
+  .fullscreen-viewer-close:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--accent);
+  }
+  .fullscreen-viewer-meta {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    z-index: 1000;
+  }
+  .fullscreen-viewer-nav {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 1000;
+  }
+  .fullscreen-viewer-nav button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--text-dim);
+    border-radius: 6px;
+    background: rgba(0,0,0,0.7);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+    font-size: 16px;
+  }
+  .fullscreen-viewer-nav button:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--accent);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .chapter-rule::after,
     .link-title::after,
@@ -606,8 +687,19 @@
         ← RETURN TO TERMINAL
       </button>
       <h2 class="gallery-title">STEALTH  GALLERY</h2>
-      <p class="gallery-sub"> airframes — F-22 / F-35 / B-2. Select any frame to a local copy.</p>
+      <p class="gallery-sub">airframes — F-22 / F-35 / B-2. Select any frame to view fullscreen.</p>
       <div id="gallery-grid" class="gallery-grid"></div>
+    </div>
+
+    <!-- ============ FULLSCREEN VIEWER (hidden by default) ============ -->
+    <div id="fullscreen-viewer" class="fullscreen-viewer">
+      <button class="fullscreen-viewer-close" id="closeViewer" type="button" aria-label="Close fullscreen">✕</button>
+      <div class="fullscreen-viewer-meta" id="viewerMeta"></div>
+      <div class="fullscreen-viewer-nav">
+        <button id="prevImage" type="button" aria-label="Previous">←</button>
+        <button id="nextImage" type="button" aria-label="Next">→</button>
+      </div>
+      <img id="viewerImage" src="" alt="Fullscreen image" loading="lazy" decoding="async">
     </div>
 
   </div>
@@ -621,7 +713,7 @@
 const PROFILE = {
   name: "stxbandz",
   initial: "S",                       // letter shown in the avatar ring
-  tagline: "— a quiet index of the things I make and recommend."
+  tagline: "Builder, writer, investor. A quiet index of the things I make, trade, and recommend."
 };
 
 // Group your links into sections. Add/remove/reorder freely.
@@ -928,12 +1020,12 @@ function renderGallery() {
   const grid = byId("gallery-grid");
   grid.replaceChildren();
 
-  GALLERY.forEach(function (item) {
+  GALLERY.forEach(function (item, idx) {
     const card = document.createElement("div");
     card.className = "gallery-card";
     card.tabIndex = 0;
     card.setAttribute("role", "button");
-    card.setAttribute("aria-label", "Download " + item.title + " image");
+    card.setAttribute("aria-label", "View " + item.title + " fullscreen");
 
     const img = document.createElement("img");
     img.loading = "lazy";
@@ -941,7 +1033,7 @@ function renderGallery() {
     img.alt = item.title;
     img.src = item.url;
     img.addEventListener("error", function () {
-      card.classList.add("img-failed");   // graceful placeholder, layout never breaks
+      card.classList.add("img-failed");
     });
 
     const overlay = document.createElement("div");
@@ -954,17 +1046,18 @@ function renderGallery() {
     const dl = document.createElement("button");
     dl.type = "button";
     dl.className = "gallery-dl";
-    dl.textContent = "↓ DOWNLOAD";
-    dl.setAttribute("aria-label", "Download " + item.title);
+    dl.textContent = "⛶ FULLSCREEN";
+    dl.setAttribute("aria-label", "View fullscreen");
     dl.addEventListener("click", function (e) {
-      e.stopPropagation();                 // don't double-trigger the card
-      downloadImage(item.url, item.file);
+      e.stopPropagation();
+      openFullscreenViewer(idx);
+      trackClick("gallery_view", item.title);
     });
 
     overlay.append(meta, dl);
     card.append(img, overlay);
 
-    const trigger = function () { downloadImage(item.url, item.file); };
+    const trigger = function () { openFullscreenViewer(idx); trackClick("gallery_view", item.title); };
     card.addEventListener("click", trigger);
     card.addEventListener("keydown", function (e) {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); trigger(); }
@@ -974,10 +1067,206 @@ function renderGallery() {
   });
 }
 
+/* ---- Fullscreen Gallery Viewer + Analytics ---- */
+let currentViewerIndex = 0;
+
+function openFullscreenViewer(idx) {
+  currentViewerIndex = idx;
+  const item = GALLERY[idx];
+  byId("viewerImage").src = item.url;
+  byId("viewerMeta").textContent = item.title + " (" + (idx + 1) + " / " + GALLERY.length + ")";
+  byId("fullscreen-viewer").classList.add("active");
+  document.body.style.overflow = "hidden";
+  trackEvent("gallery_fullscreen", { item: item.title, index: idx });
+}
+
+function closeFullscreenViewer() {
+  byId("fullscreen-viewer").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+byId("closeViewer").addEventListener("click", closeFullscreenViewer);
+
+byId("prevImage").addEventListener("click", function () {
+  currentViewerIndex = (currentViewerIndex - 1 + GALLERY.length) % GALLERY.length;
+  openFullscreenViewer(currentViewerIndex);
+});
+
+byId("nextImage").addEventListener("click", function () {
+  currentViewerIndex = (currentViewerIndex + 1) % GALLERY.length;
+  openFullscreenViewer(currentViewerIndex);
+});
+
+/* Touch/keyboard navigation in fullscreen */
+document.addEventListener("keydown", function (e) {
+  if (!byId("fullscreen-viewer").classList.contains("active")) return;
+  if (e.key === "Escape") { closeFullscreenViewer(); }
+  if (e.key === "ArrowLeft") { document.getElementById("prevImage").click(); }
+  if (e.key === "ArrowRight") { document.getElementById("nextImage").click(); }
+});
+
+/* Swipe gestures for fullscreen gallery */
+let touchStartX = 0, touchStartY = 0;
+byId("fullscreen-viewer").addEventListener("touchstart", function (e) {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+byId("fullscreen-viewer").addEventListener("touchend", function (e) {
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
+  const diffX = touchStartX - touchEndX;
+  const diffY = Math.abs(touchStartY - touchEndY);
+  
+  if (Math.abs(diffX) > diffY && Math.abs(diffX) > 50) {
+    if (diffX > 0) {
+      document.getElementById("nextImage").click();
+    } else {
+      document.getElementById("prevImage").click();
+    }
+  }
+}, { passive: true });
+
 renderGallery();
 
-byId("openGallery").addEventListener("click", function () { switchView("gallery"); });
-byId("returnTerminal").addEventListener("click", function () { switchView("profile"); });
+/* ========================================================= 
+   ANALYTICS & CLICK TRACKING (private, localStorage only)
+   ========================================================= */
+
+class Analytics {
+  constructor() {
+    this.storageKey = "stxbandz_analytics";
+    this.load();
+  }
+  
+  load() {
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+      this.data = stored ? JSON.parse(stored) : { 
+        views: 0, 
+        clicks: {}, 
+        events: [], 
+        startDate: new Date().toISOString().split('T')[0]
+      };
+    } catch (e) {
+      this.data = { views: 0, clicks: {}, events: [], startDate: new Date().toISOString().split('T')[0] };
+    }
+  }
+  
+  save() {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+    } catch (e) {
+      console.warn("Analytics save failed (quota exceeded)");
+    }
+  }
+  
+  trackClick(label, title) {
+    if (!this.data.clicks[label]) this.data.clicks[label] = {};
+    if (!this.data.clicks[label][title]) this.data.clicks[label][title] = 0;
+    this.data.clicks[label][title]++;
+    this.data.events.push({ 
+      type: "click", 
+      label, 
+      title, 
+      timestamp: new Date().toISOString() 
+    });
+    if (this.data.events.length > 1000) this.data.events.shift();
+    this.save();
+  }
+  
+  trackEvent(eventName, data) {
+    this.data.events.push({ 
+      type: eventName, 
+      data, 
+      timestamp: new Date().toISOString() 
+    });
+    if (this.data.events.length > 1000) this.data.events.shift();
+    this.save();
+  }
+  
+  trackView() {
+    this.data.views++;
+    this.save();
+  }
+  
+  getStats() {
+    const clicks = this.data.clicks;
+    const totalClicks = Object.values(clicks).reduce((acc, cat) => 
+      acc + Object.values(cat).reduce((a, b) => a + b, 0), 0);
+    return {
+      pageViews: this.data.views,
+      totalClicks,
+      clicks,
+      events: this.data.events,
+      startDate: this.data.startDate
+    };
+  }
+}
+
+const analytics = new Analytics();
+analytics.trackView();
+
+function trackClick(label, title) {
+  analytics.trackClick(label, title);
+}
+
+function trackEvent(eventName, data) {
+  analytics.trackEvent(eventName, data);
+}
+
+/* Dashboard access (press Shift+D to open) */
+window.addEventListener("keydown", function (e) {
+  if (e.shiftKey && (e.key === "D" || e.key === "d")) {
+    e.preventDefault();
+    showDashboard();
+  }
+});
+
+function showDashboard() {
+  const stats = analytics.getStats();
+  const clicksByCategory = Object.entries(stats.clicks)
+    .map(([cat, items]) => {
+      const total = Object.values(items).reduce((a, b) => a + b, 0);
+      const top = Object.entries(items).sort((a, b) => b[1] - a[1])[0];
+      return `${cat}: ${total} total (top: ${top[0]} × ${top[1]})`;
+    })
+    .join("\n");
+  
+  const msg = `ANALYTICS DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━
+Page Views: ${stats.pageViews}
+Total Clicks: ${stats.totalClicks}
+Started: ${stats.startDate}
+Active Events: ${stats.events.length}
+
+BY CATEGORY:
+${clicksByCategory || "No clicks yet"}
+
+━━━━━━━━━━━━━━━━━━━━━━━
+(Dashboard is private, stored locally only)`;
+  
+  alert(msg);
+}
+
+/* Track all link clicks */
+document.addEventListener("click", function (e) {
+  const link = e.target.closest("a.link-row");
+  if (link) {
+    const title = link.querySelector(".link-title")?.textContent || "unknown";
+    const section = link.closest(".section")?.querySelector(".chapter-label")?.textContent || "unknown";
+    trackClick(section, title);
+  }
+}, true);
+
+byId("openGallery").addEventListener("click", function () { 
+  switchView("gallery"); 
+  trackClick("nav", "Gallery");
+});
+byId("returnTerminal").addEventListener("click", function () { 
+  switchView("profile"); 
+  trackClick("nav", "Return");
+});
 </script>
 
 </body>
