@@ -640,6 +640,179 @@
     .gallery-card img,
     .gallery-overlay { transition: none; }
   }
+
+  /* ===== Globe / Calm-Shadow feature (launched via button) ===== */
+  .globe-view {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: radial-gradient(circle at 50% 42%, #061208 0%, #04100a 48%, #020804 100%);
+    color: #5cd67d;
+  }
+  .globe-view::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  #globe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+    cursor: grab;
+    touch-action: none;
+  }
+  #globe.dragging { cursor: grabbing; }
+  #globe.hovering { cursor: pointer; }
+  .brand {
+    position: absolute;
+    top: 22px;
+    left: 26px;
+    z-index: 5;
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #bbf2cc;
+    user-select: none;
+  }
+  .brand small { display: block; margin-top: 6px; color: #3f7a58; font-size: 9.5px; letter-spacing: 0.18em; }
+  .globe-return {
+    position: absolute;
+    top: 22px;
+    right: 26px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #0f3a1c;
+    border-radius: 10px;
+    background: rgba(8, 18, 12, 0.42);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #bbf2cc;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+  .globe-return:hover, .globe-return:focus-visible { background: rgba(8, 18, 12, 0.62); border-color: #165229; outline: none; }
+  .globe-return:focus-visible { outline: 1px solid #165229; outline-offset: 3px; }
+
+  .info-box {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    right: 26px;
+    transform: translateY(-50%);
+    width: min(360px, calc(100vw - 52px));
+    max-height: 76vh;
+    overflow-y: auto;
+    padding: 20px 22px;
+    border-radius: 18px;
+    background: rgba(6, 14, 9, 0.62);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+    border: 1px solid #0f3a1c;
+    box-shadow: inset 0 1px 0 rgba(22, 82, 41, 0.5), 0 20px 60px rgba(0, 0, 0, 0.6);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+  }
+  .info-box.empty { opacity: 0; pointer-events: none; transform: translateY(-50%) translateX(12px); }
+  .info-box h2 { margin: 0 0 2px; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: #bbf2cc; }
+  .info-box .region { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #3f7a58; margin-bottom: 16px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .stat { background: rgba(2, 8, 4, 0.5); border: 1px solid #0f3a1c; border-radius: 10px; padding: 10px 12px; }
+  .stat .k { font-family: 'Geist Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #3f7a58; margin-bottom: 5px; }
+  .stat .v { font-size: 14px; color: #bbf2cc; font-variant-numeric: tabular-nums; }
+  .stat.wide { grid-column: 1 / -1; }
+  .analysis .block { margin-bottom: 14px; }
+  .analysis .block:last-child { margin-bottom: 0; }
+  .analysis .block h3 { margin: 0 0 6px; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #a2f7ef; }
+  .analysis .block p { margin: 0; font-size: 13px; line-height: 1.6; color: #5cd67d; }
+  .analysis .loading, .analysis .notice { font-family: 'Geist Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em; color: #3f7a58; line-height: 1.5; }
+  .analysis .notice { background: rgba(2, 8, 4, 0.5); border: 1px solid #0f3a1c; border-radius: 8px; padding: 9px 11px; margin-bottom: 12px; }
+
+  .input-container {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    width: min(560px, calc(100vw - 40px));
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(8, 18, 12, 0.42);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid #0f3a1c;
+    box-shadow: inset 0 1px 0 rgba(22, 82, 41, 0.45), 0 18px 50px rgba(0, 0, 0, 0.55);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .input-container input {
+    flex: 1;
+    min-width: 0;
+    background: rgba(2, 8, 4, 0.55);
+    border: 1px solid #0f3a1c;
+    border-radius: 10px;
+    color: #bbf2cc;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 11px 13px;
+    outline: none;
+    transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .input-container input::placeholder { color: #3f7a58; }
+  .input-container input:focus { border-color: #165229; box-shadow: 0 0 0 3px rgba(22, 82, 41, 0.25); }
+  .btn {
+    flex: 0 0 auto;
+    padding: 11px 16px;
+    border-radius: 10px;
+    border: 1px solid #165229;
+    background: rgba(22, 82, 41, 0.18);
+    color: #bbf2cc;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+    white-space: nowrap;
+  }
+  .btn:hover, .btn:focus-visible { background: rgba(22, 82, 41, 0.34); border-color: #a2f7ef; outline: none; }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+  .hint {
+    position: absolute;
+    z-index: 5;
+    left: 26px;
+    bottom: 30px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3f7a58;
+    max-width: 230px;
+    line-height: 1.7;
+    user-select: none;
+    pointer-events: none;
+  }
+  .hint b { color: #5cd67d; font-weight: 500; }
+  @media (max-width: 720px) {
+    .info-box { top: auto; bottom: 92px; right: 50%; transform: translateX(50%); width: calc(100vw - 36px); max-height: 40vh; }
+    .info-box.empty { transform: translateX(50%) translateY(12px); }
+    .hint { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -678,6 +851,13 @@
 
       <div id="sections"></div>
 
+      <!-- Globe feature: launches the Calm/Shadow intelligence globe -->
+      <button class="cta-button" id="openGlobe" type="button" aria-label="Open intelligence globe">
+        <span class="cta-label">GLOBE</span>
+        <span class="cta-tag">LIVE</span>
+        <span class="cta-arrow" aria-hidden="true">↗</span>
+      </button>
+
       <footer id="footer"></footer>
     </div>
 
@@ -702,6 +882,20 @@
       <img id="viewerImage" src="" alt="Fullscreen image" loading="lazy" decoding="async">
     </div>
 
+  </div>
+
+  <!-- ============ GLOBE VIEW (hidden by default; launched via button) ============ -->
+  <div id="globe-view" class="view globe-view" hidden>
+    <button class="globe-return" id="returnTerminalGlobe" type="button">← RETURN TO TERMINAL</button>
+    <div class="brand">Terra Obscura<small>Calm / Shadow Intelligence Globe</small></div>
+    <div class="hint"><b>Drag</b> to orbit · <b>Hover</b> a node to highlight · <b>Click</b> center to name</div>
+    <canvas id="globe"></canvas>
+    <aside class="info-box empty" id="infoBox" aria-live="polite"></aside>
+  <form class="input-container" id="globeControls" autocomplete="off">
+    <input id="globeKey" type="password" placeholder="OpenRouter API key (sk-or-…)" spellcheck="false" style="flex:0 0 190px" />
+    <input id="globeQuery" type="text" placeholder="Ask about a country, e.g. “Japan”" spellcheck="false" />
+    <button class="btn" id="globeAnalyze" type="submit">Analyze</button>
+  </form>
   </div>
 
 <script>
@@ -733,13 +927,6 @@ const SECTIONS = [
       { icon: "", title: "PrizePicks Bonus", subtitle: "referral link", url: "https://prizepicks.onelink.me/FjtC/4u6k86qk" },
       { icon: "", title: "Trading platform", subtitle: "referral link", url: "#" },
       { icon: "", title: "Linktree", subtitle: "referral link", url: "https://linktr.ee/Silksnypes" }
-    ]
-  },
-  {
-    label: "Products",
-    links: [
-      { icon: "", title: "Product name", subtitle: "referral link", url: "#" },
-      { icon: "", title: "Product name", subtitle: "referral link", url: "#" }
     ]
   }
 ];
@@ -774,7 +961,26 @@ const GALLERY = [
   { title: "F-15 AFTERBURNER",  file: "stxbandz-stealth-06.jpg", url: "https://i.pinimg.com/736x/bf/99/f9/bf99f9725681f4b51742dc5e2b374b36.jpg" },
   { title: "ARMY PLANE FORMATION", file: "stxbandz-stealth-07.jpg", url: "https://i.pinimg.com/736x/13/b8/86/13b886f931abe43215eed613c71ef952.jpg" },
   { title: "MISSILE TRAIL",     file: "stxbandz-stealth-08.jpg", url: "https://i.pinimg.com/736x/96/fc/61/96fc61188f142d19526db40f17adaff1.jpg" },
-  { title: "F-22 RAPTOR WALL",  file: "stxbandz-stealth-09.jpg", url: "https://i.pinimg.com/736x/f9/26/e3/f926e3ef84866e9cea6a19646270780f.jpg" }
+  { title: "F-22 RAPTOR WALL",  file: "stxbandz-stealth-09.jpg", url: "https://i.pinimg.com/736x/f9/26/e3/f926e3ef84866e9cea6a19646270780f.jpg" },
+
+  /* ---- Pinterest imports (resolved from pin.it short links to direct i.pinimg.com CDN URLs) ---- */
+  { title: "F-15 EAGLE NIGHT",     file: "stxbandz-pin-01.jpg", url: "https://i.pinimg.com/736x/ea/33/65/ea3365e5328dba68e61e59eec55489c0.jpg" },
+  { title: "SAAB 37 VIGGEN",       file: "stxbandz-pin-02.jpg", url: "https://i.pinimg.com/736x/b1/fb/52/b1fb52aa158ddd99338a744019a3320f.jpg" },
+  { title: "F-16 AFTERBURNER",     file: "stxbandz-pin-03.jpg", url: "https://i.pinimg.com/736x/1b/14/a4/1b14a4a1bad042905860e25ed2b5cab5.jpg" },
+  { title: "FIGHTERS SUNSET",       file: "stxbandz-pin-04.jpg", url: "https://i.pinimg.com/736x/c6/55/32/c655322954b029416aaf55aabb36bd5e.jpg" },
+  { title: "STEALTH FORMATION",     file: "stxbandz-pin-05.jpg", url: "https://i.pinimg.com/736x/e6/e2/8a/e6e28a26bc4ae9c50c940b002077be26.jpg" },
+  { title: "B-2 SPIRIT 4K",         file: "stxbandz-pin-06.jpg", url: "https://i.pinimg.com/736x/60/c4/f9/60c4f9760528b0e373266722df248561.jpg" },
+  { title: "B-2 SPIRIT ESCORT",     file: "stxbandz-pin-07.jpg", url: "https://i.pinimg.com/736x/95/68/d0/9568d0db6669d7cc5344860482865eec.jpg" },
+  { title: "AIR FORCE TARMAC",      file: "stxbandz-pin-08.jpg", url: "https://i.pinimg.com/736x/6b/db/68/6bdb68fdb0c482abb598dfec21f54f69.jpg" },
+  { title: "DESERT PYRAMIDS STRIKE",file: "stxbandz-pin-09.jpg", url: "https://i.pinimg.com/736x/b8/f0/5b/b8f05b06679f45d6d97e03c0a88f25bb.jpg" },
+  { title: "VINTAGE JET TARMAC",    file: "stxbandz-pin-10.jpg", url: "https://i.pinimg.com/736x/75/89/87/75898758419751b7523d17ee792db021.jpg" },
+  { title: "SR-71 BLACKBIRD",       file: "stxbandz-pin-11.jpg", url: "https://i.pinimg.com/736x/5b/db/f0/5bdbf0411fe0c418455c0c861c3e7fed.jpg" },
+  { title: "SR-71 CITYSCAPE",       file: "stxbandz-pin-12.jpg", url: "https://i.pinimg.com/736x/47/e9/9a/47e99a0fe90a08e8c4e247cc2c74738d.jpg" },
+  { title: "F-22 RAPTOR STEALTH",   file: "stxbandz-pin-13.jpg", url: "https://i.pinimg.com/736x/b9/f2/2b/b9f22be42f7394748653def517420445.jpg" },
+  { title: "GRAY STEALTH JET",      file: "stxbandz-pin-14.jpg", url: "https://i.pinimg.com/736x/9b/5c/75/9b5c756577f1ff7d509d71d035b3fd9e.jpg" },
+  { title: "SONIC BOOM BARRIER",    file: "stxbandz-pin-15.jpg", url: "https://i.pinimg.com/736x/2f/1b/03/2f1b03afaaf4887bd7df1ab482c6c0f8.jpg" },
+  { title: "SUKHOI SU-57",          file: "stxbandz-pin-16.jpg", url: "https://i.pinimg.com/736x/68/3f/99/683f994427eb81833ae6c46d5ae7c4dc.jpg" },
+  { title: "GRIPEN AURORA",         file: "stxbandz-pin-17.jpg", url: "https://i.pinimg.com/736x/b1/5d/58/b15d5875d1b31cb56dbf42486a275031.jpg" }
 ];
 
 /* =========================================================
@@ -959,16 +1165,25 @@ window.addEventListener("resize", updateFill);
 function switchView(target) {
   const profile = byId("profile-view");
   const gallery = byId("gallery-view");
-  const show = target === "gallery" ? gallery : profile;
-  const hide = target === "gallery" ? profile : gallery;
+  const globe = byId("globe-view");
+  const all = [profile, gallery, globe];
 
-  hide.hidden = true;
-  hide.classList.remove("active");
+  all.forEach(function (v) {
+    v.hidden = true;
+    v.classList.remove("active");
+  });
+
+  let show;
+  if (target === "gallery") show = gallery;
+  else if (target === "globe") show = globe;
+  else show = profile;
 
   show.hidden = false;
   show.classList.remove("active");
   void show.offsetWidth;          // force reflow so the enter animation replays
   show.classList.add("active");
+
+  if (target === "globe") initGlobe();
 
   window.scrollTo({ top: 0 });
 }
@@ -1266,6 +1481,568 @@ byId("openGallery").addEventListener("click", function () {
 byId("returnTerminal").addEventListener("click", function () { 
   switchView("profile"); 
   trackClick("nav", "Return");
+});
+
+/* =========================================================
+   GLOBE FEATURE — Calm / Shadow intelligence globe
+   Launched by the "openGlobe" button. The original site
+   code above is untouched; this is a self-contained module.
+   ========================================================= */
+
+// OpenRouter key is supplied by the user via the globe UI and stored in
+// localStorage — it is NEVER hardcoded here (keeps the repo free of secrets).
+const OR_KEY_STORAGE = "or_key";
+function getApiKey() {
+  const el = document.getElementById("globeKey");
+  const fromInput = el && el.value.trim();
+  return fromInput || (localStorage.getItem(OR_KEY_STORAGE) || "");
+}
+
+// Analyst system prompt — structured, comprehensive, multi-sentence blocks.
+const GLOBE_SYSTEM_PROMPT = `You are a senior geopolitical intelligence analyst embedded in a calm, shadow-themed globe interface called "Terra Obscura". When given a country, produce a structured analytical briefing.
+
+Rules:
+- Use these exact section headings, each on its own line wrapped in triple equals: ===OVERVIEW===, ===DEMOGRAPHICS===, ===GEOPOLITICAL CONTEXT===, ===STRATEGIC OUTLOOK===.
+- Each section must be a single, cohesive paragraph of AT LEAST four deep, well-developed sentences. Do NOT write short, clipped replies. Develop each idea with nuance, cause-and-effect, and concrete context.
+- Anchor your analysis in the factual data provided (population, region, capital, coordinates). Weave the population figure naturally into the DEMOGRAPHICS section.
+- Maintain a measured, analytical tone suited to a low-light intelligence console.
+- Output only the sectioned briefing. No preamble, no closing remarks.`;
+
+const GLOBE_SECTIONS = ["OVERVIEW", "DEMOGRAPHICS", "GEOPOLITICAL CONTEXT", "STRATEGIC OUTLOOK"];
+
+// COUNTRIES — geospatial data mapping array (lat/lng anchor each cluster).
+const GLOBE_COUNTRIES = [
+  { name: "United States", code: "US", lat: 39.8,  lng: -98.6,  population: 331002651, region: "North America", capital: "Washington, D.C." },
+  { name: "Canada",        code: "CA", lat: 56.1,  lng: -106.3, population: 37742154,  region: "North America", capital: "Ottawa" },
+  { name: "Mexico",        code: "MX", lat: 23.6,  lng: -102.5, population: 126014024, region: "North America", capital: "Mexico City" },
+  { name: "Brazil",        code: "BR", lat: -14.2, lng: -51.9,  population: 212559417, region: "South America", capital: "Brasília" },
+  { name: "Argentina",     code: "AR", lat: -38.4, lng: -63.6,  population: 45195774,  region: "South America", capital: "Buenos Aires" },
+  { name: "Colombia",      code: "CO", lat: 4.6,   lng: -74.3,  population: 50882891,  region: "South America", capital: "Bogotá" },
+  { name: "Chile",         code: "CL", lat: -35.7, lng: -71.5,  population: 19116201,  region: "South America", capital: "Santiago" },
+  { name: "United Kingdom",code: "GB", lat: 55.4,  lng: -3.4,   population: 67886011,  region: "Europe", capital: "London" },
+  { name: "France",        code: "FR", lat: 46.2,  lng: 2.2,    population: 65273511,  region: "Europe", capital: "Paris" },
+  { name: "Germany",       code: "DE", lat: 51.2,  lng: 10.5,   population: 83783942,  region: "Europe", capital: "Berlin" },
+  { name: "Italy",         code: "IT", lat: 41.9,  lng: 12.6,   population: 60461826,  region: "Europe", capital: "Rome" },
+  { name: "Spain",         code: "ES", lat: 40.5,  lng: -3.7,   population: 46754778,  region: "Europe", capital: "Madrid" },
+  { name: "Ukraine",       code: "UA", lat: 48.4,  lng: 31.2,   population: 43733762,  region: "Europe", capital: "Kyiv" },
+  { name: "Poland",        code: "PL", lat: 51.9,  lng: 19.1,   population: 37747523,  region: "Europe", capital: "Warsaw" },
+  { name: "Sweden",        code: "SE", lat: 60.1,  lng: 18.6,   population: 10099265,  region: "Europe", capital: "Stockholm" },
+  { name: "Russia",        code: "RU", lat: 61.5,  lng: 90.0,   population: 144104080, region: "Eurasia", capital: "Moscow" },
+  { name: "Turkey",        code: "TR", lat: 38.9,  lng: 35.2,   population: 84339067,  region: "Eurasia", capital: "Ankara" },
+  { name: "Nigeria",       code: "NG", lat: 9.1,   lng: 8.7,    population: 206139589, region: "Africa", capital: "Abuja" },
+  { name: "Egypt",         code: "EG", lat: 26.8,  lng: 30.8,   population: 102334404, region: "Africa", capital: "Cairo" },
+  { name: "South Africa",  code: "ZA", lat: -30.6, lng: 22.9,   population: 59308690,  region: "Africa", capital: "Pretoria" },
+  { name: "Kenya",         code: "KE", lat: -0.0,  lng: 37.9,   population: 53771296,  region: "Africa", capital: "Nairobi" },
+  { name: "Ethiopia",      code: "ET", lat: 9.1,   lng: 40.5,   population: 114963588, region: "Africa", capital: "Addis Ababa" },
+  { name: "Morocco",       code: "MA", lat: 31.8,  lng: -7.1,   population: 36910560,  region: "Africa", capital: "Rabat" },
+  { name: "China",         code: "CN", lat: 35.9,  lng: 104.2,  population: 1411778724,region: "Asia", capital: "Beijing" },
+  { name: "India",         code: "IN", lat: 20.6,  lng: 79.0,   population: 1380004385,region: "Asia", capital: "New Delhi" },
+  { name: "Japan",         code: "JP", lat: 36.2,  lng: 138.3,  population: 126476461, region: "Asia", capital: "Tokyo" },
+  { name: "Indonesia",     code: "ID", lat: -0.8,  lng: 113.9,  population: 273523615, region: "Asia", capital: "Jakarta" },
+  { name: "South Korea",   code: "KR", lat: 35.9,  lng: 127.8,  population: 51269185,  region: "Asia", capital: "Seoul" },
+  { name: "Vietnam",       code: "VN", lat: 14.1,  lng: 108.3,  population: 97338579,  region: "Asia", capital: "Hanoi" },
+  { name: "Thailand",      code: "TH", lat: 15.9,  lng: 100.9,  population: 69799978,  region: "Asia", capital: "Bangkok" },
+  { name: "Saudi Arabia",  code: "SA", lat: 23.9,  lng: 45.1,   population: 34813871,  region: "Asia", capital: "Riyadh" },
+  { name: "Iran",          code: "IR", lat: 32.4,  lng: 53.7,   population: 83992949,  region: "Asia", capital: "Tehran" },
+  { name: "Pakistan",      code: "PK", lat: 30.4,  lng: 69.3,   population: 220892340, region: "Asia", capital: "Islamabad" },
+  { name: "Australia",     code: "AU", lat: -25.3, lng: 133.8,  population: 25499884,  region: "Oceania", capital: "Canberra" },
+  { name: "New Zealand",   code: "NZ", lat: -40.9, lng: 174.9,  population: 5084300,   region: "Oceania", capital: "Wellington" },
+  { name: "Philippines",   code: "PH", lat: 12.9,  lng: 121.8,  population: 109581078, region: "Asia", capital: "Manila" },
+  { name: "Singapore",     code: "SG", lat: 1.35,  lng: 103.8,  population: 5850342,   region: "Asia", capital: "Singapore" },
+  { name: "Israel",        code: "IL", lat: 31.0,  lng: 34.9,   population: 8655535,   region: "Asia", capital: "Jerusalem" },
+];
+
+const GLOBE_DEG = Math.PI / 180;
+const GLOBE_CLAMP = (v, a, b) => Math.max(a, Math.min(b, v));
+const GLOBE_LERP = (a, b, t) => a + (b - a) * t;
+
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const globeRand = mulberry32(20260712);
+const globeJitter = () => (globeRand() + globeRand() + globeRand() - 1.5) / 1.5;
+
+let globeCanvas, globeCtx, gW = 0, gH = 0, gDPR = 1, gcx = 0, gcy = 0, gR = 0;
+let globeInited = false;
+let globeRAF = null;
+const globeReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const globeCam = { yaw: 0.6, pitch: -0.25, targetYaw: 0.6, targetPitch: -0.25, autoRotate: !globeReduce, focused: null };
+let globeHovered = null;
+const globeClusters = [];
+const globeStars = [];
+
+const HIGHLIGHT = [162, 247, 239]; // #a2f7ef
+const DOT_COLOR = [92, 214, 125];  // #5cd67d
+const DOT_BRIGHT = [187, 242, 204];// #bbf2cc
+
+function buildGlobeClusters() {
+  // Fixed node count per country — appearance is uniform, NOT population-based.
+  const NODES_PER = 46;
+  const spread = 3.4; // angular spread of the network blob
+  GLOBE_COUNTRIES.forEach((c, ci) => {
+    const nodes = [];
+    for (let i = 0; i < NODES_PER; i++) {
+      let lat = GLOBE_CLAMP(c.lat + globeJitter() * spread, -86, 86);
+      let lng = c.lng + globeJitter() * spread;
+      if (lng > 180) lng -= 360; if (lng < -180) lng += 360;
+      const phi = (90 - lat) * GLOBE_DEG, theta = lng * GLOBE_DEG;
+      nodes.push({
+        lat, lng,
+        x: Math.sin(phi) * Math.sin(theta),
+        y: Math.cos(phi),
+        z: Math.sin(phi) * Math.cos(theta),
+      });
+    }
+    // network edges: connect each node to its 2 nearest neighbours
+    const edges = [];
+    for (let i = 0; i < nodes.length; i++) {
+      const near = nodes
+        .map((n, j) => ({ j, d: Math.hypot(n.x - nodes[i].x, n.y - nodes[i].y, n.z - nodes[i].z) }))
+        .filter(o => o.j !== i)
+        .sort((a, b) => a.d - b.d);
+      for (let k = 0; k < 2; k++) {
+        const j = near[k].j;
+        const lo = Math.min(i, j), hi = Math.max(i, j);
+        if (!edges.some(e => e[0] === lo && e[1] === hi)) edges.push([lo, hi]);
+      }
+    }
+    globeClusters.push({ country: c, ci, nodes, edges, phase: globeRand() * Math.PI * 2, flagImg: loadFlagImg(c.code) });
+  });
+
+  for (let i = 0; i < 150; i++) {
+    globeStars.push({
+      x: globeRand(), y: globeRand(),
+      r: 0.3 + globeRand() * 1.1,
+      a: 0.12 + globeRand() * 0.35,
+      tw: globeRand() * Math.PI * 2,
+      ts: 0.4 + globeRand() * 0.9,
+    });
+  }
+}
+
+function globeProject(x, y, z) {
+  const cy_ = Math.cos(globeCam.yaw), sy = Math.sin(globeCam.yaw);
+  let x1 = x * cy_ + z * sy;
+  let z1 = -x * sy + z * cy_;
+  const cp = Math.cos(globeCam.pitch), sp = Math.sin(globeCam.pitch);
+  let y1 = y * cp - z1 * sp;
+  let z2 = y * sp + z1 * cp;
+  return { sx: gcx + x1 * gR, sy: gcy - y1 * gR, depth: z2 };
+}
+
+function globeResize() {
+  gDPR = Math.min(window.devicePixelRatio || 1, 2);
+  gW = window.innerWidth; gH = window.innerHeight;
+  globeCanvas.width = Math.floor(gW * gDPR);
+  globeCanvas.height = Math.floor(gH * gDPR);
+  globeCanvas.style.width = gW + "px";
+  globeCanvas.style.height = gH + "px";
+  globeCtx.setTransform(gDPR, 0, 0, gDPR, 0, 0);
+  gcx = gW / 2; gcy = gH / 2;
+  gR = Math.min(gW, gH) * 0.34;
+}
+
+function globeCountryScreen(c) {
+  const phi = (90 - c.lat) * GLOBE_DEG, theta = c.lng * GLOBE_DEG;
+  return globeProject(Math.sin(phi) * Math.sin(theta), Math.cos(phi), Math.sin(phi) * Math.cos(theta));
+}
+
+function globePick(px, py) {
+  let best = null, bestD = 26;
+  globeClusters.forEach(cl => {
+    const p = globeCountryScreen(cl.country);
+    if (p.depth < 0.02) return;
+    const d = Math.hypot(p.sx - px, p.sy - py);
+    if (d < bestD) { bestD = d; best = cl.ci; }
+  });
+  return best;
+}
+
+function globeFocus(ci) {
+  const c = GLOBE_COUNTRIES[ci];
+  globeCam.focused = ci;
+  globeCam.autoRotate = false;
+  globeCam.targetYaw = -c.lng * GLOBE_DEG;
+  globeCam.targetPitch = c.lat * GLOBE_DEG;
+}
+
+// regional-indicator flag emoji from a 2-letter country code (fallback)
+function flagFor(code) {
+  if (!code || code.length !== 2) return "🏳";
+  const A = 0x1F1E6;
+  return String.fromCodePoint(A + code.charCodeAt(0) - 65, A + code.charCodeAt(1) - 65);
+}
+
+// actual flag image per country (reliable cross-platform rendering)
+function loadFlagImg(code) {
+  const img = new Image();
+  img.src = "https://flagcdn.com/w40/" + String(code).toLowerCase() + ".png";
+  return img;
+}
+
+function drawGlobeHalo() {
+  const g = globeCtx.createRadialGradient(gcx, gcy, gR * 0.2, gcx, gcy, gR * 1.9);
+  g.addColorStop(0, "rgba(22, 82, 41, 0.22)");
+  g.addColorStop(0.35, "rgba(15, 58, 28, 0.14)");
+  g.addColorStop(1, "rgba(2, 8, 4, 0)");
+  globeCtx.fillStyle = g;
+  globeCtx.beginPath();
+  globeCtx.arc(gcx, gcy, gR * 1.9, 0, Math.PI * 2);
+  globeCtx.fill();
+
+  const bg = globeCtx.createRadialGradient(gcx - gR * 0.3, gcy - gR * 0.3, gR * 0.1, gcx, gcy, gR * 1.05);
+  bg.addColorStop(0, "rgba(12, 36, 22, 0.55)");
+  bg.addColorStop(0.7, "rgba(6, 18, 11, 0.5)");
+  bg.addColorStop(1, "rgba(2, 8, 4, 0)");
+  globeCtx.fillStyle = bg;
+  globeCtx.beginPath();
+  globeCtx.arc(gcx, gcy, gR * 1.05, 0, Math.PI * 2);
+  globeCtx.fill();
+}
+
+function drawGlobeGraticule() {
+  globeCtx.lineWidth = 1;
+  globeCtx.strokeStyle = "rgba(22, 82, 41, 0.16)";
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const phi = (90 - lat) * GLOBE_DEG;
+    globeCtx.beginPath();
+    let first = true;
+    for (let lng = -180; lng <= 180; lng += 6) {
+      const th = lng * GLOBE_DEG;
+      const p = globeProject(Math.sin(phi) * Math.sin(th), Math.cos(phi), Math.sin(phi) * Math.cos(th));
+      if (p.depth <= -0.05) { first = true; continue; }
+      if (first) { globeCtx.moveTo(p.sx, p.sy); first = false; } else globeCtx.lineTo(p.sx, p.sy);
+    }
+    globeCtx.stroke();
+  }
+  for (let lng = -180; lng < 180; lng += 30) {
+    const th = lng * GLOBE_DEG;
+    globeCtx.beginPath();
+    let first = true;
+    for (let lat = -90; lat <= 90; lat += 6) {
+      const phi = (90 - lat) * GLOBE_DEG;
+      const p = globeProject(Math.sin(phi) * Math.sin(th), Math.cos(phi), Math.sin(phi) * Math.cos(th));
+      if (p.depth <= -0.05) { first = true; continue; }
+      if (first) { globeCtx.moveTo(p.sx, p.sy); first = false; } else globeCtx.lineTo(p.sx, p.sy);
+    }
+    globeCtx.stroke();
+  }
+}
+
+function drawGlobeNetwork(now) {
+  const breathe = !globeReduce;
+
+  // lines first (behind dots)
+  globeClusters.forEach(cl => {
+    const isHover = globeHovered === cl.ci;
+    cl.edges.forEach(([a, b]) => {
+      const pa = globeProject(cl.nodes[a].x, cl.nodes[a].y, cl.nodes[a].z);
+      const pb = globeProject(cl.nodes[b].x, cl.nodes[b].y, cl.nodes[b].z);
+      if (pa.depth < -0.05 || pb.depth < -0.05) return;
+      const front = GLOBE_CLAMP((Math.min(pa.depth, pb.depth) + 0.15) / 1.0, 0, 1);
+      const col = isHover ? HIGHLIGHT : DOT_COLOR;
+      globeCtx.beginPath();
+      globeCtx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(isHover ? 0.55 : 0.22) * (0.3 + 0.7 * front)})`;
+      globeCtx.lineWidth = isHover ? 1.3 : 0.8;
+      globeCtx.moveTo(pa.sx, pa.sy);
+      globeCtx.lineTo(pb.sx, pb.sy);
+      globeCtx.stroke();
+    });
+  });
+
+  // dots (uniform size — not population based)
+  globeClusters.forEach(cl => {
+    const isHover = globeHovered === cl.ci;
+    const pulse = breathe ? 1 + 0.34 * Math.sin(now * 0.0009 + cl.phase) : 1;
+    cl.nodes.forEach(n => {
+      const p = globeProject(n.x, n.y, n.z);
+      if (p.depth < -0.12) return;
+      const front = GLOBE_CLAMP((p.depth + 0.15) / 1.0, 0, 1);
+      const col = isHover ? HIGHLIGHT : (front > 0.75 ? DOT_BRIGHT : DOT_COLOR);
+      const size = (isHover ? 2.6 : 1.6) * pulse * (0.7 + 0.6 * front);
+      const alpha = (isHover ? 0.95 : 0.55) * (0.25 + 0.75 * front);
+      globeCtx.beginPath();
+      globeCtx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${alpha})`;
+      if (isHover) { globeCtx.shadowColor = `rgba(${col[0]},${col[1]},${col[2]},0.8)`; globeCtx.shadowBlur = 8; }
+      globeCtx.arc(p.sx, p.sy, size, 0, Math.PI * 2);
+      globeCtx.fill();
+      globeCtx.shadowBlur = 0;
+    });
+  });
+
+  // central interactive nodes — the country's flag (image, emoji fallback); no plain dot
+  globeClusters.forEach(cl => {
+    const c = cl.country;
+    const phi = (90 - c.lat) * GLOBE_DEG, theta = c.lng * GLOBE_DEG;
+    const p = globeProject(Math.sin(phi) * Math.sin(theta), Math.cos(phi), Math.sin(phi) * Math.cos(theta));
+    if (p.depth < 0.02) return;
+    const isHover = globeHovered === cl.ci;
+    const isFocus = globeCam.focused === cl.ci;
+    const col = isHover ? HIGHLIGHT : DOT_BRIGHT;
+    const fw = isHover ? 34 : (isFocus ? 30 : 24);
+    const fh = fw * 0.66;
+
+    globeCtx.save();
+    globeCtx.shadowColor = `rgba(${col[0]},${col[1]},${col[2]},0.85)`;
+    globeCtx.shadowBlur = isHover ? 16 : (isFocus ? 11 : 7);
+    if (cl.flagImg && cl.flagImg.complete && cl.flagImg.naturalWidth) {
+      globeCtx.drawImage(cl.flagImg, p.sx - fw / 2, p.sy - fh / 2, fw, fh);
+    } else {
+      globeCtx.font = (fw * 0.8) + "px 'Geist Mono', monospace";
+      globeCtx.textAlign = "center";
+      globeCtx.textBaseline = "middle";
+      globeCtx.fillText(flagFor(c.code), p.sx, p.sy);
+    }
+    globeCtx.restore();
+
+    if (isHover || isFocus) {
+      globeCtx.beginPath();
+      globeCtx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},0.5)`;
+      globeCtx.lineWidth = 1.4;
+      globeCtx.arc(p.sx, p.sy, fw * 0.5 + (isHover ? 4 : 0), 0, Math.PI * 2);
+      globeCtx.stroke();
+      // display the country name
+      globeCtx.font = "600 13px 'Geist Mono', monospace";
+      globeCtx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},0.95)`;
+      globeCtx.textAlign = "center";
+      globeCtx.fillText(c.name.toUpperCase(), p.sx, p.sy - fh / 2 - 12);
+      globeCtx.textAlign = "start";
+      globeCtx.textBaseline = "alphabetic";
+    }
+  });
+}
+
+function globeFrame(now) {
+  globeCam.yaw = GLOBE_LERP(globeCam.yaw, globeCam.targetYaw, 0.48);
+  globeCam.pitch = GLOBE_LERP(globeCam.pitch, globeCam.targetPitch, 0.48);
+  if (globeCam.autoRotate && globeCam.focused === null) globeCam.targetYaw += 0.0096;
+
+  globeCtx.clearRect(0, 0, gW, gH);
+
+  globeStars.forEach(s => {
+    const a = s.a * (0.6 + 0.4 * Math.sin(now * 0.001 * s.ts + s.tw));
+    globeCtx.beginPath();
+    globeCtx.fillStyle = `rgba(187,242,204,${a})`;
+    globeCtx.arc(s.x * gW, s.y * gH, s.r, 0, Math.PI * 2);
+    globeCtx.fill();
+  });
+
+  drawGlobeHalo();
+  drawGlobeGraticule();
+  drawGlobeNetwork(now);
+
+  globeRAF = requestAnimationFrame(globeFrame);
+}
+
+/* ---- interaction: hover, click-to-name, drag orbit ---- */
+let gDragging = false, gMoved = false, gLastX = 0, gLastY = 0;
+
+function initGlobe() {
+  if (globeInited) return;
+  globeInited = true;
+  globeCanvas = byId("globe");
+  globeCtx = globeCanvas.getContext("2d");
+  buildGlobeClusters();
+  globeResize();
+  window.addEventListener("resize", globeResize);
+
+  globeCanvas.addEventListener("pointerdown", e => {
+    gDragging = true; gMoved = false;
+    gLastX = e.clientX; gLastY = e.clientY;
+    globeCam.autoRotate = false;
+    globeCanvas.classList.add("dragging");
+    globeCanvas.setPointerCapture(e.pointerId);
+  });
+  globeCanvas.addEventListener("pointermove", e => {
+    if (gDragging) {
+      const dx = e.clientX - gLastX, dy = e.clientY - gLastY;
+      if (Math.abs(dx) + Math.abs(dy) > 2) gMoved = true;
+      globeCam.targetYaw = globeCam.yaw + dx * 0.005;
+      globeCam.targetPitch = GLOBE_CLAMP(globeCam.pitch + dy * 0.005, -1.2, 1.2);
+      gLastX = e.clientX; gLastY = e.clientY;
+    } else {
+      const hit = globePick(e.clientX, e.clientY);
+      globeHovered = hit;
+      globeCanvas.classList.toggle("hovering", hit !== null);
+    }
+  });
+  function gEnd(e) {
+    if (!gDragging) return;
+    gDragging = false;
+    globeCanvas.classList.remove("dragging");
+    if (gMoved) return; // orbit drag, not a click
+    const hit = globePick(e.clientX, e.clientY);
+    if (hit !== null) {
+      globeFocus(hit);
+      displayCountryName(hit); // shows the country name (no API call)
+    }
+  }
+  globeCanvas.addEventListener("pointerup", gEnd);
+  globeCanvas.addEventListener("pointercancel", () => { gDragging = false; globeCanvas.classList.remove("dragging"); });
+  globeCanvas.addEventListener("pointerleave", () => { globeHovered = null; globeCanvas.classList.remove("hovering"); });
+
+  globeRAF = requestAnimationFrame(globeFrame);
+}
+
+/* ---- info box (name on click; analysis via text box) ---- */
+const globeInfoBox = byId("infoBox");
+const globeFmt = new Intl.NumberFormat("en-US");
+
+function renderInfoHeader(obj, withHint) {
+  globeInfoBox.classList.remove("empty");
+  globeInfoBox.innerHTML = `
+    <h2>${obj.name}</h2>
+    <div class="region">${obj.region || "—"} · ${obj.code || ""}</div>
+    <div class="stat-grid">
+      <div class="stat wide">
+        <div class="k">👥 Population</div>
+        <div class="v">${obj.population != null ? globeFmt.format(obj.population) : "—"}</div>
+      </div>
+      <div class="stat">
+        <div class="k">🏛 Capital</div>
+        <div class="v">${obj.capital || "—"}</div>
+      </div>
+      <div class="stat">
+        <div class="k">🌐 Coordinates</div>
+        <div class="v">${obj.lat != null ? obj.lat.toFixed(1) + "°, " + obj.lng.toFixed(1) + "°" : "—"}</div>
+      </div>
+    </div>
+    <div class="analysis" id="globeAnalysis">
+      ${withHint ? '<div class="notice">Use the box below to request an AI briefing for this country.</div>' : '<div class="loading">Initializing analysis…</div>'}
+    </div>`;
+}
+
+// clicking a country center displays its name (no API call)
+function displayCountryName(ci) {
+  renderInfoHeader(GLOBE_COUNTRIES[ci], true);
+}
+
+function parseGlobeSections(text) {
+  const map = {};
+  const re = /===([A-Z\s]+)===\s*([\s\S]*?)(?=(?:===[A-Z\s]+===)|$)/g;
+  let m;
+  while ((m = re.exec(text)) !== null) map[m[1].trim()] = m[2].trim();
+  if (Object.keys(map).length === 0 && text.trim()) map["OVERVIEW"] = text.trim();
+  return map;
+}
+
+function renderGlobeAnalysis(blocks, notice) {
+  const host = byId("globeAnalysis");
+  if (!host) return;
+  let html = notice ? `<div class="notice">${notice}</div>` : "";
+  GLOBE_SECTIONS.forEach(s => {
+    const txt = (blocks[s] || "").trim();
+    if (!txt) return;
+    html += `<div class="block"><h3>${s}</h3><p>${txt.replace(/\n+/g, " ")}</p></div>`;
+  });
+  host.innerHTML = html;
+}
+
+// Working OpenRouter models — tried in order; a 404 falls through to the next.
+const GLOBE_MODELS = ["openai/gpt-4o-mini", "meta-llama/llama-3.1-8b-instruct", "deepseek/deepseek-chat"];
+
+// ONLY the "ask about a country" text box triggers the OpenRouter API.
+async function globeChat(messages) {
+  const key = getApiKey();
+  if (!key) throw new Error("no API key — add your OpenRouter key above");
+  let lastErr;
+  for (const model of GLOBE_MODELS) {
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + key,
+          "Content-Type": "application/json",
+          "HTTP-Referer": location.href,
+          "X-Title": "Terra Obscura - Calm/Shadow Globe",
+        },
+        body: JSON.stringify({ model, temperature: 0.7, max_tokens: 900, messages }),
+      });
+      if (res.status === 404) { lastErr = new Error("HTTP 404 (model unavailable)"); continue; }
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return await res.json();
+    } catch (err) {
+      lastErr = err;
+      if (String(err.message).indexOf("404") !== -1) continue; // try next model
+      throw err;
+    }
+  }
+  throw lastErr;
+}
+
+async function globeAnalyze(query) {
+  const q = query.trim();
+  if (!q) return;
+  if (!getApiKey()) {
+    globeInfoBox.classList.remove("empty");
+    globeInfoBox.innerHTML = `<h2>${q}</h2><div class="region">Query</div><div class="analysis" id="globeAnalysis"><div class="notice">Add your OpenRouter API key in the field above to enable live analysis.</div></div>`;
+    return;
+  }
+
+  // match a country even when the query is a question (e.g. "what is Japan?")
+  const ql = q.toLowerCase();
+  const idx = GLOBE_COUNTRIES.findIndex(c =>
+    c.name.toLowerCase() === ql ||
+    c.code.toLowerCase() === ql ||
+    c.name.toLowerCase().includes(ql) ||
+    ql.includes(c.name.toLowerCase())
+  );
+  const known = idx >= 0;
+  const subject = known ? GLOBE_COUNTRIES[idx] : { name: q, region: "—", code: "", capital: "—", population: null, lat: null, lng: null };
+
+  if (known) { globeFocus(idx); renderInfoHeader(subject, false); }
+  else {
+    globeInfoBox.classList.remove("empty");
+    globeInfoBox.innerHTML = `<h2>${q}</h2><div class="region">Query</div><div class="analysis" id="globeAnalysis"><div class="loading">Initializing analysis…</div></div>`;
+  }
+
+  const facts = known
+    ? `Country in focus: ${subject.name}\nRegion: ${subject.region}\nCapital: ${subject.capital || "N/A"}\nPopulation: ${globeFmt.format(subject.population)}\nApprox. coordinates: ${subject.lat.toFixed(2)}° lat, ${subject.lng.toFixed(2)}° lng.`
+    : `Topic in focus: ${q}`;
+
+  const userPrompt =
+    facts + "\n\nUser question: \"" + q + "\"\n" +
+    "Answer the user's question clearly, then expand it into the structured analytical briefing " +
+    "below (===OVERVIEW===, ===DEMOGRAPHICS===, ===GEOPOLITICAL CONTEXT===, ===STRATEGIC OUTLOOK===), " +
+    "each section a paragraph of at least four developed sentences and anchored in the facts above.";
+
+  try {
+    const data = await globeChat([
+      { role: "system", content: GLOBE_SYSTEM_PROMPT },
+      { role: "user", content: userPrompt },
+    ]);
+    const content = data?.choices?.[0]?.message?.content || "";
+    renderGlobeAnalysis(parseGlobeSections(content), null);
+  } catch (err) {
+    renderGlobeAnalysis({}, "Live fetch failed (" + err.message + "). Check the network or key and retry.");
+  }
+}
+
+byId("openGlobe").addEventListener("click", function () {
+  switchView("globe");
+  const kEl = byId("globeKey");
+  kEl.value = localStorage.getItem(OR_KEY_STORAGE) || "";
+  trackClick("nav", "Globe");
+});
+byId("returnTerminalGlobe").addEventListener("click", function () {
+  switchView("profile");
+  trackClick("nav", "Return");
+});
+byId("globeKey").addEventListener("input", function () {
+  localStorage.setItem(OR_KEY_STORAGE, this.value.trim());
+});
+byId("globeControls").addEventListener("submit", function (e) {
+  e.preventDefault();
+  localStorage.setItem(OR_KEY_STORAGE, byId("globeKey").value.trim());
+  const q = byId("globeQuery").value.trim();
+  if (!q) return;
+  globeAnalyze(q);
 });
 </script>
 
