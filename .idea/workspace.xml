@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="baece04c-d3a6-4e95-a6f5-fffdc528278f" name="Changes" comment="new" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="15" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ironic-jsmith&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ironic-jsmith/my-links-site.git&quot;,
+    &quot;accountId&quot;: &quot;416fc2c6-6a67-46b1-907f-c556cba7e7e4&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.000002842127961" />
+      <entry key="MS500" value="1.340132225595193" />
+      <entry key="S2" value="8.208484824166202" />
+      <entry key="S5" value="20.440345052611427" />
+      <entry key="S10" value="30.42166153148137" />
+      <entry key="S30" value="43.120155256040775" />
+      <entry key="S60" value="58.85752923343674" />
+      <entry key="M2" value="104.5723149270803" />
+      <entry key="M5" value="264.08575668611144" />
+      <entry key="M10" value="486.7526789038569" />
+      <entry key="M15" value="647.3393989318141" />
+      <entry key="M30" value="925.2358323480903" />
+      <entry key="H1" value="1188.3677959572387" />
+      <entry key="H2" value="1429.061623568462" />
+      <entry key="H4" value="1627.6046433007061" />
+      <entry key="D1" value="3785.959109494116" />
+      <entry key="W1" value="8018.419525030412" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9726577251672973" />
+      <entry key="MS500" value="1.3326412145369408" />
+      <entry key="S2" value="8.195581506045915" />
+      <entry key="S5" value="20.427075140549796" />
+      <entry key="S10" value="30.411737655383206" />
+      <entry key="S30" value="43.11542669330585" />
+      <entry key="S60" value="58.85416128627276" />
+      <entry key="M2" value="104.56900812792013" />
+      <entry key="M5" value="264.08202315020174" />
+      <entry key="M10" value="486.7490265291818" />
+      <entry key="M15" value="647.3360767737348" />
+      <entry key="M30" value="925.2333873252339" />
+      <entry key="H1" value="1188.3661946347493" />
+      <entry key="H2" value="1429.060647180744" />
+      <entry key="H4" value="1627.6040829797012" />
+      <entry key="D1" value="3785.9589042513185" />
+      <entry key="W1" value="8018.419464961625" />
+    </decayedShown>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3GLDgHUW7DevUa1O8rCry86wudm" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.index.html.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/Change Language": [
+      "HTML"
+    ],
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Angular2Html"
+    ]
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.26222.65" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.26222.65" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="baece04c-d3a6-4e95-a6f5-fffdc528278f" name="Changes" comment="" />
+      <created>1783742064673</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1783742064673</updated>
+      <workItem from="1783742065700" duration="21962000" />
+      <workItem from="1783800407138" duration="3197000" />
+      <workItem from="1783827103543" duration="39473000" />
+    </task>
+    <task id="LOCAL-00001" summary="new update">
+      <option name="closed" value="true" />
+      <created>1783743920668</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1783743920668</updated>
+    </task>
+    <task id="LOCAL-00002" summary="new update">
+      <option name="closed" value="true" />
+      <created>1783750483298</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1783750483298</updated>
+    </task>
+    <task id="LOCAL-00003" summary="new update">
+      <option name="closed" value="true" />
+      <created>1783755035789</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1783755035789</updated>
+    </task>
+    <task id="LOCAL-00004" summary="new update">
+      <option name="closed" value="true" />
+      <created>1783759764573</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1783759764573</updated>
+    </task>
+    <task id="LOCAL-00005" summary="new update">
+      <option name="closed" value="true" />
+      <created>1783803572606</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1783803572607</updated>
+    </task>
+    <task id="LOCAL-00006" summary="new update">
+      <option name="closed" value="true" />
+      <created>1783828785259</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1783828785259</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Major feature upgrade: fullscreen gallery viewer, analytics dashboard (Shift+D), click tracking, touch gestures, better taglines, OG image&#10;&#10;- Replaced download gallery with fullscreen wallpaper viewer (no borders)&#10;- Added touch swipe gestures + arrow key navigation for images&#10;- Built private analytics system (localStorage): page views, click tracking by category&#10;- Dashboard accessible via Shift+D shortcut (alerts stats summary)&#10;- Improved tagline: 'Builder, writer, investor...'&#10;- Created SVG OG image (2000s fruitego aesthetic, olive + charcoal theme)&#10;- Updated OG meta tags for Twitter/Facebook sharing&#10;- 60fps scroll performance maintained (GPU-accelerated animations)&#10;&#10;Co-authored-by: Copilot &lt;223556219+Copilot@users.noreply.github.com&gt;">
+      <option name="closed" value="true" />
+      <created>1783828939951</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1783828939951</updated>
+    </task>
+    <task id="LOCAL-00008" summary="new">
+      <option name="closed" value="true" />
+      <created>1783829766322</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1783829766322</updated>
+    </task>
+    <task id="LOCAL-00009" summary="new">
+      <option name="closed" value="true" />
+      <created>1783843647573</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1783843647573</updated>
+    </task>
+    <task id="LOCAL-00010" summary="new">
+      <option name="closed" value="true" />
+      <created>1784009710822</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1784009710822</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="new update" />
+    <MESSAGE value="new updatee" />
+    <MESSAGE value="Major feature upgrade: fullscreen gallery viewer, analytics dashboard (Shift+D), click tracking, touch gestures, better taglines, OG image&#10;&#10;- Replaced download gallery with fullscreen wallpaper viewer (no borders)&#10;- Added touch swipe gestures + arrow key navigation for images&#10;- Built private analytics system (localStorage): page views, click tracking by category&#10;- Dashboard accessible via Shift+D shortcut (alerts stats summary)&#10;- Improved tagline: 'Builder, writer, investor...'&#10;- Created SVG OG image (2000s fruitego aesthetic, olive + charcoal theme)&#10;- Updated OG meta tags for Twitter/Facebook sharing&#10;- 60fps scroll performance maintained (GPU-accelerated animations)&#10;&#10;Co-authored-by: Copilot &lt;223556219+Copilot@users.noreply.github.com&gt;" />
+    <MESSAGE value="new" />
+    <option name="LAST_COMMIT_MESSAGE" value="new" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
