@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — stxbandz</title>
+<style>
+  :root{
+    --bg:#0E0F11;
+    --surface:#16181B;
+    --text:#E7E5DF;
+    --text-dim:#86888E;
+    --accent:#7C8A6E;
+    --hairline:#26282C;
+    --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;padding:0;
+    background:radial-gradient(120% 80% at 50% -10%,rgba(124,138,110,0.06),transparent 60%),var(--bg);
+    color:var(--text);
+    font-family:Inter,sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:960px;
+    margin:0 auto;
+    padding:72px 24px 96px;
+  }
+  .brand{
+    font-family:Geist Mono,monospace;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+  }
+  .header h1{
+    font-family:Schibsted Grotesk,sans-serif;
+    font-weight:600;
+    font-size:26px;
+    margin:0;
+    letter-spacing:-0.02em;
+  }
+  .back{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border:1px solid var(--hairline);
+    border-radius:10px;
+    background:rgba(255,255,255,0.03);
+    color:var(--text);
+    font-family:Geist Mono,monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    text-decoration:none;
+    cursor:pointer;
+    transition:background 0.4s var(--ease),border-color 0.4s var(--ease);
+  }
+  .back:hover,.back:focus-visible{
+    background:rgba(255,255,255,0.06);
+    border-color:var(--accent);
+    outline:none;
+  }
+  .back:focus-visible{outline:1px solid var(--accent);outline-offset:3px}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:12px;
+    padding:18px 20px;
+    transition:border-color 0.4s var(--ease),transform 0.4s var(--ease);
+  }
+  .card:hover{
+    border-color:rgba(124,138,110,0.35);
+    transform:translateY(-1px);
+  }
+  .card.wide{grid-column:1/-1}
+  .k{
+    font-family:Geist Mono,monospace;
+    font-size:9px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:8px;
+  }
+  .v{
+    font-size:22px;
+    color:var(--text);
+    font-variant-numeric:tabular-nums;
+  }
+  .muted{
+    font-size:12px;
+    color:var(--text-dim);
+    margin-top:4px;
+  }
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:12px;
+    padding:22px 24px;
+    margin-bottom:18px;
+  }
+  .panel h2{
+    font-family:Schibsted Grotesk,sans-serif;
+    font-weight:600;
+    font-size:17px;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+
+  .table{
+    width:100%;
+    border-collapse:collapse;
+    font-family:Geist Mono,monospace;
+    font-size:12px;
+  }
+  .table th{
+    text-align:left;
+    font-size:9px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    font-weight:500;
+    padding:8px 6px;
+    border-bottom:1px solid var(--hairline);
+  }
+  .table td{
+    padding:10px 6px;
+    border-bottom:1px solid rgba(38,40,44,0.6);
+    color:var(--text);
+  }
+  .table tr:last-child td{border-bottom:none}
+  .table .num{
+    color:var(--text-dim);
+    font-variant-numeric:tabular-nums;
+  }
+  .table .bar-wrap{
+    width:100%;
+    height:6px;
+    background:rgba(2,8,4,0.5);
+    border-radius:3px;
+    overflow:hidden;
+    margin-top:8px;
+  }
+  .table .bar{
+    height:100%;
+    background:linear-gradient(90deg,var(--accent),#a2f7ef);
+    border-radius:3px;
+    transition:width 0.6s var(--ease);
+  }
+
+  .empty{
+    color:var(--text-dim);
+    font-size:13px;
+  }
+
+  @media (max-width:640px){
+    .grid{grid-template-columns:1fr}
+    .header{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">Terra Obscura / Analytics</div>
+    <div class="header">
+      <h1>Dashboard</h1>
+      <a class="back" href="index.html">&larr; Back to index</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="k">Page Views</div>
+        <div class="v" id="v">—</div>
+        <div class="muted" id="vMuted">Loading…</div>
+      </div>
+      <div class="card">
+        <div class="k">Total Clicks</div>
+        <div class="v" id="c">—</div>
+        <div class="muted" id="cMuted">Loading…</div>
+      </div>
+      <div class="card wide">
+        <div class="k">Tracking Since</div>
+        <div class="v" id="s" style="font-size:18px">—</div>
+      </div>
+      <div class="card wide">
+        <div class="k">Events Logged</div>
+        <div class="v" id="e" style="font-size:18px">—</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Top Links</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Link</th>
+            <th style="width:110px">Clicks</th>
+            <th style="width:160px">Share</th>
+          </tr>
+        </thead>
+        <tbody id="topLinks">
+          <tr><td colspan="3" class="empty">No data yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>By Category</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th style="width:110px">Clicks</th>
+            <th style="width:160px">Top Item</th>
+          </tr>
+        </thead>
+        <tbody id="cats">
+          <tr><td colspan="3" class="empty">No data yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>Recent Events</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Label / Title</th>
+          </tr>
+        </thead>
+        <tbody id="events">
+          <tr><td colspan="3" class="empty">No events yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+  if (sessionStorage.getItem("dash_auth") !== "1") {
+    window.location.href = "dashboard.html";
+  }
+
+  const KEY = "stxbandz_analytics";
+
+  function $(id){ return document.getElementById(id); }
+
+  function fmtDate(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, {year:"numeric",month:"short",day:"numeric"});
+  }
+
+  function fmtTime(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    return d.toLocaleTimeString(undefined, {hour:"2-digit",minute:"2-digit"});
+  }
+
+  function render(){
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+    if(!d){
+      $("v").textContent = "0";
+      $("c").textContent = "0";
+      $("s").textContent = "—";
+      $("e").textContent = "0";
+      $("vMuted").textContent = "No visits recorded";
+      $("cMuted").textContent = "No clicks recorded";
+      return;
+    }
+
+    const clicks = d.clicks || {};
+    const totalClicks = Object.values(clicks).reduce((a, cat) =>
+      a + Object.values(cat).reduce((x, y) => x + y, 0), 0);
+
+    $("v").textContent = d.views != null ? d.views : 0;
+    $("c").textContent = totalClicks;
+    $("s").textContent = fmtDate(d.startDate);
+    $("e").textContent = d.events ? d.events.length : 0;
+    $("vMuted").textContent = totalClicks ? "Tracking active" : "No visits recorded";
+    $("cMuted").textContent = totalClicks ? `${totalClicks} tracked clicks` : "No clicks recorded";
+
+    // Build flat list of all link clicks
+    const flat = [];
+    for (const [cat, items] of Object.entries(clicks)) {
+      for (const [title, count] of Object.entries(items)) {
+        flat.push({ cat, title, count });
+      }
+    }
+    flat.sort((a, b) => b.count - a.count);
+    const max = flat.length ? flat[0].count : 1;
+
+    const topBody = $("topLinks");
+    topBody.innerHTML = "";
+    if (!flat.length) {
+      topBody.innerHTML = '<tr><td colspan="3" class="empty">No clicks yet.</td></tr>';
+    } else {
+      flat.slice(0, 20).forEach(row => {
+        const tr = document.createElement("tr");
+        const pct = Math.round((row.count / max) * 100);
+        tr.innerHTML = `
+          <td>
+            <div>${row.title}</div>
+            <div class="muted" style="font-size:10px;margin-top:2px">${row.cat}</div>
+          </td>
+          <td class="num">${row.count}</td>
+          <td>
+            <div class="num" style="font-size:11px">${pct}%</div>
+            <div class="bar-wrap"><div class="bar" style="width:${pct}%"></div></div>
+          </td>
+        `;
+        topBody.appendChild(tr);
+      });
+    }
+
+    const catBody = $("cats");
+    catBody.innerHTML = "";
+    const catEntries = Object.entries(clicks);
+    if (!catEntries.length) {
+      catBody.innerHTML = '<tr><td colspan="3" class="empty">No categories yet.</td></tr>';
+    } else {
+      catEntries.forEach(([cat, items]) => {
+        const total = Object.values(items).reduce((a, b) => a + b, 0);
+        const top = Object.entries(items).sort((a, b) => b[1] - a[1])[0];
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${cat}</td>
+          <td class="num">${total}</td>
+          <td class="num" style="font-size:11px">${top[0]} <span style="color:var(--text-dim)">× ${top[1]}</span></td>
+        `;
+        catBody.appendChild(tr);
+      });
+    }
+
+    const evBody = $("events");
+    evBody.innerHTML = "";
+    const events = d.events || [];
+    if (!events.length) {
+      evBody.innerHTML = '<tr><td colspan="3" class="empty">No events yet.</td></tr>';
+    } else {
+      events.slice().reverse().slice(0, 50).forEach(ev => {
+        const tr = document.createElement("tr");
+        const label = ev.label || ev.data?.label || "—";
+        const title = ev.title || ev.data?.title || "";
+        const text = title ? `${label} / ${title}` : label;
+        tr.innerHTML = `
+          <td class="num" style="white-space:nowrap">${fmtTime(ev.timestamp)}</td>
+          <td style="text-transform:uppercase;font-size:10px;letter-spacing:0.12em;color:var(--accent)">${ev.type || "event"}</td>
+          <td style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${text}">${text}</td>
+        `;
+        evBody.appendChild(tr);
+      });
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
