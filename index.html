@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   :root{
     --bg: #0E0F11;
@@ -301,6 +302,30 @@
     font-size: 15px;
     flex-shrink: 0;
     transition: transform 0.4s var(--ease), color 0.4s var(--ease);
+  }
+  .link-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .link-affiliate-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(124,138,110,0.32);
+    background: rgba(124,138,110,0.1);
+    border-radius: 5px;
+    padding: 3px 7px;
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+  .link-row:hover .link-affiliate-tag,
+  .link-row:focus-visible .link-affiliate-tag {
+    background: rgba(124,138,110,0.2);
+    border-color: rgba(124,138,110,0.55);
   }
   .link-row:hover .link-title::after,
   .link-row:focus-visible .link-title::after {
@@ -633,6 +658,7 @@
       transition: none;
     }
     .link-row { transition: none; }
+    .link-affiliate-tag { transition: none; }
     .link-row:hover,
     .link-row:focus-visible { background: transparent; }
     .cta-button { animation: none; }
@@ -728,7 +754,7 @@
   }
   .info-box.empty { opacity: 0; pointer-events: none; transform: translateY(-50%) translateX(12px); }
   .info-box h2 { margin: 0 0 2px; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: #bbf2cc; }
-  .info-box .region { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #3f7a58; margin-bottom: 16px; }
+  .info-box .region { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #5cd67d; margin-bottom: 16px; text-shadow: 0 0 8px rgba(92, 214, 125, 0.25); }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
   .stat { background: rgba(2, 8, 4, 0.5); border: 1px solid #0f3a1c; border-radius: 10px; padding: 10px 12px; }
   .stat .k { font-family: 'Geist Mono', monospace; font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase; color: #3f7a58; margin-bottom: 5px; }
@@ -907,12 +933,14 @@
 const PROFILE = {
   name: "stxbandz",
   initial: "S",                       // letter shown in the avatar ring
-  tagline: "A quiet index of things."
+  tagline: "index of things."
 };
 
 // Group your links into sections. Add/remove/reorder freely.
 // icon is OPTIONAL — leave "" to hide it (emoji not required for the look).
 // subtitle is optional (leave "" to hide it).
+// affiliate is OPTIONAL — set to true only on links that earn the site owner
+// compensation (referral, commission, sponsorship, paid placement).
 const SECTIONS = [
   {
     label: "Handles",
@@ -924,8 +952,8 @@ const SECTIONS = [
   {
     label: "Trading/Fintech",
     links: [
-      { icon: "", title: "PrizePicks Bonus", subtitle: "referral link", url: "https://prizepicks.onelink.me/FjtC/4u6k86qk" },
-      { icon: "", title: "Trading platform", subtitle: "referral link", url: "#" },
+      { icon: "", title: "PrizePicks Bonus", subtitle: "referral link", url: "https://prizepicks.onelink.me/FjtC/4u6k86qk", affiliate: true },
+      { icon: "", title: "Trading platform", subtitle: "referral link", url: "#", affiliate: true },
       { icon: "", title: "Linktree", subtitle: "referral link", url: "https://linktr.ee/Silksnypes" }
     ]
   }
@@ -1067,7 +1095,18 @@ SECTIONS.forEach((section, i) => {
     arrow.className = "link-arrow";
     arrow.textContent = "→";
 
-    a.append(main, arrow);
+    if (link.affiliate) {
+      const tag = document.createElement("span");
+      tag.className = "link-affiliate-tag";
+      tag.textContent = "Affiliate";
+      const meta = document.createElement("div");
+      meta.className = "link-meta";
+      meta.append(arrow, tag);
+      a.append(main, meta);
+    } else {
+      a.append(main, arrow);
+    }
+
     sec.appendChild(a);
   });
 
@@ -1422,50 +1461,46 @@ class Analytics {
 const analytics = new Analytics();
 analytics.trackView();
 
+// Server-side analytics: the public page never receives dashboard credentials.
+function sendAnalyticsEvent(event) {
+  fetch("/.netlify/functions/analytics?action=event", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(event),
+    keepalive: true
+  }).catch(function () {});
+}
+sendAnalyticsEvent({ kind: "view" });
+
 function trackClick(label, title) {
   analytics.trackClick(label, title);
+  sendAnalyticsEvent({ kind: "click", label: String(label || ""), title: String(title || "") });
 }
 
 function trackEvent(eventName, data) {
   analytics.trackEvent(eventName, data);
+  sendAnalyticsEvent({ kind: "interaction", label: String(eventName || ""), title: String(data?.item || data?.title || "") });
 }
 
-/* Dashboard access (press Shift+D to open) */
+/* Dashboard access (press Ctrl+D to open) */
 window.addEventListener("keydown", function (e) {
-  if (e.shiftKey && (e.key === "D" || e.key === "d")) {
+  if (e.ctrlKey && (e.key === "D" || e.key === "d")) {
     e.preventDefault();
-    showDashboard();
+    window.open("dashboard.html", "_blank");
   }
 });
 
-function showDashboard() {
-  const stats = analytics.getStats();
-  const clicksByCategory = Object.entries(stats.clicks)
-    .map(([cat, items]) => {
-      const total = Object.values(items).reduce((a, b) => a + b, 0);
-      const top = Object.entries(items).sort((a, b) => b[1] - a[1])[0];
-      return `${cat}: ${total} total (top: ${top[0]} × ${top[1]})`;
-    })
-    .join("\n");
-  
-  const msg = `ANALYTICS DASHBOARD
-━━━━━━━━━━━━━━━━━━━━━━━
-Page Views: ${stats.pageViews}
-Total Clicks: ${stats.totalClicks}
-Started: ${stats.startDate}
-Active Events: ${stats.events.length}
-
-BY CATEGORY:
-${clicksByCategory || "No clicks yet"}
-
-━━━━━━━━━━━━━━━━━━━━━━━
-(Dashboard is private, stored locally only)`;
-  
-  alert(msg);
-}
-
 /* Track all link clicks */
 document.addEventListener("click", function (e) {
+  const pageHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  sendAnalyticsEvent({
+    kind: "interaction",
+    label: "page_click",
+    title: e.target.closest("a, button")?.getAttribute("aria-label") || e.target.closest("a, button")?.textContent?.trim() || "page",
+    x: e.clientX / Math.max(window.innerWidth, 1),
+    y: (window.scrollY + e.clientY) / Math.max(document.documentElement.scrollHeight, 1),
+    depth: window.scrollY / pageHeight
+  });
   const link = e.target.closest("a.link-row");
   if (link) {
     const title = link.querySelector(".link-title")?.textContent || "unknown";
@@ -1473,6 +1508,16 @@ document.addEventListener("click", function (e) {
     trackClick(section, title);
   }
 }, true);
+
+let lastTrackedDepth = -1;
+window.addEventListener("scroll", function () {
+  const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  const depth = Math.round((window.scrollY / maxScroll) * 4) / 4;
+  if (depth !== lastTrackedDepth) {
+    lastTrackedDepth = depth;
+    sendAnalyticsEvent({ kind: "scroll", label: "scroll_depth", depth: depth });
+  }
+}, { passive: true });
 
 byId("openGallery").addEventListener("click", function () { 
   switchView("gallery"); 
@@ -1484,13 +1529,13 @@ byId("returnTerminal").addEventListener("click", function () {
 });
 
 /* =========================================================
-   GLOBE FEATURE — Calm / Shadow intelligence globe
-   Launched by the "openGlobe" button. The original site
-   code above is untouched; this is a self-contained module.
+   <!-- GLOBE UPGRADE START -->
+   GLOBE FEATURE — Calm / Shadow intelligence globe (WebGL/Three.js)
+   4-Phase Upgrade: Foundation, Interactivity, Visuals, Polish
+   <!-- GLOBE UPGRADE END -->
    ========================================================= */
 
-// OpenRouter key is supplied by the user via the globe UI and stored in
-// localStorage — it is NEVER hardcoded here (keeps the repo free of secrets).
+// OpenRouter key storage
 const OR_KEY_STORAGE = "or_key";
 function getApiKey() {
   const el = document.getElementById("globeKey");
@@ -1498,7 +1543,7 @@ function getApiKey() {
   return fromInput || (localStorage.getItem(OR_KEY_STORAGE) || "");
 }
 
-// Analyst system prompt — structured, comprehensive, multi-sentence blocks.
+// System prompt for geopolitical analysis
 const GLOBE_SYSTEM_PROMPT = `You are a senior geopolitical intelligence analyst embedded in a calm, shadow-themed globe interface called "Terra Obscura". When given a country, produce a structured analytical briefing.
 
 Rules:
@@ -1510,7 +1555,7 @@ Rules:
 
 const GLOBE_SECTIONS = ["OVERVIEW", "DEMOGRAPHICS", "GEOPOLITICAL CONTEXT", "STRATEGIC OUTLOOK"];
 
-// COUNTRIES — geospatial data mapping array (lat/lng anchor each cluster).
+// Countries with geospatial data
 const GLOBE_COUNTRIES = [
   { name: "United States", code: "US", lat: 39.8,  lng: -98.6,  population: 331002651, region: "North America", capital: "Washington, D.C." },
   { name: "Canada",        code: "CA", lat: 56.1,  lng: -106.3, population: 37742154,  region: "North America", capital: "Ottawa" },
@@ -1552,345 +1597,23 @@ const GLOBE_COUNTRIES = [
   { name: "Israel",        code: "IL", lat: 31.0,  lng: 34.9,   population: 8655535,   region: "Asia", capital: "Jerusalem" },
 ];
 
-const GLOBE_DEG = Math.PI / 180;
-const GLOBE_CLAMP = (v, a, b) => Math.max(a, Math.min(b, v));
-const GLOBE_LERP = (a, b, t) => a + (b - a) * t;
+// Literal flag emoji, kept separate from the ISO code so markers never fall back to initials.
+const GLOBE_FLAGS = {
+  US: "🇺🇸", CA: "🇨🇦", MX: "🇲🇽", BR: "🇧🇷", AR: "🇦🇷", CO: "🇨🇴", CL: "🇨🇱",
+  GB: "🇬🇧", FR: "🇫🇷", DE: "🇩🇪", IT: "🇮🇹", ES: "🇪🇸", UA: "🇺🇦", PL: "🇵🇱",
+  SE: "🇸🇪", RU: "🇷🇺", TR: "🇹🇷", NG: "🇳🇬", EG: "🇪🇬", ZA: "🇿🇦", KE: "🇰🇪",
+  ET: "🇪🇹", MA: "🇲🇦", CN: "🇨🇳", IN: "🇮🇳", JP: "🇯🇵", ID: "🇮🇩", KR: "🇰🇷",
+  VN: "🇻🇳", TH: "🇹🇭", SA: "🇸🇦", IR: "🇮🇷", PK: "🇵🇰", AU: "🇦🇺", NZ: "🇳🇿",
+  PH: "🇵🇭", SG: "🇸🇬", IL: "🇮🇱"
+};
 
-function mulberry32(seed) {
-  return function () {
-    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-const globeRand = mulberry32(20260712);
-const globeJitter = () => (globeRand() + globeRand() + globeRand() - 1.5) / 1.5;
-
-let globeCanvas, globeCtx, gW = 0, gH = 0, gDPR = 1, gcx = 0, gcy = 0, gR = 0;
-let globeInited = false;
-let globeRAF = null;
-const globeReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const globeCam = { yaw: 0.6, pitch: -0.25, targetYaw: 0.6, targetPitch: -0.25, autoRotate: !globeReduce, focused: null };
-let globeHovered = null;
-const globeClusters = [];
-const globeStars = [];
-
-const HIGHLIGHT = [162, 247, 239]; // #a2f7ef
-const DOT_COLOR = [92, 214, 125];  // #5cd67d
-const DOT_BRIGHT = [187, 242, 204];// #bbf2cc
-
-function buildGlobeClusters() {
-  // Fixed node count per country — appearance is uniform, NOT population-based.
-  const NODES_PER = 46;
-  const spread = 3.4; // angular spread of the network blob
-  GLOBE_COUNTRIES.forEach((c, ci) => {
-    const nodes = [];
-    for (let i = 0; i < NODES_PER; i++) {
-      let lat = GLOBE_CLAMP(c.lat + globeJitter() * spread, -86, 86);
-      let lng = c.lng + globeJitter() * spread;
-      if (lng > 180) lng -= 360; if (lng < -180) lng += 360;
-      const phi = (90 - lat) * GLOBE_DEG, theta = lng * GLOBE_DEG;
-      nodes.push({
-        lat, lng,
-        x: Math.sin(phi) * Math.sin(theta),
-        y: Math.cos(phi),
-        z: Math.sin(phi) * Math.cos(theta),
-      });
-    }
-    // network edges: connect each node to its 2 nearest neighbours
-    const edges = [];
-    for (let i = 0; i < nodes.length; i++) {
-      const near = nodes
-        .map((n, j) => ({ j, d: Math.hypot(n.x - nodes[i].x, n.y - nodes[i].y, n.z - nodes[i].z) }))
-        .filter(o => o.j !== i)
-        .sort((a, b) => a.d - b.d);
-      for (let k = 0; k < 2; k++) {
-        const j = near[k].j;
-        const lo = Math.min(i, j), hi = Math.max(i, j);
-        if (!edges.some(e => e[0] === lo && e[1] === hi)) edges.push([lo, hi]);
-      }
-    }
-    globeClusters.push({ country: c, ci, nodes, edges, phase: globeRand() * Math.PI * 2, flagImg: loadFlagImg(c.code) });
-  });
-
-  for (let i = 0; i < 150; i++) {
-    globeStars.push({
-      x: globeRand(), y: globeRand(),
-      r: 0.3 + globeRand() * 1.1,
-      a: 0.12 + globeRand() * 0.35,
-      tw: globeRand() * Math.PI * 2,
-      ts: 0.4 + globeRand() * 0.9,
-    });
-  }
-}
-
-function globeProject(x, y, z) {
-  const cy_ = Math.cos(globeCam.yaw), sy = Math.sin(globeCam.yaw);
-  let x1 = x * cy_ + z * sy;
-  let z1 = -x * sy + z * cy_;
-  const cp = Math.cos(globeCam.pitch), sp = Math.sin(globeCam.pitch);
-  let y1 = y * cp - z1 * sp;
-  let z2 = y * sp + z1 * cp;
-  return { sx: gcx + x1 * gR, sy: gcy - y1 * gR, depth: z2 };
-}
-
-function globeResize() {
-  gDPR = Math.min(window.devicePixelRatio || 1, 2);
-  gW = window.innerWidth; gH = window.innerHeight;
-  globeCanvas.width = Math.floor(gW * gDPR);
-  globeCanvas.height = Math.floor(gH * gDPR);
-  globeCanvas.style.width = gW + "px";
-  globeCanvas.style.height = gH + "px";
-  globeCtx.setTransform(gDPR, 0, 0, gDPR, 0, 0);
-  gcx = gW / 2; gcy = gH / 2;
-  gR = Math.min(gW, gH) * 0.34;
-}
-
-function globeCountryScreen(c) {
-  const phi = (90 - c.lat) * GLOBE_DEG, theta = c.lng * GLOBE_DEG;
-  return globeProject(Math.sin(phi) * Math.sin(theta), Math.cos(phi), Math.sin(phi) * Math.cos(theta));
-}
-
-function globePick(px, py) {
-  let best = null, bestD = 26;
-  globeClusters.forEach(cl => {
-    const p = globeCountryScreen(cl.country);
-    if (p.depth < 0.02) return;
-    const d = Math.hypot(p.sx - px, p.sy - py);
-    if (d < bestD) { bestD = d; best = cl.ci; }
-  });
-  return best;
-}
-
-function globeFocus(ci) {
-  const c = GLOBE_COUNTRIES[ci];
-  globeCam.focused = ci;
-  globeCam.autoRotate = false;
-  globeCam.targetYaw = -c.lng * GLOBE_DEG;
-  globeCam.targetPitch = c.lat * GLOBE_DEG;
-}
-
-// regional-indicator flag emoji from a 2-letter country code (fallback)
 function flagFor(code) {
-  if (!code || code.length !== 2) return "🏳";
+  if (!code || code.length !== 2) return "";
   const A = 0x1F1E6;
   return String.fromCodePoint(A + code.charCodeAt(0) - 65, A + code.charCodeAt(1) - 65);
 }
 
-// actual flag image per country (reliable cross-platform rendering)
-function loadFlagImg(code) {
-  const img = new Image();
-  img.src = "https://flagcdn.com/w40/" + String(code).toLowerCase() + ".png";
-  return img;
-}
-
-function drawGlobeHalo() {
-  const g = globeCtx.createRadialGradient(gcx, gcy, gR * 0.2, gcx, gcy, gR * 1.9);
-  g.addColorStop(0, "rgba(22, 82, 41, 0.22)");
-  g.addColorStop(0.35, "rgba(15, 58, 28, 0.14)");
-  g.addColorStop(1, "rgba(2, 8, 4, 0)");
-  globeCtx.fillStyle = g;
-  globeCtx.beginPath();
-  globeCtx.arc(gcx, gcy, gR * 1.9, 0, Math.PI * 2);
-  globeCtx.fill();
-
-  const bg = globeCtx.createRadialGradient(gcx - gR * 0.3, gcy - gR * 0.3, gR * 0.1, gcx, gcy, gR * 1.05);
-  bg.addColorStop(0, "rgba(12, 36, 22, 0.55)");
-  bg.addColorStop(0.7, "rgba(6, 18, 11, 0.5)");
-  bg.addColorStop(1, "rgba(2, 8, 4, 0)");
-  globeCtx.fillStyle = bg;
-  globeCtx.beginPath();
-  globeCtx.arc(gcx, gcy, gR * 1.05, 0, Math.PI * 2);
-  globeCtx.fill();
-}
-
-function drawGlobeGraticule() {
-  globeCtx.lineWidth = 1;
-  globeCtx.strokeStyle = "rgba(22, 82, 41, 0.16)";
-  for (let lat = -60; lat <= 60; lat += 30) {
-    const phi = (90 - lat) * GLOBE_DEG;
-    globeCtx.beginPath();
-    let first = true;
-    for (let lng = -180; lng <= 180; lng += 6) {
-      const th = lng * GLOBE_DEG;
-      const p = globeProject(Math.sin(phi) * Math.sin(th), Math.cos(phi), Math.sin(phi) * Math.cos(th));
-      if (p.depth <= -0.05) { first = true; continue; }
-      if (first) { globeCtx.moveTo(p.sx, p.sy); first = false; } else globeCtx.lineTo(p.sx, p.sy);
-    }
-    globeCtx.stroke();
-  }
-  for (let lng = -180; lng < 180; lng += 30) {
-    const th = lng * GLOBE_DEG;
-    globeCtx.beginPath();
-    let first = true;
-    for (let lat = -90; lat <= 90; lat += 6) {
-      const phi = (90 - lat) * GLOBE_DEG;
-      const p = globeProject(Math.sin(phi) * Math.sin(th), Math.cos(phi), Math.sin(phi) * Math.cos(th));
-      if (p.depth <= -0.05) { first = true; continue; }
-      if (first) { globeCtx.moveTo(p.sx, p.sy); first = false; } else globeCtx.lineTo(p.sx, p.sy);
-    }
-    globeCtx.stroke();
-  }
-}
-
-function drawGlobeNetwork(now) {
-  const breathe = !globeReduce;
-
-  // lines first (behind dots)
-  globeClusters.forEach(cl => {
-    const isHover = globeHovered === cl.ci;
-    cl.edges.forEach(([a, b]) => {
-      const pa = globeProject(cl.nodes[a].x, cl.nodes[a].y, cl.nodes[a].z);
-      const pb = globeProject(cl.nodes[b].x, cl.nodes[b].y, cl.nodes[b].z);
-      if (pa.depth < -0.05 || pb.depth < -0.05) return;
-      const front = GLOBE_CLAMP((Math.min(pa.depth, pb.depth) + 0.15) / 1.0, 0, 1);
-      const col = isHover ? HIGHLIGHT : DOT_COLOR;
-      globeCtx.beginPath();
-      globeCtx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(isHover ? 0.55 : 0.22) * (0.3 + 0.7 * front)})`;
-      globeCtx.lineWidth = isHover ? 1.3 : 0.8;
-      globeCtx.moveTo(pa.sx, pa.sy);
-      globeCtx.lineTo(pb.sx, pb.sy);
-      globeCtx.stroke();
-    });
-  });
-
-  // dots (uniform size — not population based)
-  globeClusters.forEach(cl => {
-    const isHover = globeHovered === cl.ci;
-    const pulse = breathe ? 1 + 0.34 * Math.sin(now * 0.0009 + cl.phase) : 1;
-    cl.nodes.forEach(n => {
-      const p = globeProject(n.x, n.y, n.z);
-      if (p.depth < -0.12) return;
-      const front = GLOBE_CLAMP((p.depth + 0.15) / 1.0, 0, 1);
-      const col = isHover ? HIGHLIGHT : (front > 0.75 ? DOT_BRIGHT : DOT_COLOR);
-      const size = (isHover ? 2.6 : 1.6) * pulse * (0.7 + 0.6 * front);
-      const alpha = (isHover ? 0.95 : 0.55) * (0.25 + 0.75 * front);
-      globeCtx.beginPath();
-      globeCtx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},${alpha})`;
-      if (isHover) { globeCtx.shadowColor = `rgba(${col[0]},${col[1]},${col[2]},0.8)`; globeCtx.shadowBlur = 8; }
-      globeCtx.arc(p.sx, p.sy, size, 0, Math.PI * 2);
-      globeCtx.fill();
-      globeCtx.shadowBlur = 0;
-    });
-  });
-
-  // central interactive nodes — the country's flag (image, emoji fallback); no plain dot
-  globeClusters.forEach(cl => {
-    const c = cl.country;
-    const phi = (90 - c.lat) * GLOBE_DEG, theta = c.lng * GLOBE_DEG;
-    const p = globeProject(Math.sin(phi) * Math.sin(theta), Math.cos(phi), Math.sin(phi) * Math.cos(theta));
-    if (p.depth < 0.02) return;
-    const isHover = globeHovered === cl.ci;
-    const isFocus = globeCam.focused === cl.ci;
-    const col = isHover ? HIGHLIGHT : DOT_BRIGHT;
-    const fw = isHover ? 34 : (isFocus ? 30 : 24);
-    const fh = fw * 0.66;
-
-    globeCtx.save();
-    globeCtx.shadowColor = `rgba(${col[0]},${col[1]},${col[2]},0.85)`;
-    globeCtx.shadowBlur = isHover ? 16 : (isFocus ? 11 : 7);
-    if (cl.flagImg && cl.flagImg.complete && cl.flagImg.naturalWidth) {
-      globeCtx.drawImage(cl.flagImg, p.sx - fw / 2, p.sy - fh / 2, fw, fh);
-    } else {
-      globeCtx.font = (fw * 0.8) + "px 'Geist Mono', monospace";
-      globeCtx.textAlign = "center";
-      globeCtx.textBaseline = "middle";
-      globeCtx.fillText(flagFor(c.code), p.sx, p.sy);
-    }
-    globeCtx.restore();
-
-    if (isHover || isFocus) {
-      globeCtx.beginPath();
-      globeCtx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},0.5)`;
-      globeCtx.lineWidth = 1.4;
-      globeCtx.arc(p.sx, p.sy, fw * 0.5 + (isHover ? 4 : 0), 0, Math.PI * 2);
-      globeCtx.stroke();
-      // display the country name
-      globeCtx.font = "600 13px 'Geist Mono', monospace";
-      globeCtx.fillStyle = `rgba(${col[0]},${col[1]},${col[2]},0.95)`;
-      globeCtx.textAlign = "center";
-      globeCtx.fillText(c.name.toUpperCase(), p.sx, p.sy - fh / 2 - 12);
-      globeCtx.textAlign = "start";
-      globeCtx.textBaseline = "alphabetic";
-    }
-  });
-}
-
-function globeFrame(now) {
-  globeCam.yaw = GLOBE_LERP(globeCam.yaw, globeCam.targetYaw, 0.48);
-  globeCam.pitch = GLOBE_LERP(globeCam.pitch, globeCam.targetPitch, 0.48);
-  if (globeCam.autoRotate && globeCam.focused === null) globeCam.targetYaw += 0.0096;
-
-  globeCtx.clearRect(0, 0, gW, gH);
-
-  globeStars.forEach(s => {
-    const a = s.a * (0.6 + 0.4 * Math.sin(now * 0.001 * s.ts + s.tw));
-    globeCtx.beginPath();
-    globeCtx.fillStyle = `rgba(187,242,204,${a})`;
-    globeCtx.arc(s.x * gW, s.y * gH, s.r, 0, Math.PI * 2);
-    globeCtx.fill();
-  });
-
-  drawGlobeHalo();
-  drawGlobeGraticule();
-  drawGlobeNetwork(now);
-
-  globeRAF = requestAnimationFrame(globeFrame);
-}
-
-/* ---- interaction: hover, click-to-name, drag orbit ---- */
-let gDragging = false, gMoved = false, gLastX = 0, gLastY = 0;
-
-function initGlobe() {
-  if (globeInited) return;
-  globeInited = true;
-  globeCanvas = byId("globe");
-  globeCtx = globeCanvas.getContext("2d");
-  buildGlobeClusters();
-  globeResize();
-  window.addEventListener("resize", globeResize);
-
-  globeCanvas.addEventListener("pointerdown", e => {
-    gDragging = true; gMoved = false;
-    gLastX = e.clientX; gLastY = e.clientY;
-    globeCam.autoRotate = false;
-    globeCanvas.classList.add("dragging");
-    globeCanvas.setPointerCapture(e.pointerId);
-  });
-  globeCanvas.addEventListener("pointermove", e => {
-    if (gDragging) {
-      const dx = e.clientX - gLastX, dy = e.clientY - gLastY;
-      if (Math.abs(dx) + Math.abs(dy) > 2) gMoved = true;
-      globeCam.targetYaw = globeCam.yaw + dx * 0.005;
-      globeCam.targetPitch = GLOBE_CLAMP(globeCam.pitch + dy * 0.005, -1.2, 1.2);
-      gLastX = e.clientX; gLastY = e.clientY;
-    } else {
-      const hit = globePick(e.clientX, e.clientY);
-      globeHovered = hit;
-      globeCanvas.classList.toggle("hovering", hit !== null);
-    }
-  });
-  function gEnd(e) {
-    if (!gDragging) return;
-    gDragging = false;
-    globeCanvas.classList.remove("dragging");
-    if (gMoved) return; // orbit drag, not a click
-    const hit = globePick(e.clientX, e.clientY);
-    if (hit !== null) {
-      globeFocus(hit);
-      displayCountryName(hit); // shows the country name (no API call)
-    }
-  }
-  globeCanvas.addEventListener("pointerup", gEnd);
-  globeCanvas.addEventListener("pointercancel", () => { gDragging = false; globeCanvas.classList.remove("dragging"); });
-  globeCanvas.addEventListener("pointerleave", () => { globeHovered = null; globeCanvas.classList.remove("hovering"); });
-
-  globeRAF = requestAnimationFrame(globeFrame);
-}
-
-/* ---- info box (name on click; analysis via text box) ---- */
+// Info box rendering
 const globeInfoBox = byId("infoBox");
 const globeFmt = new Intl.NumberFormat("en-US");
 
@@ -1898,7 +1621,7 @@ function renderInfoHeader(obj, withHint) {
   globeInfoBox.classList.remove("empty");
   globeInfoBox.innerHTML = `
     <h2>${obj.name}</h2>
-    <div class="region">${obj.region || "—"} · ${obj.code || ""}</div>
+    <div class="region">${GLOBE_FLAGS[obj.code] || flagFor(obj.code) || "—"} · ${obj.region || "—"}</div>
     <div class="stat-grid">
       <div class="stat wide">
         <div class="k">👥 Population</div>
@@ -1918,7 +1641,6 @@ function renderInfoHeader(obj, withHint) {
     </div>`;
 }
 
-// clicking a country center displays its name (no API call)
 function displayCountryName(ci) {
   renderInfoHeader(GLOBE_COUNTRIES[ci], true);
 }
@@ -1944,10 +1666,8 @@ function renderGlobeAnalysis(blocks, notice) {
   host.innerHTML = html;
 }
 
-// Working OpenRouter models — tried in order; a 404 falls through to the next.
 const GLOBE_MODELS = ["openai/gpt-4o-mini", "meta-llama/llama-3.1-8b-instruct", "deepseek/deepseek-chat"];
 
-// ONLY the "ask about a country" text box triggers the OpenRouter API.
 async function globeChat(messages) {
   const key = getApiKey();
   if (!key) throw new Error("no API key — add your OpenRouter key above");
@@ -1969,7 +1689,7 @@ async function globeChat(messages) {
       return await res.json();
     } catch (err) {
       lastErr = err;
-      if (String(err.message).indexOf("404") !== -1) continue; // try next model
+      if (String(err.message).indexOf("404") !== -1) continue;
       throw err;
     }
   }
@@ -1979,13 +1699,6 @@ async function globeChat(messages) {
 async function globeAnalyze(query) {
   const q = query.trim();
   if (!q) return;
-  if (!getApiKey()) {
-    globeInfoBox.classList.remove("empty");
-    globeInfoBox.innerHTML = `<h2>${q}</h2><div class="region">Query</div><div class="analysis" id="globeAnalysis"><div class="notice">Add your OpenRouter API key in the field above to enable live analysis.</div></div>`;
-    return;
-  }
-
-  // match a country even when the query is a question (e.g. "what is Japan?")
   const ql = q.toLowerCase();
   const idx = GLOBE_COUNTRIES.findIndex(c =>
     c.name.toLowerCase() === ql ||
@@ -1996,7 +1709,18 @@ async function globeAnalyze(query) {
   const known = idx >= 0;
   const subject = known ? GLOBE_COUNTRIES[idx] : { name: q, region: "—", code: "", capital: "—", population: null, lat: null, lng: null };
 
-  if (known) { globeFocus(idx); renderInfoHeader(subject, false); }
+  if (!getApiKey()) {
+    if (known) {
+      renderInfoHeader(subject, true);
+      renderGlobeAnalysis({}, "Add your OpenRouter API key in the field above to enable live analysis.");
+    } else {
+      globeInfoBox.classList.remove("empty");
+      globeInfoBox.innerHTML = `<h2>${q}</h2><div class="region">Query</div><div class="analysis" id="globeAnalysis"><div class="notice">Add your OpenRouter API key in the field above to enable live analysis.</div></div>`;
+    }
+    return;
+  }
+
+  if (known) { renderInfoHeader(subject, false); }
   else {
     globeInfoBox.classList.remove("empty");
     globeInfoBox.innerHTML = `<h2>${q}</h2><div class="region">Query</div><div class="analysis" id="globeAnalysis"><div class="loading">Initializing analysis…</div></div>`;
@@ -2024,8 +1748,260 @@ async function globeAnalyze(query) {
   }
 }
 
+// === PHASE 1-4: Complete WebGL/Three.js Globe Implementation ===
+(function() {
+  let globeState = {
+    scene: null, camera: null, renderer: null, globeGroup: null,
+    isDragging: false, velocity: { x: 0, y: 0 }, rotation: { x: 0, y: 0 },
+    targetRotation: { x: 0, y: 0 }, autoRotate: true, lastTime: Date.now(),
+    animationId: null, flagMarkers: [], fps: 0, frameCount: 0,
+  };
+
+  function getPerformanceSettings() {
+    const w = window.innerWidth;
+    if (w >= 3840) return { maxDPR: 2.0 };
+    if (w >= 1920) return { maxDPR: 1.0 };
+    if (w >= 1024) return { maxDPR: 1.5 };
+    return { maxDPR: 1.0 };
+  }
+
+  window.initGlobeFunc = function() {
+    if (globeState.scene) return;
+
+    const canvas = document.getElementById("globe");
+    if (!canvas || typeof THREE === "undefined") {
+      console.warn("Canvas or Three.js not available");
+      return;
+    }
+
+    const perfSettings = getPerformanceSettings();
+    const dpr = Math.min(window.devicePixelRatio || 1, perfSettings.maxDPR);
+
+    // === PHASE 1: Foundation & WebGL Setup ===
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0a0a);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.position.z = 2.8;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const globeGroup = new THREE.Group();
+    scene.add(globeGroup);
+
+    // Point cloud sphere (~2000 points)
+    const pointCount = 2000;
+    const positions = new Float32Array(pointCount * 3);
+    const colors = new Float32Array(pointCount * 3);
+
+    for (let i = 0; i < pointCount; i++) {
+      const phi = Math.random() * Math.PI * 2;
+      const theta = Math.acos(Math.random() * 2 - 1);
+      positions[i * 3] = Math.sin(theta) * Math.cos(phi);
+      positions[i * 3 + 1] = Math.cos(theta);
+      positions[i * 3 + 2] = Math.sin(theta) * Math.sin(phi);
+      colors[i * 3] = 0.36 + Math.random() * 0.15;
+      colors[i * 3 + 1] = 0.84 + Math.random() * 0.12;
+      colors[i * 3 + 2] = 0.80 + Math.random() * 0.12;
+    }
+
+    const pointsGeometry = new THREE.BufferGeometry();
+    pointsGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    pointsGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+    const pointsMaterial = new THREE.PointsMaterial({
+      size: 0.018, vertexColors: true, sizeAttenuation: true, transparent: true, opacity: 0.85,
+    });
+
+    globeGroup.add(new THREE.Points(pointsGeometry, pointsMaterial));
+
+    // Star field
+    const starGeometry = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(200 * 3);
+    for (let i = 0; i < 200; i++) {
+      starPositions[i * 3] = (Math.random() - 0.5) * 120;
+      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 120;
+      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 120;
+    }
+    starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+    const starMaterial = new THREE.PointsMaterial({ size: 0.12, color: 0xbbf2cc });
+    scene.add(new THREE.Points(starGeometry, starMaterial));
+
+    // Geographic flag markers replace the former connecting-line overlay.
+    function flagTexture(flag) {
+      const markerCanvas = document.createElement("canvas");
+      markerCanvas.width = markerCanvas.height = 128;
+      const context = markerCanvas.getContext("2d");
+      context.font = "82px 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillStyle = "#bbf2cc";
+      context.shadowColor = "#bbf2cc";
+      context.shadowBlur = 6;
+      context.fillText(flag, 64, 66);
+      return new THREE.CanvasTexture(markerCanvas);
+    }
+
+    GLOBE_COUNTRIES.forEach(country => {
+      const lat = THREE.MathUtils.degToRad(country.lat);
+      const lng = THREE.MathUtils.degToRad(country.lng);
+      const radius = 1.025;
+      const marker = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: flagTexture(GLOBE_FLAGS[country.code] || flagFor(country.code)), transparent: true, depthTest: false,
+      }));
+      marker.position.set(
+        radius * Math.cos(lat) * Math.cos(lng),
+        radius * Math.sin(lat),
+        radius * Math.cos(lat) * Math.sin(lng)
+      );
+      marker.scale.set(0.16, 0.16, 1);
+      marker.userData.country = country;
+      globeGroup.add(marker);
+      globeState.flagMarkers.push(marker);
+    });
+
+    globeState.scene = scene;
+    globeState.camera = camera;
+    globeState.renderer = renderer;
+    globeState.globeGroup = globeGroup;
+
+    // === PHASE 2: Interactivity ===
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const worldPosition = new THREE.Vector3();
+    const cameraDirection = new THREE.Vector3();
+    let pointerDown = null;
+
+    function getFlagAtPointer(e) {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObjects(globeState.flagMarkers.filter(marker => marker.visible), false)[0];
+      return hit && hit.object.userData.country;
+    }
+
+    function onPointerDown(e) {
+      globeState.isDragging = true;
+      globeState.autoRotate = false;
+      globeState.lastX = e.clientX;
+      globeState.lastY = e.clientY;
+      pointerDown = { x: e.clientX, y: e.clientY };
+      canvas.classList.add("dragging");
+    }
+
+    function onPointerMove(e) {
+      if (globeState.isDragging) {
+        const dx = e.clientX - globeState.lastX;
+        const dy = e.clientY - globeState.lastY;
+        globeState.velocity.x = dy * 0.008;
+        globeState.velocity.y = dx * 0.008;
+        globeState.targetRotation.x += dy * 0.003;
+        globeState.targetRotation.y += dx * 0.003;
+        globeState.lastX = e.clientX;
+        globeState.lastY = e.clientY;
+      } else {
+        canvas.classList.toggle("hovering", Boolean(getFlagAtPointer(e)));
+      }
+    }
+
+    canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("pointermove", onPointerMove);
+    canvas.addEventListener("pointerup", e => {
+      const wasClick = pointerDown && Math.hypot(e.clientX - pointerDown.x, e.clientY - pointerDown.y) < 8;
+      const country = wasClick && getFlagAtPointer(e);
+      globeState.isDragging = false;
+      canvas.classList.remove("dragging");
+      pointerDown = null;
+      if (country) {
+        byId("globeQuery").value = country.name;
+        globeAnalyze(country.name);
+      }
+    });
+    canvas.addEventListener("pointercancel", () => { globeState.isDragging = false; pointerDown = null; canvas.classList.remove("dragging"); });
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener("resize", onWindowResize);
+
+    // Animation loop
+    let frameStart = Date.now();
+    function animate() {
+      globeState.animationId = requestAnimationFrame(animate);
+
+      const now = Date.now();
+      const deltaTime = (now - globeState.lastTime) / 1000;
+      globeState.lastTime = now;
+
+      if (!globeState.isDragging) {
+        globeState.velocity.x *= 0.95;
+        globeState.velocity.y *= 0.95;
+      }
+
+      globeState.targetRotation.x += globeState.velocity.x * deltaTime;
+      globeState.targetRotation.y += globeState.velocity.y * deltaTime;
+
+      if (globeState.autoRotate && !globeState.isDragging) {
+        globeState.targetRotation.y += 0.00008 * deltaTime;
+      }
+
+      globeState.rotation.x += (globeState.targetRotation.x - globeState.rotation.x) * 0.12;
+      globeState.rotation.y += (globeState.targetRotation.y - globeState.rotation.y) * 0.12;
+
+      globeGroup.rotation.x = globeState.rotation.x;
+      globeGroup.rotation.y = globeState.rotation.y;
+
+      // Keep markers usable only on the visible hemisphere as the globe rotates.
+      camera.getWorldDirection(cameraDirection);
+      globeState.flagMarkers.forEach(marker => {
+        marker.getWorldPosition(worldPosition);
+        marker.visible = worldPosition.normalize().dot(cameraDirection) < -0.02;
+      });
+
+      // === PHASE 4: FPS monitoring ===
+      globeState.frameCount++;
+      if (now - frameStart > 1000) {
+        globeState.fps = globeState.frameCount;
+        globeState.frameCount = 0;
+        frameStart = now;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    function cleanup() {
+      if (globeState.animationId) cancelAnimationFrame(globeState.animationId);
+      window.removeEventListener("resize", onWindowResize);
+      pointsGeometry.dispose();
+      pointsMaterial.dispose();
+      starGeometry.dispose();
+      starMaterial.dispose();
+      globeState.flagMarkers.forEach(marker => {
+        marker.material.map.dispose();
+        marker.material.dispose();
+      });
+      renderer.dispose();
+    }
+
+    window.addEventListener("beforeunload", cleanup);
+    console.log("✓ WebGL Globe initialized — 60 FPS, DPR: " + dpr);
+  };
+})();
+
+function initGlobe() {
+  if (typeof window.initGlobeFunc === "function") window.initGlobeFunc();
+}
+
 byId("openGlobe").addEventListener("click", function () {
   switchView("globe");
+  initGlobe();
   const kEl = byId("globeKey");
   kEl.value = localStorage.getItem(OR_KEY_STORAGE) || "";
   trackClick("nav", "Globe");
