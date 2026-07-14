@@ -359,6 +359,24 @@
     color: var(--text-dim);
     opacity: 0.9;
   }
+  .dashboard-footer-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    border: 1px solid #4ade80;
+    border-radius: 7px;
+    background: rgba(74, 222, 128, 0.14);
+    color: #8df0aa;
+    font: inherit;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: background 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .dashboard-footer-link:hover,
+  .dashboard-footer-link:focus-visible { background: #4ade80; color: #071009; outline: none; }
+  .dashboard-footer-link:focus-visible { outline: 1px solid #8df0aa; outline-offset: 3px; }
 
   /* ---- film-grain overlay (static, very subtle) ---- */
   .grain {
@@ -1113,7 +1131,15 @@ SECTIONS.forEach((section, i) => {
   sectionsEl.appendChild(sec);
 });
 
-byId("footer").textContent = "© 2026 — Works";
+const footer = byId("footer");
+const footerCopyright = document.createElement("span");
+footerCopyright.textContent = "© 2026 — Works";
+const dashboardLink = document.createElement("a");
+dashboardLink.className = "dashboard-footer-link";
+dashboardLink.href = "dashboard.html";
+dashboardLink.textContent = "DASHBOARD →";
+dashboardLink.setAttribute("aria-label", "Open owner dashboard");
+footer.replaceChildren(footerCopyright, dashboardLink);
 
 document.documentElement.classList.add("js");
 
