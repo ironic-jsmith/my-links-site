@@ -44,6 +44,12 @@
     margin-bottom:28px;
     flex-wrap:wrap;
   }
+  .header-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
   .header h1{
     font-family:Schibsted Grotesk,sans-serif;
     font-weight:600;
@@ -51,6 +57,21 @@
     margin:0;
     letter-spacing:-0.02em;
   }
+  .source-badge{
+    display:inline-flex;
+    align-items:center;
+    min-height:38px;
+    padding:8px 12px;
+    border:1px solid var(--hairline);
+    border-radius:10px;
+    background:rgba(255,255,255,0.02);
+    color:var(--text-dim);
+    font-family:Geist Mono,monospace;
+    font-size:10px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+  }
+  .source-badge.live{color:var(--accent);border-color:rgba(124,138,110,0.28)}
   .back{
     display:inline-flex;
     align-items:center;
@@ -184,7 +205,10 @@
     <div class="brand">Terra Obscura / Analytics</div>
     <div class="header">
       <h1>Dashboard</h1>
-      <a class="back" href="index.html">&larr; Back to index</a>
+      <div class="header-actions">
+        <div class="source-badge" id="sourceBadge">Loading source</div>
+        <a class="back" href="index.html">&larr; Back to index</a>
+      </div>
     </div>
 
     <div class="grid">
@@ -258,13 +282,38 @@
   </div>
 
 <script>
-  if (sessionStorage.getItem("dash_auth") !== "1") {
+  const AUTH_KEY = "stx_dash_auth";
+  const KEY = "stxbandz_analytics";
+  const API_URL = "/analytics?action=stats";
+
+  if (sessionStorage.getItem(AUTH_KEY) !== "1") {
     window.location.href = "dashboard.html";
   }
 
-  const KEY = "stxbandz_analytics";
-
   function $(id){ return document.getElementById(id); }
+
+  function emptyData(){
+    return { views: 0, clicks: {}, events: [], startDate: null };
+  }
+
+  function normalizeData(raw){
+    const base = raw && typeof raw === "object" ? raw : {};
+    return {
+      views: Number.isFinite(base.views) ? base.views : 0,
+      clicks: base.clicks && typeof base.clicks === "object" ? base.clicks : {},
+      events: Array.isArray(base.events) ? base.events : [],
+      startDate: typeof base.startDate === "string" ? base.startDate : null
+    };
+  }
+
+  function readLocalData(){
+    try {
+      const stored = localStorage.getItem(KEY);
+      return stored ? normalizeData(JSON.parse(stored)) : emptyData();
+    } catch (e) {
+      return emptyData();
+    }
+  }
 
   function fmtDate(iso){
     if(!iso) return "—";
@@ -278,19 +327,19 @@
     return d.toLocaleTimeString(undefined, {hour:"2-digit",minute:"2-digit"});
   }
 
-  function render(){
-    let d = null;
-    try { d = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
-    if(!d){
-      $("v").textContent = "0";
-      $("c").textContent = "0";
-      $("s").textContent = "—";
-      $("e").textContent = "0";
-      $("vMuted").textContent = "No visits recorded";
-      $("cMuted").textContent = "No clicks recorded";
-      return;
+  function setSourceBadge(source){
+    const badge = $("sourceBadge");
+    if (source === "cloudflare-kv") {
+      badge.textContent = "Cloudflare KV";
+      badge.classList.add("live");
+    } else {
+      badge.textContent = "Local fallback";
+      badge.classList.remove("live");
     }
+  }
 
+  function render(d, source){
+    setSourceBadge(source);
     const clicks = d.clicks || {};
     const totalClicks = Object.values(clicks).reduce((a, cat) =>
       a + Object.values(cat).reduce((x, y) => x + y, 0), 0);
@@ -299,8 +348,12 @@
     $("c").textContent = totalClicks;
     $("s").textContent = fmtDate(d.startDate);
     $("e").textContent = d.events ? d.events.length : 0;
-    $("vMuted").textContent = totalClicks ? "Tracking active" : "No visits recorded";
-    $("cMuted").textContent = totalClicks ? `${totalClicks} tracked clicks` : "No clicks recorded";
+    $("vMuted").textContent = source === "cloudflare-kv"
+      ? (d.views ? "Persistent analytics active" : "Persistent analytics ready")
+      : (d.views ? "Stored on this device" : "No visits recorded on this device");
+    $("cMuted").textContent = totalClicks
+      ? `${totalClicks} tracked clicks`
+      : (source === "cloudflare-kv" ? "No clicks recorded yet" : "No local clicks recorded");
 
     // Build flat list of all link clicks
     const flat = [];
@@ -365,9 +418,11 @@
         const label = ev.label || ev.data?.label || "—";
         const title = ev.title || ev.data?.title || "";
         const text = title ? `${label} / ${title}` : label;
+        const eventType = ev.type || ev.kind || "event";
+        const stamp = ev.timestamp || ev.at;
         tr.innerHTML = `
-          <td class="num" style="white-space:nowrap">${fmtTime(ev.timestamp)}</td>
-          <td style="text-transform:uppercase;font-size:10px;letter-spacing:0.12em;color:var(--accent)">${ev.type || "event"}</td>
+          <td class="num" style="white-space:nowrap">${fmtTime(stamp)}</td>
+          <td style="text-transform:uppercase;font-size:10px;letter-spacing:0.12em;color:var(--accent)">${eventType}</td>
           <td style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${text}">${text}</td>
         `;
         evBody.appendChild(tr);
@@ -375,7 +430,23 @@
     }
   }
 
-  render();
+  async function loadDashboardData(){
+    try {
+      const res = await fetch(API_URL, { headers: { "Accept": "application/json" }, cache: "no-store" });
+      if (res.ok) {
+        const payload = await res.json().catch(() => null);
+        if (payload && payload.data) {
+          if (payload.persistent) return { data: normalizeData(payload.data), source: "cloudflare-kv" };
+          return { data: readLocalData(), source: "local-fallback" };
+        }
+      }
+    } catch (e) {}
+    return { data: readLocalData(), source: "local-fallback" };
+  }
+
+  loadDashboardData().then(({ data, source }) => {
+    render(data, source);
+  });
 </script>
 </body>
 </html>

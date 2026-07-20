@@ -149,10 +149,15 @@
   </div>
 
 <script>
+  const AUTH_KEY = "stx_dash_auth";
   const PW = "test321";
   const form = document.getElementById("loginForm");
   const input = document.getElementById("pw");
   const err = document.getElementById("err");
+
+  if (sessionStorage.getItem(AUTH_KEY) === "1") {
+    window.location.replace("dashboard-view.html");
+  }
 
   function showError(msg) {
     err.textContent = msg;
@@ -165,7 +170,7 @@
     const v = input.value;
     if (v === PW) {
       err.textContent = "";
-      sessionStorage.setItem("dash_auth", "1");
+      sessionStorage.setItem(AUTH_KEY, "1");
       window.location.href = "dashboard-view.html";
     } else {
       showError("Incorrect access key.");

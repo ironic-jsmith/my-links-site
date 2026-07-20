@@ -1,3 +1,4 @@
+// Deprecated: Cloudflare Pages now uses /functions/analytics.js instead of this Netlify function.
 import { getStore } from "@netlify/blobs";
 import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 

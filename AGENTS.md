@@ -2,7 +2,7 @@
 
 ## Project
 `my-links-site` — a single-file, dark "terminal"-style link-in-bio / profile site
-for the `stxbandz` handle, deployed statically on **Netlify**. It also contains an
+for the `stxbandz` handle, deployed statically on **Cloudflare Pages**. It also contains an
 integrated "Terra Obscura" globe intelligence feature.
 
 No build step, no framework, no package install required. Everything lives in
@@ -48,6 +48,7 @@ No build step, no framework, no package install required. Everything lives in
 - Deployment config files (_headers, _redirects, og-image.svg) are optional;
   if _headers with a CSP is restored, its connect-src must allow
   https://openrouter.ai or the globe AI calls will be blocked.
+- Analytics are routed through Cloudflare Pages Functions (`/api/analytics`).
 
 ## Conventions
 - Keep all changes inside index.html; prefer editing the data arrays over logic.

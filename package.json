@@ -1,6 +1,6 @@
 {
   "private": true,
-  "dependencies": {
-    "@netlify/blobs": "^10.7.9"
+  "scripts": {
+    "test:analytics": "node --no-warnings scripts/test-analytics.mjs"
   }
 }
