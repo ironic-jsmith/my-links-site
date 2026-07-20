@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Z-Flow Layout Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 antialiased relative">
+  
+  <!-- Floating Back Button back to Hub -->
+  <a href="index.html" class="fixed top-4 left-4 z-50 bg-gray-900/90 backdrop-blur text-white text-sm font-bold px-4 py-2 rounded-full border border-gray-700 hover:bg-green-500 hover:text-gray-950 transition shadow-lg">
+    &larr; Back to stxbandz
+  </a>
+
+  <!-- Minimal Hero -->
+  <header class="pt-32 pb-16 px-4 text-center max-w-4xl mx-auto">
+    <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-6 text-gray-900">Restore Your Curb Appeal.</h1>
+    <p class="text-xl text-gray-600 mb-10 font-medium">Top-rated exterior cleaning and soft washing. We let our results do the talking.</p>
+    <a href="tel:&&&&&&&&&&" class="inline-block bg-blue-600 text-white font-bold text-xl px-10 py-5 rounded-full hover:bg-blue-700 transition shadow-xl">
+      Call Now for a Quote: (&&&) &&&-&&&&
+    </a>
+  </header>
+
+  <!-- Z-Flow Block 1 (Text Left, Image Right) -->
+  <section class="flex flex-col md:flex-row items-stretch min-h-[500px]">
+    <div class="w-full md:w-1/2 bg-gray-50 flex flex-col justify-center p-12 md:p-24">
+      <h2 class="text-4xl font-bold mb-4">Driveway & Concrete</h2>
+      <p class="text-lg text-gray-600 mb-8">High-pressure surface cleaning to blast away years of grime, oil stains, and organic growth safely.</p>
+      <div><a href="tel:&&&&&&&&&&" class="text-blue-600 font-bold hover:underline text-lg">Call to schedule &rarr;</a></div>
+    </div>
+    <div class="w-full md:w-1/2 bg-gray-200 min-h-[300px]" style="background-image: url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80'); background-size: cover; background-position: center;"></div>
+  </section>
+
+  <!-- Z-Flow Block 2 (Image Left, Text Right) -->
+  <section class="flex flex-col md:flex-row-reverse items-stretch min-h-[500px]">
+    <div class="w-full md:w-1/2 bg-gray-900 text-white flex flex-col justify-center p-12 md:p-24">
+      <h2 class="text-4xl font-bold mb-4">Soft Wash House Washing</h2>
+      <p class="text-lg text-gray-400 mb-8">Low-pressure cleaning that removes algae and dirt without damaging your delicate siding or paint.</p>
+      <div><a href="tel:&&&&&&&&&&" class="text-green-400 font-bold hover:underline text-lg">Call to schedule &rarr;</a></div>
+    </div>
+    <div class="w-full md:w-1/2 bg-gray-300 min-h-[300px]" style="background-image: url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80'); background-size: cover; background-position: center;"></div>
+  </section>
+
+</body>
+</html>

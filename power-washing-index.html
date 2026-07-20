@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>stxbandz website builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* ---------- Animated hero background (retro grid + glowing beams) ---------- */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(120% 120% at 50% 0%, #0f172a 0%, #020617 70%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: -50% 0 0 0;
+      background-image:
+        linear-gradient(to right, rgba(92,214,125,0.10) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(92,214,125,0.10) 1px, transparent 1px);
+      background-size: 44px 44px;
+      transform: perspective(420px) rotateX(60deg);
+      transform-origin: top center;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 65%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 65%);
+      animation: gridScroll 12s linear infinite;
+    }
+    @keyframes gridScroll {
+      from { background-position: 0 0; }
+      to   { background-position: 0 44px; }
+    }
+    .hero-beam {
+      position: absolute;
+      top: -30%;
+      width: 38vw;
+      height: 140%;
+      filter: blur(70px);
+      opacity: 0.5;
+      border-radius: 9999px;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .hero-beam--1 { left: 8%;  background: radial-gradient(circle, rgba(92,214,125,0.45), transparent 60%); animation: drift1 9s ease-in-out infinite; }
+    .hero-beam--2 { right: 6%; background: radial-gradient(circle, rgba(129,140,248,0.35), transparent 60%); animation: drift2 11s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(28px) scale(1.08); } }
+    @keyframes drift2 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.12); } }
+
+    /* ---------- Staggered entrance ---------- */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* ---------- Card hover glow ---------- */
+    .glow-card {
+      position: relative;
+      transition: transform .35s ease, border-color .35s ease;
+    }
+    .glow-card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(92,214,125,0.55), transparent 45%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity .35s ease;
+      pointer-events: none;
+    }
+    .glow-card:hover { transform: translateY(-4px); border-color: rgba(92,214,125,0.45); }
+    .glow-card:hover::after { opacity: 1; }
+
+    /* Seamless transition: page background fades from hero dark into light */
+    .after-hero {
+      background: linear-gradient(to bottom, #020617 0%, #0f172a 8%, #f8fafc 22%, #f8fafc 100%);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+      .hero-grid, .hero-beam { animation: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Adaptive "Liquid Glass" Navigation -->
+  <nav id="nav" class="sticky top-0 z-50 border-b border-transparent transition-all duration-500"
+       style="backdrop-filter: blur(0px); background: transparent;">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+      <a href="index.html" class="font-black text-xl tracking-tighter text-white drop-shadow hover:text-emerald-400 transition-colors">stx<span class="text-emerald-400">bandz</span></a>
+      <div class="flex items-center gap-3">
+        <a href="index.html"
+           class="text-slate-300 hover:text-white text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400"
+           aria-label="Back to social page">&larr; Social Page</a>
+        <a href="#templates"
+           class="bg-emerald-500 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 text-slate-950 px-5 py-2 rounded-md font-semibold text-sm transition-colors shadow-sm"
+           aria-label="Get started">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Animated Hero -->
+  <header class="hero -mt-16 pt-32 pb-24 sm:pt-40 sm:pb-32 text-center px-4">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-beam hero-beam--1" aria-hidden="true"></div>
+    <div class="hero-beam hero-beam--2" aria-hidden="true"></div>
+
+    <div class="relative max-w-3xl mx-auto">
+      <span class="reveal inline-block py-1 px-3 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold tracking-widest uppercase mb-6 border border-emerald-500/30">
+        One-time. Unmanaged. Yours.
+      </span>
+      <h1 class="reveal text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight" style="transition-delay:.08s">
+        stxbandz website builder
+      </h1>
+      <p class="reveal text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed" style="transition-delay:.16s">
+        Premium, lightning-fast static websites. You pay a one-time fee for the code, and nothing else. Zero monthly retainer fees&mdash;you own the code and host it yourself forever.
+      </p>
+    </div>
+  </header>
+
+  <!-- Template Showcase -->
+  <section id="templates" class="after-hero -mt-px pt-28 pb-24 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="reveal text-3xl font-extrabold tracking-tight text-slate-900">Available Templates</h2>
+        <p class="reveal mt-4 text-slate-600">Hand-built, production-ready layouts you can preview and own outright.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card 1: Power Washing / Exterior Cleaning -->
+        <article class="glow-card reveal bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+          <div class="relative h-56 bg-slate-900 overflow-hidden">
+            <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center px-6">
+                <div class="font-black text-2xl tracking-tighter text-white">PRO<span class="text-emerald-400">WASH</span></div>
+                <div class="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-300">Power Washing &amp; Gutters</div>
+              </div>
+            </div>
+            <span class="absolute top-4 left-4 bg-white/90 text-slate-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Exterior Cleaning</span>
+          </div>
+          <div class="p-8 flex flex-col flex-1">
+            <h3 class="text-xl font-bold mb-3 text-slate-900">The Alternating Z-Flow Layout</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">A highly visual layout featuring edge-to-edge alternating content blocks. Zero forms—drives conversions purely through prominent Click-to-Call CTAs.</p>
+            <button type="button" data-preview="template-zigzag.html"
+               class="mt-auto inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 text-slate-950 px-6 py-3 rounded-md font-semibold transition-colors">
+              Preview &rarr;
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 2: General Local Service -->
+        <article class="glow-card reveal bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+          <div class="relative h-56 bg-slate-900 overflow-hidden">
+            <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center px-6">
+                <div class="font-black text-2xl tracking-tighter text-white">GREEN<span class="text-emerald-400">SCAPE</span></div>
+                <div class="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-300">Landscaping &amp; Lawn Care</div>
+              </div>
+            </div>
+            <span class="absolute top-4 left-4 bg-white/90 text-slate-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Local Service</span>
+          </div>
+          <div class="p-8 flex flex-col flex-1">
+            <h3 class="text-xl font-bold mb-3 text-slate-900">The Asymmetric Bento UI Layout</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">Built for multi-service contractors. Organizes services, trust badges, and contact details into a premium, interlocking grid, eliminating scroll fatigue.</p>
+            <button type="button" data-preview="template-bento.html"
+               class="mt-auto inline-flex items-center justify-center border border-slate-900 bg-slate-900 hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 text-white px-6 py-3 rounded-md font-semibold transition-colors">
+              Preview &rarr;
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-screen Template Preview Overlay -->
+  <div id="previewOverlay" class="fixed inset-0 z-[100] hidden">
+    <div class="flex flex-col h-full bg-slate-950">
+      <div class="flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/10 bg-slate-950/95 backdrop-blur">
+        <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-emerald-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">
+          <span aria-hidden="true">&larr;</span> Back to Main Website
+        </a>
+        <button type="button" id="previewClose" aria-label="Close preview" class="text-slate-400 hover:text-white transition-colors text-xl leading-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">&times;</button>
+      </div>
+      <iframe id="previewFrame" class="flex-1 w-full border-0 bg-white" title="Template preview" loading="lazy"></iframe>
+    </div>
+  </div>
+
+   <!-- Footer -->
+   <footer class="bg-slate-950 py-10 text-center text-slate-500 text-sm px-4">
+     <div class="mb-6">
+       <a href="index.html" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105">
+         ← Back to Website Builder
+       </a>
+     </div>
+     <p class="mb-2 font-semibold text-slate-300">stxbandz website builder</p>
+     <p>&copy; 2026 stxbandz. All rights reserved. Code is delivered unmanaged&mdash;you own it forever.</p>
+   </footer>
+
+  <script>
+    /* ===== Staggered reveal on scroll ===== */
+    (function () {
+      var items = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('is-visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.15 });
+      items.forEach(function (el) { io.observe(el); });
+    })();
+
+    /* ===== Card magnetic border-glow tracking ===== */
+    (function () {
+      document.querySelectorAll('.glow-card').forEach(function (card) {
+        card.addEventListener('pointermove', function (ev) {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+          card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+        });
+      });
+    })();
+
+    /* ===== Adaptive liquid-glass navbar ===== */
+    (function () {
+      var nav = document.getElementById('nav');
+      var hero = document.querySelector('.hero');
+      var brand = nav.querySelector('div').firstElementChild;
+      function onScroll() {
+        var threshold = hero ? hero.offsetHeight - 80 : 240;
+        if (window.scrollY > threshold) {
+          nav.style.background = 'rgba(255,255,255,0.65)';
+          nav.style.backdropFilter = 'blur(14px) saturate(160%)';
+          nav.style.webkitBackdropFilter = 'blur(14px) saturate(160%)';
+          nav.style.borderBottomColor = 'rgba(15,23,42,0.08)';
+          brand.classList.remove('text-white', 'drop-shadow');
+          brand.classList.add('text-slate-900');
+        } else {
+          nav.style.background = 'transparent';
+          nav.style.backdropFilter = 'blur(0px)';
+          nav.style.webkitBackdropFilter = 'blur(0px)';
+          nav.style.borderBottomColor = 'transparent';
+          brand.classList.add('text-white', 'drop-shadow');
+          brand.classList.remove('text-slate-900');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+    /* ===== Full-screen template preview overlay ===== */
+    (function () {
+      var overlay = document.getElementById('previewOverlay');
+      var frame = document.getElementById('previewFrame');
+      var closeBtn = document.getElementById('previewClose');
+      if (!overlay || !frame) return;
+
+      function openPreview(src) {
+        frame.src = src;
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+      function closePreview() {
+        overlay.classList.add('hidden');
+        frame.src = 'about:blank';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('[data-preview]').forEach(function (btn) {
+        btn.addEventListener('click', function () { openPreview(btn.getAttribute('data-preview')); });
+      });
+      closeBtn.addEventListener('click', closePreview);
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && !overlay.classList.contains('hidden')) closePreview();
+      });
+    })();
+  </script>
+</body>
+</html>
