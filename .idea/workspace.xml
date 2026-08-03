@@ -13,8 +13,11 @@
       <change beforePath="$PROJECT_DIR$/dashboard-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard-view.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/netlify/functions/analytics.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/netlify/functions/analytics.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model-a-landing.html" beforeDir="false" afterPath="$PROJECT_DIR$/model-a-landing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/power-washing-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/power-washing-index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template-bento.html" beforeDir="false" afterPath="$PROJECT_DIR$/template-bento.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template-zigzag.html" beforeDir="false" afterPath="$PROJECT_DIR$/template-zigzag.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +30,9 @@
     </persistenceIdMap>
   </component>
   <component name="ExportToHTMLSettings">
+    <option name="printScope" value="4" />
     <option name="OPEN_IN_BROWSER" value="true" />
-    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/exportToHTML" />
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Downloads" />
   </component>
   <component name="Git.Settings">
     <option name="PUSH_AUTO_UPDATE" value="true" />
@@ -56,23 +60,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.4796320596626322" />
-      <entry key="MS500" value="1.863339558574412" />
-      <entry key="S2" value="1.963929807740643" />
-      <entry key="S5" value="1.9854127202602958" />
-      <entry key="S10" value="1.9926795657513536" />
-      <entry key="S30" value="1.9975538766096195" />
-      <entry key="S60" value="1.9987761895114433" />
-      <entry key="M2" value="1.9994976241577915" />
-      <entry key="M5" value="2.7626947530728776" />
-      <entry key="M10" value="20.137483739928374" />
-      <entry key="M15" value="57.990104494265275" />
-      <entry key="M30" value="204.33033574935854" />
-      <entry key="H1" value="502.90846571591004" />
-      <entry key="H2" value="1057.2412631363363" />
-      <entry key="H4" value="2004.5742547254094" />
-      <entry key="D1" value="6122.711139339476" />
-      <entry key="W1" value="11540.748390629053" />
+      <entry key="MS100" value="1.0127181911051475" />
+      <entry key="MS500" value="2.6709149856506125" />
+      <entry key="S2" value="8.825562386316168" />
+      <entry key="S5" value="17.337713462880668" />
+      <entry key="S10" value="29.396804755006908" />
+      <entry key="S30" value="82.74090792961861" />
+      <entry key="S60" value="142.09465635638747" />
+      <entry key="M2" value="202.10452127843772" />
+      <entry key="M5" value="258.98930203363034" />
+      <entry key="M10" value="283.59064467901396" />
+      <entry key="M15" value="293.1212953285568" />
+      <entry key="M30" value="319.916344223707" />
+      <entry key="H1" value="453.02515492883754" />
+      <entry key="H2" value="878.8990520071698" />
+      <entry key="H4" value="1786.5625012134965" />
+      <entry key="D1" value="6173.752288026773" />
+      <entry key="W1" value="11848.740278433663" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -94,23 +98,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.4006156174705917" />
-      <entry key="MS500" value="1.8408129771851331" />
-      <entry key="S2" value="1.9578519800379588" />
-      <entry key="S5" value="1.9829433657213467" />
-      <entry key="S10" value="1.9914384195605834" />
-      <entry key="S30" value="1.99713871445799" />
-      <entry key="S60" value="1.9985684270125035" />
-      <entry key="M2" value="1.999393692960351" />
-      <entry key="M5" value="2.7626379534623857" />
-      <entry key="M10" value="20.13725611879346" />
-      <entry key="M15" value="57.98964833116179" />
-      <entry key="M30" value="204.32952918191202" />
-      <entry key="H1" value="502.90753089057034" />
-      <entry key="H2" value="1057.240368980109" />
-      <entry key="H4" value="2004.5734873116476" />
-      <entry key="D1" value="6122.710796707211" />
-      <entry key="W1" value="11540.74830219293" />
+      <entry key="MS100" value="0.9582168758951818" />
+      <entry key="MS500" value="2.6441092364142254" />
+      <entry key="S2" value="8.8036905231692" />
+      <entry key="S5" value="17.32061467488113" />
+      <entry key="S10" value="29.382512696297958" />
+      <entry key="S30" value="82.72776135273172" />
+      <entry key="S60" value="142.0833484325594" />
+      <entry key="M2" value="202.09643489201497" />
+      <entry key="M5" value="258.9851319377489" />
+      <entry key="M10" value="283.5883553323732" />
+      <entry key="M15" value="293.1197150689244" />
+      <entry key="M30" value="319.91546044821223" />
+      <entry key="H1" value="453.024469130533" />
+      <entry key="H2" value="878.8983575411346" />
+      <entry key="H4" value="1786.5618258574746" />
+      <entry key="D1" value="6173.751940529206" />
+      <entry key="W1" value="11848.740187202216" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -139,45 +143,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.index.html.executor": "Run",
-    "JavaScript Debug.model-a-landing.html.executor": "Run",
-    "JavaScript Debug.profile.html.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.analytics.mjs.executor": "Run",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.model-a-landing.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.profile.html.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.analytics.mjs.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;copilot.chat.legacySessionMetadata.migrated&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/Change Language": [
-      "HTML"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/Change Language&quot;: [
+      &quot;HTML&quot;
     ],
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "Angular2Html"
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;Angular2Html&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -203,7 +207,10 @@
       <workItem from="1784269765159" duration="1956000" />
       <workItem from="1784276799796" duration="5592000" />
       <workItem from="1784363324846" duration="1045000" />
-      <workItem from="1784506407100" duration="12300000" />
+      <workItem from="1784506407100" duration="13666000" />
+      <workItem from="1784530459835" duration="2256000" />
+      <workItem from="1785166570055" duration="1887000" />
+      <workItem from="1785734340006" duration="7082000" />
     </task>
     <task id="LOCAL-00001" summary="new update">
       <option name="closed" value="true" />
@@ -317,7 +324,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784181371252</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="neww">
+      <option name="closed" value="true" />
+      <created>1784525581893</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1784525581893</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

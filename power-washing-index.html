@@ -1,84 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>stxbandz website builder</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "ProWash Exterior Cleaning - Chicago",
+    "description": "Premium exterior cleaning, soft washing, and gutter care serving Chicago and surrounding communities.",
+    "serviceType": [
+      "Power Washing",
+      "Soft Washing",
+      "Gutter Cleaning",
+      "Driveway Cleaning",
+      "House Washing"
+    ],
+    "areaServed": {
+      "@type": "GeoCircle",
+      "geoMidpoint": {
+        "@type": "GeoCoordinates",
+        "latitude": 41.8781,
+        "longitude": -87.6298
+      },
+      "geoRadius": 40233
+    },
+    "hasMap": "https://maps.google.com/?q=Chicago,+IL",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Chicago",
+      "addressRegion": "IL",
+      "addressCountry": "US"
+    },
+    "url": "https://YOUR-DOMAIN.netlify.app/power-washing-index.html"
+  }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 
   <style>
     body { font-family: 'Inter', sans-serif; }
 
-    /* ---------- Animated hero background (retro grid + glowing beams) ---------- */
     .hero {
       position: relative;
       overflow: hidden;
-      background: radial-gradient(120% 120% at 50% 0%, #0f172a 0%, #020617 70%);
+      background: radial-gradient(120% 120% at 50% 0%, #090d16 0%, #020617 70%);
     }
     .hero-grid {
       position: absolute;
       inset: -50% 0 0 0;
       background-image:
-        linear-gradient(to right, rgba(92,214,125,0.10) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(92,214,125,0.10) 1px, transparent 1px);
-      background-size: 44px 44px;
+        linear-gradient(to right, rgba(92,214,125,0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(92,214,125,0.08) 1px, transparent 1px);
+      background-size: 48px 48px;
       transform: perspective(420px) rotateX(60deg);
       transform-origin: top center;
+      will-change: transform, opacity;
       mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 65%);
       -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 65%);
       animation: gridScroll 12s linear infinite;
     }
     @keyframes gridScroll {
-      from { background-position: 0 0; }
-      to   { background-position: 0 44px; }
+      from { transform: perspective(420px) rotateX(60deg) translate3d(0, 0, 0); }
+      to   { transform: perspective(420px) rotateX(60deg) translate3d(0, 44px, 0); }
     }
+
     .hero-beam {
       position: absolute;
-      top: -30%;
-      width: 38vw;
-      height: 140%;
-      filter: blur(70px);
-      opacity: 0.5;
+      top: -20%;
+      width: 45vw;
+      height: 120%;
+      filter: blur(90px);
+      opacity: 0.45;
       border-radius: 9999px;
       pointer-events: none;
       mix-blend-mode: screen;
+      will-change: transform, opacity;
+      transform: translateZ(0);
     }
-    .hero-beam--1 { left: 8%;  background: radial-gradient(circle, rgba(92,214,125,0.45), transparent 60%); animation: drift1 9s ease-in-out infinite; }
-    .hero-beam--2 { right: 6%; background: radial-gradient(circle, rgba(129,140,248,0.35), transparent 60%); animation: drift2 11s ease-in-out infinite; }
-    @keyframes drift1 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(28px) scale(1.08); } }
-    @keyframes drift2 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.12); } }
+    .hero-beam--1 { left: 5%; background: radial-gradient(circle, rgba(52,211,153,0.5), transparent 60%); animation: drift1 9s ease-in-out infinite; }
+    .hero-beam--2 { right: 5%; background: radial-gradient(circle, rgba(56,189,248,0.4), transparent 60%); animation: drift2 11s ease-in-out infinite; }
+    .hero-beam--3 { left: 30%; top: 40%; background: radial-gradient(circle, rgba(168,85,247,0.3), transparent 60%); animation: drift3 13s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(0, 28px, 0) scale(1.08); } }
+    @keyframes drift2 { 0%,100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(0, -24px, 0) scale(1.12); } }
+    @keyframes drift3 { 0%,100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(0, 18px, 0) scale(1.06); } }
 
-    /* ---------- Staggered entrance ---------- */
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
     .reveal.is-visible { opacity: 1; transform: none; }
 
-    /* ---------- Card hover glow ---------- */
-    .glow-card {
-      position: relative;
-      transition: transform .35s ease, border-color .35s ease;
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .glow-card::after {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      padding: 1px;
-      background: radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(92,214,125,0.55), transparent 45%);
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity .35s ease;
-      pointer-events: none;
+    .glass-card:hover {
+      border-color: rgba(52, 211, 153, 0.4);
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
     }
-    .glow-card:hover { transform: translateY(-4px); border-color: rgba(92,214,125,0.45); }
-    .glow-card:hover::after { opacity: 1; }
 
-    /* Seamless transition: page background fades from hero dark into light */
+    .nav-pill {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.3s ease;
+    }
+    .nav-pill:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(52, 211, 153, 0.5);
+      color: #34d399;
+    }
+
     .after-hero {
       background: linear-gradient(to bottom, #020617 0%, #0f172a 8%, #f8fafc 22%, #f8fafc 100%);
     }
+
     @media (prefers-reduced-motion: reduce) {
       .reveal { transition: none; opacity: 1; transform: none; }
       .hero-grid, .hero-beam { animation: none; }
@@ -88,120 +127,209 @@
 
 <body class="bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
 
-  <!-- Adaptive "Liquid Glass" Navigation -->
-  <nav id="nav" class="sticky top-0 z-50 border-b border-transparent transition-all duration-500"
-       style="backdrop-filter: blur(0px); background: transparent;">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-      <a href="index.html" class="font-black text-xl tracking-tighter text-white drop-shadow hover:text-emerald-400 transition-colors">stx<span class="text-emerald-400">bandz</span></a>
-      <div class="flex items-center gap-3">
-        <a href="index.html"
-           class="text-slate-300 hover:text-white text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400"
-           aria-label="Back to social page">&larr; Social Page</a>
-        <a href="#templates"
-           class="bg-emerald-500 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 text-slate-950 px-5 py-2 rounded-md font-semibold text-sm transition-colors shadow-sm"
-           aria-label="Get started">Get Started</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Animated Hero -->
-  <header class="hero -mt-16 pt-32 pb-24 sm:pt-40 sm:pb-32 text-center px-4">
+  <!-- Background Effects -->
+  <div class="hero min-h-screen relative">
     <div class="hero-grid" aria-hidden="true"></div>
     <div class="hero-beam hero-beam--1" aria-hidden="true"></div>
     <div class="hero-beam hero-beam--2" aria-hidden="true"></div>
+    <div class="hero-beam hero-beam--3" aria-hidden="true"></div>
 
-    <div class="relative max-w-3xl mx-auto">
-      <span class="reveal inline-block py-1 px-3 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold tracking-widest uppercase mb-6 border border-emerald-500/30">
-        One-time. Unmanaged. Yours.
-      </span>
-      <h1 class="reveal text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight" style="transition-delay:.08s">
-        stxbandz website builder
-      </h1>
-      <p class="reveal text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed" style="transition-delay:.16s">
-        Premium, lightning-fast static websites. You pay a one-time fee for the code, and nothing else. Zero monthly retainer fees&mdash;you own the code and host it yourself forever.
-      </p>
-    </div>
-  </header>
-
-  <!-- Template Showcase -->
-  <section id="templates" class="after-hero -mt-px pt-28 pb-24 px-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-        <h2 class="reveal text-3xl font-extrabold tracking-tight text-slate-900">Available Templates</h2>
-        <p class="reveal mt-4 text-slate-600">Hand-built, production-ready layouts you can preview and own outright.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Card 1: Power Washing / Exterior Cleaning -->
-        <article class="glow-card reveal bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-          <div class="relative h-56 bg-slate-900 overflow-hidden">
-            <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center px-6">
-                <div class="font-black text-2xl tracking-tighter text-white">PRO<span class="text-emerald-400">WASH</span></div>
-                <div class="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-300">Power Washing &amp; Gutters</div>
-              </div>
-            </div>
-            <span class="absolute top-4 left-4 bg-white/90 text-slate-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Exterior Cleaning</span>
-          </div>
-          <div class="p-8 flex flex-col flex-1">
-            <h3 class="text-xl font-bold mb-3 text-slate-900">The Alternating Z-Flow Layout</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">A highly visual layout featuring edge-to-edge alternating content blocks. Zero forms—drives conversions purely through prominent Click-to-Call CTAs.</p>
-            <button type="button" data-preview="template-zigzag.html"
-               class="mt-auto inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 text-slate-950 px-6 py-3 rounded-md font-semibold transition-colors">
-              Preview &rarr;
-            </button>
-          </div>
-        </article>
-
-        <!-- Card 2: General Local Service -->
-        <article class="glow-card reveal bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-          <div class="relative h-56 bg-slate-900 overflow-hidden">
-            <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center px-6">
-                <div class="font-black text-2xl tracking-tighter text-white">GREEN<span class="text-emerald-400">SCAPE</span></div>
-                <div class="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-300">Landscaping &amp; Lawn Care</div>
-              </div>
-            </div>
-            <span class="absolute top-4 left-4 bg-white/90 text-slate-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Local Service</span>
-          </div>
-          <div class="p-8 flex flex-col flex-1">
-            <h3 class="text-xl font-bold mb-3 text-slate-900">The Asymmetric Bento UI Layout</h3>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">Built for multi-service contractors. Organizes services, trust badges, and contact details into a premium, interlocking grid, eliminating scroll fatigue.</p>
-            <button type="button" data-preview="template-bento.html"
-               class="mt-auto inline-flex items-center justify-center border border-slate-900 bg-slate-900 hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 text-white px-6 py-3 rounded-md font-semibold transition-colors">
-              Preview &rarr;
-            </button>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Full-screen Template Preview Overlay -->
-  <div id="previewOverlay" class="fixed inset-0 z-[100] hidden">
-    <div class="flex flex-col h-full bg-slate-950">
-      <div class="flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/10 bg-slate-950/95 backdrop-blur">
-        <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-emerald-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">
-          <span aria-hidden="true">&larr;</span> Back to Main Website
+    <!-- Floating Glassmorphism Anchor Navigation Bar -->
+    <header class="sticky top-4 z-50 max-w-4xl mx-auto px-4 pt-4">
+      <nav class="nav-pill rounded-full px-6 py-3 flex items-center justify-between shadow-2xl">
+        <div class="font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+          stxbandz
+        </div>
+        <div class="hidden sm:flex items-center gap-2 text-sm font-medium text-slate-300">
+          <a href="#overview" class="px-3 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition-all">Overview</a>
+          <a href="#services" class="px-3 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition-all">Services</a>
+          <a href="#process" class="px-3 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition-all">Process</a>
+          <a href="#reviews" class="px-3 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition-all">Reviews</a>
+        </div>
+        <a href="#templates" class="bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide hover:opacity-90 transition-all shadow-lg shadow-emerald-500/20">
+          Live Demo
         </a>
-        <button type="button" id="previewClose" aria-label="Close preview" class="text-slate-400 hover:text-white transition-colors text-xl leading-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">&times;</button>
-      </div>
-      <iframe id="previewFrame" class="flex-1 w-full border-0 bg-white" title="Template preview" loading="lazy"></iframe>
-    </div>
-  </div>
+        <a href="index.html" class="text-slate-300 hover:text-white text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">
+          ← Back to Builder
+        </a>
+      </nav>
+    </header>
 
-   <!-- Footer -->
-   <footer class="bg-slate-950 py-10 text-center text-slate-500 text-sm px-4">
-     <div class="mb-6">
-       <a href="index.html" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105">
-         ← Back to Website Builder
-       </a>
-     </div>
-     <p class="mb-2 font-semibold text-slate-300">stxbandz website builder</p>
-     <p>&copy; 2026 stxbandz. All rights reserved. Code is delivered unmanaged&mdash;you own it forever.</p>
-   </footer>
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 py-16 space-y-24 relative z-10">
+
+      <!-- SECTION: OVERVIEW / HERO -->
+      <section id="overview" class="text-center max-w-3xl mx-auto space-y-6 pt-8">
+        <span class="reveal inline-block py-1 px-3 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold tracking-widest uppercase border border-emerald-500/30 shadow-inner">
+          Signal-Grade Architecture
+        </span>
+<h1 class="reveal text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight text-white" style="transition-delay:.08s">
+           Clean Lines. <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">Absolute Control.</span>
+         </h1>
+        <p class="reveal text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto" style="transition-delay:.16s">
+          Precision engineered layouts built to eliminate clutter, guide user attention seamlessly, and convert visitors on arrival.
+        </p>
+        <div class="reveal flex items-center justify-center gap-4 pt-4" style="transition-delay:.24s">
+          <a href="#services" class="bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 font-semibold px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/25 hover:scale-105 transition-all">
+            Explore Services
+          </a>
+          <a href="#process" class="glass-card font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-all text-white">
+            How It Works
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION: SERVICES (Bento Flow Grid) -->
+      <section id="services" class="space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="reveal text-3xl font-bold text-white">Core Capabilities</h2>
+          <p class="reveal text-slate-400 text-sm" style="transition-delay:.08s">Structured compartments designed for clean visual rhythm.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card rounded-3xl p-8 space-y-4 reveal" style="transition-delay:.12s">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold">01</div>
+            <h3 class="text-xl font-bold text-white">Surface Precision</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">High-impact layout frameworks engineered with clean typography and balanced whitespace proportions.</p>
+          </div>
+          <div class="glass-card rounded-3xl p-8 space-y-4 reveal" style="transition-delay:.24s">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold">02</div>
+            <h3 class="text-xl font-bold text-white">Glass Depth</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">Multi-layered backdrop filters and subtle borders that create natural depth without visual noise.</p>
+          </div>
+          <div class="glass-card rounded-3xl p-8 space-y-4 reveal" style="transition-delay:.36s">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 font-bold">03</div>
+            <h3 class="text-xl font-bold text-white">Seamless Flow</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">Optimized content sections that guide the visitor effortlessly from introduction to conversion.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: PROCESS -->
+      <section id="process" class="glass-card rounded-3xl p-8 sm:p-12 space-y-8 reveal">
+        <div class="text-center max-w-xl mx-auto space-y-2">
+          <h2 class="text-3xl font-bold text-white">Streamlined Execution</h2>
+          <p class="text-slate-400 text-sm">A clear, predictable progression from intake to final reveal.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div class="space-y-2">
+            <div class="text-emerald-400 font-mono text-sm tracking-widest uppercase">Phase One</div>
+            <h4 class="text-lg font-bold text-white">1. Structure</h4>
+            <p class="text-slate-400 text-sm">Defining the architectural framework and visual identity.</p>
+          </div>
+          <div class="space-y-2">
+            <div class="text-cyan-400 font-mono text-sm tracking-widest uppercase">Phase Two</div>
+            <h4 class="text-lg font-bold text-white">2. Calibration</h4>
+            <p class="text-slate-400 text-sm">Refining microcopy, glass contrast, and responsive spacing.</p>
+          </div>
+          <div class="space-y-2">
+            <div class="text-purple-400 font-mono text-sm tracking-widest uppercase">Phase Three</div>
+            <h4 class="text-lg font-bold text-white">3. Deployment</h4>
+            <p class="text-slate-400 text-sm">Deploying lightning-fast production code with zero bloat.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: REVIEWS -->
+      <section id="reviews" class="space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="reveal text-3xl font-bold text-white">Client Feedback</h2>
+          <p class="reveal text-slate-400 text-sm" style="transition-delay:.08s">Trusted results from teams who demand pristine execution.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-card rounded-2xl p-6 space-y-4 reveal" style="transition-delay:.12s">
+            <p class="text-slate-300 text-sm italic">"The layout feels completely cohesive now. The anchor navigation makes jumping through sections effortless and clean."</p>
+            <div class="text-xs font-semibold text-emerald-400">— Sarah J.</div>
+          </div>
+          <div class="glass-card rounded-2xl p-6 space-y-4 reveal" style="transition-delay:.24s">
+            <p class="text-slate-300 text-sm italic">"Sharper colors, zero clutter, and beautiful glass depth. Exactly what our presentation needed."</p>
+            <div class="text-xs font-semibold text-cyan-400">— Marcus T.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEMPLATE SHOWCASE -->
+      <section id="templates" class="after-hero -mt-px pt-28 pb-24 px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="reveal text-3xl font-extrabold tracking-tight text-slate-900">Available Templates</h2>
+            <p class="reveal mt-4 text-slate-600">Hand-built, production-ready layouts you can preview and own outright.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Card 1: Power Washing / Exterior Cleaning -->
+            <article class="glow-card reveal bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+              <div class="relative h-56 bg-slate-900 overflow-hidden">
+                <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-center px-6">
+                    <div class="font-black text-2xl tracking-tighter text-white">PRO<span class="text-emerald-400">WASH</span></div>
+                    <div class="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-300">Power Washing &amp; Gutters</div>
+                    <div class="mt-4 inline-flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white/90 backdrop-blur-xl">
+                      <div class="text-[10px] font-black uppercase tracking-[0.32em] text-emerald-200">Service Area</div>
+                      <div class="text-sm leading-relaxed">Exterior cleaning • soft washing • surface restoration</div>
+                    </div>
+                  </div>
+                </div>
+                <span class="absolute top-4 left-4 bg-white/90 text-slate-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Exterior Cleaning</span>
+              </div>
+              <div class="p-8 flex flex-col flex-1">
+                <h3 class="text-xl font-bold mb-3 text-slate-900">White Mode Template</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6">A bright, premium layout with richer accent color moments and glass surfaces for high-end service brands.</p>
+                <a href="template-zigzag.html"
+                   class="mt-auto inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 text-slate-950 px-6 py-3 rounded-md font-semibold transition-colors">
+                  Preview &rarr;
+                </a>
+              </div>
+            </article>
+
+            <!-- Card 2: General Local Service -->
+            <article class="glow-card reveal bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+              <div class="relative h-56 bg-slate-900 overflow-hidden">
+                <div class="hero-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-center px-6">
+                    <div class="font-black text-2xl tracking-tighter text-white">GREEN<span class="text-emerald-400">SCAPE</span></div>
+                    <div class="mt-2 text-xs font-bold uppercase tracking-widest text-emerald-300">Landscaping &amp; Lawn Care</div>
+                  </div>
+                </div>
+                <span class="absolute top-4 left-4 bg-white/90 text-slate-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">Local Service</span>
+              </div>
+              <div class="p-8 flex flex-col flex-1">
+                <h3 class="text-xl font-bold mb-3 text-slate-900">Dark Mode Template</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6">A darker, cinematic layout with layered glass panels, confident CTAs, and a denser premium interface feel.</p>
+                <a href="template-bento.html"
+                   class="mt-auto inline-flex items-center justify-center border border-slate-900 bg-slate-900 hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 text-white px-6 py-3 rounded-md font-semibold transition-colors">
+                  Preview &rarr;
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Full-screen Template Preview Overlay -->
+    <div id="previewOverlay" class="fixed inset-0 z-[100] hidden">
+      <div class="flex flex-col h-full bg-slate-950">
+        <div class="flex items-center justify-between px-4 sm:px-6 h-14 border-b border-white/10 bg-slate-950/95 backdrop-blur">
+          <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-emerald-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">
+            <span aria-hidden="true">&larr;</span> Back to Main Website
+          </a>
+          <button type="button" id="previewClose" aria-label="Close preview" class="text-slate-400 hover:text-white transition-colors text-xl leading-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">&times;</button>
+        </div>
+        <iframe id="previewFrame" class="flex-1 w-full border-0 bg-white" title="Template preview" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 py-10 text-center text-slate-500 text-sm px-4">
+      <p class="mb-2 font-semibold text-slate-300">stxbandz website builder</p>
+      <p>&copy; 2026 stxbandz. All rights reserved. Code is delivered unmanaged&mdash;you own it forever.</p>
+    </footer>
+
+  </div>
 
   <script>
     /* ===== Staggered reveal on scroll ===== */
@@ -235,7 +363,11 @@
       var nav = document.getElementById('nav');
       var hero = document.querySelector('.hero');
       var brand = nav.querySelector('div').firstElementChild;
+      var ticking = false;
       function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
         var threshold = hero ? hero.offsetHeight - 80 : 240;
         if (window.scrollY > threshold) {
           nav.style.background = 'rgba(255,255,255,0.65)';
@@ -252,6 +384,8 @@
           brand.classList.add('text-white', 'drop-shadow');
           brand.classList.remove('text-slate-900');
         }
+        ticking = false;
+        });
       }
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();

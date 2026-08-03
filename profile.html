@@ -25,7 +25,7 @@
     --surface: #16181B;
     --text: #E7E5DF;
     --text-dim: #86888E;
-    --accent: #7C8A6E;
+    --accent: #5cd67d;
     --hairline: #26282C;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -485,11 +485,28 @@
     cursor: pointer;
     outline: none;
   }
+  .gallery-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, rgba(255,255,255,0.02) 20%, rgba(255,255,255,0.10) 44%, rgba(255,255,255,0.02) 68%);
+    background-size: 220% 100%;
+    animation: galleryShimmer 1.4s linear infinite;
+    z-index: 0;
+  }
+  .gallery-card.loaded::before,
+  .gallery-card.img-failed::before { display: none; }
+  @keyframes galleryShimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -20% 0; }
+  }
   .gallery-card:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
   .gallery-card img {
     width: 100%; height: 100%;
     object-fit: cover;
     display: block;
+    position: relative;
+    z-index: 1;
     filter: grayscale(0.15) brightness(0.82) contrast(1.05);
     transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
   }
@@ -508,6 +525,7 @@
     background: linear-gradient(to top, rgba(14,15,17,0.92) 0%, rgba(14,15,17,0) 55%);
     opacity: 0;
     transition: opacity 0.45s var(--ease);
+    z-index: 2;
   }
   .gallery-card:hover .gallery-overlay,
   .gallery-card:focus-visible .gallery-overlay { opacity: 1; }
@@ -1257,9 +1275,13 @@ if ("IntersectionObserver" in window) {
   revealEls.forEach(function (el) { el.classList.add("is-visible"); });
 }
 
-/* live crypto strip - CoinGecko free API, refreshed every 60s */
+/* live crypto strip - visibility-aware CoinGecko polling with adaptive backoff */
 const marketsEl = byId("markets");
 const priceFmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+let marketPollTimer = null;
+let marketPollDelayMs = 60000;
+const marketMinDelayMs = 60000;
+const marketMaxDelayMs = 8 * 60000;
 
 /**
  * @param {any} data
@@ -1289,20 +1311,53 @@ function renderMarkets(data) {
 
 async function refreshMarkets() {
   if (!MARKETS.length) return;
+  if (document.hidden) return;
   const ids = MARKETS.map(function (m) { return m.id; }).join(",");
   const url = "https://api.coingecko.com/api/v3/simple/price?ids=" + encodeURIComponent(ids) + "&vs_currencies=usd&include_24hr_change=true";
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
+    if (res.status === 429) {
+      const retryAfter = Number(res.headers.get("Retry-After"));
+      marketPollDelayMs = Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(retryAfter * 1000, marketMaxDelayMs)
+        : Math.min(marketPollDelayMs * 2, marketMaxDelayMs);
+      throw new Error("HTTP 429");
+    }
     if (!res.ok) throw new Error("HTTP " + res.status);
+    const remaining = Number(res.headers.get("x-ratelimit-remaining"));
+    if (Number.isFinite(remaining) && remaining <= 3) {
+      marketPollDelayMs = Math.min(marketPollDelayMs * 2, marketMaxDelayMs);
+    } else {
+      marketPollDelayMs = marketMinDelayMs;
+    }
     renderMarkets(await res.json());
   } catch (err) {
+    marketPollDelayMs = Math.min(marketPollDelayMs * 2, marketMaxDelayMs);
     /* keep last good values; an empty strip hides itself via CSS */
   }
 }
 
+function scheduleMarketRefresh() {
+  if (marketPollTimer) clearTimeout(marketPollTimer);
+  if (document.hidden || !MARKETS.length) return;
+  marketPollTimer = setTimeout(async function () {
+    await refreshMarkets();
+    scheduleMarketRefresh();
+  }, marketPollDelayMs);
+}
+
 if (MARKETS.length) {
   refreshMarkets();
-  setInterval(refreshMarkets, 60000);
+  scheduleMarketRefresh();
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+      if (marketPollTimer) clearTimeout(marketPollTimer);
+      marketPollTimer = null;
+      return;
+    }
+    marketPollDelayMs = marketMinDelayMs;
+    refreshMarkets().finally(scheduleMarketRefresh);
+  });
 }
 
 /* chapter progress fill — calm scroll cue, no looping motion */
@@ -1394,6 +1449,30 @@ async function downloadImage(url, filename) {
 }
 
 /** Build the gallery grid from the GALLERY data block. */
+let galleryObserver = null;
+
+function attachGalleryObserver(grid) {
+  if (!("IntersectionObserver" in window)) {
+    grid.querySelectorAll("img[data-src]").forEach(function (img) {
+      img.src = img.getAttribute("data-src") || "";
+      img.removeAttribute("data-src");
+    });
+    return;
+  }
+  if (galleryObserver) galleryObserver.disconnect();
+  galleryObserver = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      const img = entry.target;
+      const src = img.getAttribute("data-src");
+      if (src) img.src = src;
+      img.removeAttribute("data-src");
+      obs.unobserve(img);
+    });
+  }, { root: null, rootMargin: "240px 0px", threshold: 0.01 });
+  grid.querySelectorAll("img[data-src]").forEach(function (img) { galleryObserver.observe(img); });
+}
+
 function renderGallery() {
   const grid = byId("gallery-grid");
   grid.replaceChildren();
@@ -1409,7 +1488,10 @@ function renderGallery() {
     img.loading = "lazy";
     img.decoding = "async";
     img.alt = item.title;
-    img.src = item.url;
+    img.setAttribute("data-src", item.url);
+    img.addEventListener("load", function () {
+      card.classList.add("loaded");
+    }, { once: true });
     img.addEventListener("error", function () {
       card.classList.add("img-failed");
     });
@@ -1443,6 +1525,8 @@ function renderGallery() {
 
     grid.appendChild(card);
   });
+
+  attachGalleryObserver(grid);
 }
 
 /* ---- Fullscreen Gallery Viewer + Analytics ---- */
@@ -2107,36 +2191,31 @@ function renderGlobeAnalysis(blocks, notice) {
   host.innerHTML = html;
 }
 
-// Working OpenRouter models — tried in order; a 404 falls through to the next.
+// Preferred OpenRouter models (edge fallback is handled by OpenRouter itself).
 const GLOBE_MODELS = ["openai/gpt-4o-mini", "meta-llama/llama-3.1-8b-instruct", "deepseek/deepseek-chat"];
 
 // ONLY the "ask about a country" text box triggers the OpenRouter API.
 async function globeChat(messages) {
   const key = getApiKey();
   if (!key) throw new Error("no API key — add your OpenRouter key above");
-  let lastErr;
-  for (const model of GLOBE_MODELS) {
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + key,
-          "Content-Type": "application/json",
-          "HTTP-Referer": location.href,
-          "X-Title": "Terra Obscura - Calm/Shadow Globe",
-        },
-        body: JSON.stringify({ model, temperature: 0.7, max_tokens: 900, messages }),
-      });
-      if (res.status === 404) { lastErr = new Error("HTTP 404 (model unavailable)"); continue; }
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return await res.json();
-    } catch (err) {
-      lastErr = err;
-      if (String(err.message).indexOf("404") !== -1) continue; // try next model
-      throw err;
-    }
-  }
-  throw lastErr;
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + key,
+      "Content-Type": "application/json",
+      "HTTP-Referer": location.href,
+      "X-Title": "Terra Obscura - Calm/Shadow Globe",
+    },
+    body: JSON.stringify({
+      model: GLOBE_MODELS[0],
+      models: GLOBE_MODELS,
+      temperature: 0.7,
+      max_tokens: 900,
+      messages,
+    }),
+  });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return await res.json();
 }
 
 async function globeAnalyze(query) {

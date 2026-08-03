@@ -10,7 +10,7 @@
     --surface:#16181B;
     --text:#E7E5DF;
     --text-dim:#86888E;
-    --accent:#7C8A6E;
+    --accent:#5cd67d;
     --hairline:#26282C;
     --ease:cubic-bezier(0.16,1,0.3,1);
   }
@@ -72,6 +72,8 @@
     text-transform:uppercase;
   }
   .source-badge.live{color:var(--accent);border-color:rgba(124,138,110,0.28)}
+  .source-badge.warn{color:#d4a017;border-color:rgba(212,160,23,0.35);background:rgba(212,160,23,0.08)}
+  .source-badge.offline{color:#c15b5b;border-color:rgba(193,91,91,0.35);background:rgba(193,91,91,0.08)}
   .back{
     display:inline-flex;
     align-items:center;
@@ -123,7 +125,9 @@
     margin-bottom:8px;
   }
   .v{
-    font-size:22px;
+    font-size:24px;
+    font-weight:600;
+    letter-spacing:-0.02em;
     color:var(--text);
     font-variant-numeric:tabular-nums;
   }
@@ -173,6 +177,8 @@
   .table .num{
     color:var(--text-dim);
     font-variant-numeric:tabular-nums;
+    font-weight:600;
+    letter-spacing:-0.01em;
   }
   .table .bar-wrap{
     width:100%;
@@ -243,7 +249,7 @@
           </tr>
         </thead>
         <tbody id="topLinks">
-          <tr><td colspan="3" class="empty">No data yet.</td></tr>
+          <tr><td colspan="3" class="empty">Awaiting telemetry.</td></tr>
         </tbody>
       </table>
     </div>
@@ -259,7 +265,7 @@
           </tr>
         </thead>
         <tbody id="cats">
-          <tr><td colspan="3" class="empty">No data yet.</td></tr>
+          <tr><td colspan="3" class="empty">Awaiting telemetry.</td></tr>
         </tbody>
       </table>
     </div>
@@ -275,7 +281,7 @@
           </tr>
         </thead>
         <tbody id="events">
-          <tr><td colspan="3" class="empty">No events yet.</td></tr>
+          <tr><td colspan="3" class="empty">Awaiting telemetry.</td></tr>
         </tbody>
       </table>
     </div>
@@ -309,10 +315,25 @@
   function readLocalData(){
     try {
       const stored = localStorage.getItem(KEY);
-      return stored ? normalizeData(JSON.parse(stored)) : emptyData();
+      const parsed = stored ? normalizeData(JSON.parse(stored)) : emptyData();
+      // Keep render cycles immutable even if other code mutates local state objects.
+      if (typeof structuredClone === "function") return structuredClone(parsed);
+      return JSON.parse(JSON.stringify(parsed));
     } catch (e) {
       return emptyData();
     }
+  }
+
+  function parseRetryAfterSeconds(value){
+    if (!value) return null;
+    const asNumber = Number(value);
+    if (Number.isFinite(asNumber) && asNumber > 0) return Math.ceil(asNumber);
+    const asDate = Date.parse(value);
+    if (Number.isFinite(asDate)) {
+      const diffMs = asDate - Date.now();
+      if (diffMs > 0) return Math.ceil(diffMs / 1000);
+    }
+    return null;
   }
 
   function fmtDate(iso){
@@ -329,12 +350,18 @@
 
   function setSourceBadge(source){
     const badge = $("sourceBadge");
+    badge.classList.remove("live", "warn", "offline");
     if (source === "cloudflare-kv") {
       badge.textContent = "Cloudflare KV";
       badge.classList.add("live");
+    } else if (source === "cloudflare-kv-warn") {
+      badge.textContent = "Cloudflare KV unavailable";
+      badge.classList.add("warn");
+    } else if (source === "offline-unreachable") {
+      badge.textContent = "Offline data only";
+      badge.classList.add("offline");
     } else {
       badge.textContent = "Local fallback";
-      badge.classList.remove("live");
     }
   }
 
@@ -350,10 +377,16 @@
     $("e").textContent = d.events ? d.events.length : 0;
     $("vMuted").textContent = source === "cloudflare-kv"
       ? (d.views ? "Persistent analytics active" : "Persistent analytics ready")
-      : (d.views ? "Stored on this device" : "No visits recorded on this device");
+      : source === "offline-unreachable"
+        ? "Live Cloudflare data unavailable — showing offline copy"
+        : (d.views ? "Stored on this device" : "No visits recorded on this device");
     $("cMuted").textContent = totalClicks
       ? `${totalClicks} tracked clicks`
-      : (source === "cloudflare-kv" ? "No clicks recorded yet" : "No local clicks recorded");
+      : source === "cloudflare-kv"
+        ? "No clicks recorded yet"
+        : source === "offline-unreachable"
+          ? "Retry later to refresh live analytics"
+          : "No local clicks recorded";
 
     // Build flat list of all link clicks
     const flat = [];
@@ -368,7 +401,7 @@
     const topBody = $("topLinks");
     topBody.innerHTML = "";
     if (!flat.length) {
-      topBody.innerHTML = '<tr><td colspan="3" class="empty">No clicks yet.</td></tr>';
+      topBody.innerHTML = '<tr><td colspan="3" class="empty">Awaiting click telemetry.</td></tr>';
     } else {
       flat.slice(0, 20).forEach(row => {
         const tr = document.createElement("tr");
@@ -392,7 +425,7 @@
     catBody.innerHTML = "";
     const catEntries = Object.entries(clicks);
     if (!catEntries.length) {
-      catBody.innerHTML = '<tr><td colspan="3" class="empty">No categories yet.</td></tr>';
+      catBody.innerHTML = '<tr><td colspan="3" class="empty">Awaiting category telemetry.</td></tr>';
     } else {
       catEntries.forEach(([cat, items]) => {
         const total = Object.values(items).reduce((a, b) => a + b, 0);
@@ -411,7 +444,7 @@
     evBody.innerHTML = "";
     const events = d.events || [];
     if (!events.length) {
-      evBody.innerHTML = '<tr><td colspan="3" class="empty">No events yet.</td></tr>';
+      evBody.innerHTML = '<tr><td colspan="3" class="empty">Awaiting event telemetry.</td></tr>';
     } else {
       events.slice().reverse().slice(0, 50).forEach(ev => {
         const tr = document.createElement("tr");
@@ -431,17 +464,37 @@
   }
 
   async function loadDashboardData(){
-    try {
-      const res = await fetch(API_URL, { headers: { "Accept": "application/json" }, cache: "no-store" });
-      if (res.ok) {
-        const payload = await res.json().catch(() => null);
-        if (payload && payload.data) {
-          if (payload.persistent) return { data: normalizeData(payload.data), source: "cloudflare-kv" };
-          return { data: readLocalData(), source: "local-fallback" };
+    async function fetchWithRetry() {
+      let lastError = null;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch(API_URL, { headers: { "Accept": "application/json" }, cache: "no-store" });
+          if (res.status === 429) {
+            const retryAfter = parseRetryAfterSeconds(res.headers.get("Retry-After"));
+            const waitMs = (retryAfter != null ? retryAfter * 1000 : 2000);
+            await new Promise(resolve => setTimeout(resolve, waitMs));
+            lastError = new Error("HTTP 429");
+            continue;
+          }
+          if (res.ok) {
+            const payload = await res.json().catch(() => null);
+            if (payload && payload.data) {
+              if (payload.persistent) return { data: normalizeData(payload.data), source: "cloudflare-kv" };
+              return { data: readLocalData(), source: "local-fallback" };
+            }
+          }
+          lastError = new Error("HTTP " + res.status);
+        } catch (e) {
+          lastError = e;
+        }
+        if (attempt === 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
-    } catch (e) {}
-    return { data: readLocalData(), source: "local-fallback" };
+      return { data: readLocalData(), source: "offline-unreachable", error: lastError };
+    }
+
+    return fetchWithRetry();
   }
 
   loadDashboardData().then(({ data, source }) => {

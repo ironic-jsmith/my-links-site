@@ -18,8 +18,9 @@
     @keyframes drift2 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.12); } }
     .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
     .reveal.is-visible { opacity: 1; transform: none; }
-    .pricing-card { position: relative; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(92,214,125,0.2); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-    .pricing-card:hover { border-color: rgba(92,214,125,0.4); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(92,214,125,0.15); }
+    .pricing-card { position: relative; backdrop-filter: blur(48px) saturate(150%); -webkit-backdrop-filter: blur(48px) saturate(150%); border: 1px solid rgba(255,255,255,0.10); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 34px 110px rgba(2,6,23,0.60); }
+    .pricing-card:hover { border-color: rgba(187,242,204,0.35); transform: translateY(-4px); box-shadow: 0 42px 130px rgba(2,6,23,0.72); }
+    .feature-dot { width: 9px; height: 9px; border-radius: 9999px; margin-top: 0.45rem; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.25); background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.55), rgba(148,163,184,0.18) 62%, rgba(2,6,23,0.06) 100%); }
     .btn-primary { background: linear-gradient(135deg, #5cd67d 0%, #3aadd5 100%); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(92,214,125,0.3); }
     .btn-secondary { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -34,23 +35,23 @@
     <div class="hero-beam hero-beam--2" aria-hidden="true"></div>
     <div class="relative max-w-2xl w-full mx-auto text-center">
       <div class="mb-12">
-        <span class="reveal inline-block py-1 px-3 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold tracking-widest uppercase mb-6 border border-emerald-500/30">Premium Website Solutions</span>
+        <span class="reveal inline-block py-1 px-3 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold tracking-widest uppercase mb-6 border border-emerald-500/30">Signal-grade digital presence</span>
         <h1 class="reveal text-5xl sm:text-7xl font-extrabold tracking-tight mb-6 leading-tight" style="transition-delay:.08s">stxbandz</h1>
-        <p class="reveal text-lg sm:text-xl text-slate-300 leading-relaxed" style="transition-delay:.16s">One-time payment. Your code. Forever.</p>
+        <p class="reveal text-lg sm:text-xl text-slate-300 leading-relaxed" style="transition-delay:.16s">Absolute ownership. Precision architecture. Built to move when you move.</p>
       </div>
-      <div class="reveal pricing-card bg-slate-900/40 rounded-3xl p-8 sm:p-12 mb-8" style="transition-delay:.24s">
+      <div class="reveal pricing-card bg-white/5 rounded-3xl p-8 sm:p-12 mb-8" style="transition-delay:.24s">
         <div class="mb-8">
           <h2 class="text-3xl sm:text-4xl font-black mb-6 text-white">Complete Website Package</h2>
           <div class="space-y-4">
             <div class="flex items-center justify-center gap-3">
-              <span class="text-5xl sm:text-6xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">$25-35</span>
-              <span class="text-slate-400 text-sm">One-time</span>
+              <span class="text-5xl sm:text-6xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">$25</span>
+              <span class="text-slate-400 text-sm">one-time price</span>
             </div>
             <div class="mt-8 space-y-3 text-left">
-              <div class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span class="text-slate-200">No monthly maintenance fees</span></div>
-              <div class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span class="text-slate-200">Fast transfer upon purchase</span></div>
-              <div class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span class="text-slate-200">Production-ready templates</span></div>
-              <div class="flex items-start gap-3"><svg class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span class="text-slate-200">Yours to host, customize, and own</span></div>
+              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Zero recurring fees. Pure autonomy.</span></div>
+              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Seamless architectural transfer.</span></div>
+              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Production-grade templates. Ready to deploy.</span></div>
+              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Host. Customize. Dominate.</span></div>
             </div>
           </div>
         </div>
@@ -58,10 +59,13 @@
           <a href="power-washing-index.html" class="btn-primary flex-1 px-6 py-4 rounded-lg font-semibold text-base text-center transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-900">
             Preview Templates →
           </a>
-          <a href="model-a-landing.html" class="btn-secondary flex-1 px-6 py-4 rounded-lg font-semibold text-base flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900">Terms & Agreement</a>
+          <a href="model-a-landing.html" class="btn-secondary flex-1 px-6 py-4 rounded-lg font-semibold text-base flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900">View Licensing & Terms</a>
         </div>
       </div>
-      <p class="reveal text-slate-400 text-sm" style="transition-delay:.32s"><a href="profile.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105">← Back to Profile</a></p>
+      <div class="reveal flex items-center justify-center gap-4 flex-wrap" style="transition-delay:.32s">
+        <a href="profile.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105 text-sm">← Back to Profile</a>
+        <a href="dashboard.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105 text-sm">Dashboard →</a>
+      </div>
     </div>
   </div>
   <script>

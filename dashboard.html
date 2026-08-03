@@ -10,9 +10,9 @@
     --surface:#16181B;
     --text:#E7E5DF;
     --text-dim:#86888E;
-    --accent:#7C8A6E;
+    --accent:#5cd67d;
     --hairline:#26282C;
-    --ease:cubic-bezier(0.16,1,0.3,1);
+    --ease:cubic-bezier(0.22, 1, 0.36, 1);
   }
   *{box-sizing:border-box}
   html,body{
@@ -80,11 +80,12 @@
     font-family:Geist Mono,monospace;
     font-size:12px;
     outline:none;
-    transition:border-color 0.4s var(--ease),box-shadow 0.4s var(--ease);
+    transition:border-color 0.45s var(--ease),box-shadow 0.45s var(--ease),transform 0.45s var(--ease);
   }
   .field input:focus{
     border-color:var(--accent);
-    box-shadow:0 0 0 3px rgba(124,138,110,0.15);
+    box-shadow:0 0 0 4px rgba(124,138,110,0.2), 0 8px 24px rgba(0,0,0,0.35);
+    transform:translateY(-1px);
   }
   .login-btn{
     width:100%;
@@ -123,14 +124,22 @@
     font-size:11px;
     color:var(--text-dim);
   }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+  }
+  .shake {
+    animation: shake 0.4s var(--ease);
+  }
 </style>
 </head>
 <body>
   <div class="login-wrap">
     <div class="login-card">
       <div class="login-brand">Terra Obscura</div>
-      <h1 class="login-title">Dashboard Access</h1>
-      <p class="login-subtitle">Enter the access key to continue.</p>
+      <h1 class="login-title">Telemetry Console Access</h1>
+      <p class="login-subtitle">Provide the key to enter the secured Terra Obscura analytics channel.</p>
 
       <form id="loginForm" autocomplete="off">
         <div class="field">
@@ -176,6 +185,11 @@
       showError("Incorrect access key.");
       input.value = "";
       input.focus();
+
+      const card = document.querySelector(".login-card");
+      card.classList.remove("shake");
+      void card.offsetWidth;
+      card.classList.add("shake");
     }
   });
 

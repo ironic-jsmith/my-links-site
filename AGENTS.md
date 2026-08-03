@@ -1,17 +1,23 @@
 ﻿# AGENTS.md — Project Memory Bank
 
 ## Project
-`my-links-site` — a single-file, dark "terminal"-style link-in-bio / profile site
-for the `stxbandz` handle, deployed statically on **Cloudflare Pages**. It also contains an
-integrated "Terra Obscura" globe intelligence feature.
+`my-links-site` — a multi-page, dark "terminal"-style link-in-bio / profile site
+for the `stxbandz` handle, deployed statically on **Cloudflare Pages**. The main
+experience lives in `profile.html`, with supporting `index.html`, `dashboard.html`,
+and `dashboard-view.html` pages. It also contains an integrated "Terra Obscura"
+globe intelligence feature.
 
-No build step, no framework, no package install required. Everything lives in
-`index.html` (HTML + CSS + vanilla JS).
+No build step, no framework, no package install required for runtime. Everything is
+HTML + CSS + vanilla JS.
 
 ## Stack
-- Static site: one `index.html` (HTML/CSS/JS in a single file).
+- Static site: `profile.html` is the main app shell; `index.html` is a landing page,
+  and `dashboard.html` / `dashboard-view.html` handle analytics access and reporting.
 - Canvas 2D for the globe (no WebGL/three.js).
 - External APIs (client-side `fetch`): CoinGecko (crypto strip) and OpenRouter (AI).
+- Cloudflare Pages Function analytics: `/analytics?action=stats|event|reset` in
+  `functions/analytics.js`, with `ANALYTICS_KV` for persistence and a localStorage
+  fallback in `dashboard-view.html` when KV is unavailable.
 - Fonts: Geist Mono / Inter via Google Fonts.
 
 ## Views (switched via `switchView(target)`)
@@ -19,8 +25,9 @@ No build step, no framework, no package install required. Everything lives in
 - `gallery` — stealth / air-force imagery grid (tap to fullscreen).
 - `globe`   — Calm/Shadow intelligence globe (button-launched).
 
-## Editable data (top of `<script>`)
+## Editable data (top of `profile.html` `<script>`)
 - `PROFILE` — name, initial, tagline.
+- `TICKER_ITEMS` — optional low-contrast status / index line under the profile.
 - `SECTIONS` — link groups (currently `Handles`, `Trading/Fintech`).
 - `MARKETS` — CoinGecko ids for the live crypto strip.
 - `GALLERY` — image cards. URLs are direct `i.pinimg.com/736x/...` links
@@ -48,9 +55,13 @@ No build step, no framework, no package install required. Everything lives in
 - Deployment config files (_headers, _redirects, og-image.svg) are optional;
   if _headers with a CSP is restored, its connect-src must allow
   https://openrouter.ai or the globe AI calls will be blocked.
-- Analytics are routed through Cloudflare Pages Functions (`/api/analytics`).
+- Analytics use the Cloudflare Pages Function at `/analytics?action=...`; keep
+  `ANALYTICS_KV` bound for persistence, otherwise `dashboard-view.html` falls back
+  to the localStorage copy.
 
 ## Conventions
-- Keep all changes inside index.html; prefer editing the data arrays over logic.
+- Prefer editing the file that owns the feature (`profile.html`, `dashboard.html`,
+  `dashboard-view.html`, or `functions/analytics.js`) and, inside `profile.html`,
+  prefer editing the top data arrays over logic.
 - Vanilla JS only; no external runtime dependencies.
 - Original profile/gallery/analytics code must remain intact when adding features.
