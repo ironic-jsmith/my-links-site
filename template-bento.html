@@ -9,14 +9,22 @@
   </script>
 </head>
 <body class="bg-[#f5f5f7] text-slate-900 antialiased relative min-h-screen p-4 lg:p-12 dark:bg-slate-950 dark:text-slate-100">
-  <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(120%_120%_at_50%_0%,rgba(255,255,255,0.72),transparent_60%)] dark:bg-[radial-gradient(120%_120%_at_50%_0%,rgba(15,23,42,0.85),transparent_58%)]"></div>
+  <!-- Layout Switcher Bar -->
+  <div class="fixed top-4 left-1/2 z-[70] flex w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 gap-2 rounded-full border border-white/60 bg-white/85 p-2 shadow-[0_20px_50px_rgba(15,23,42,0.18)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/80">
+    <button id="btn-default" class="layout-btn flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition bg-green-500 text-white shadow-md" onclick="switchLayout('default')">Default</button>
+    <button id="btn-matrix" class="layout-btn flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition bg-gray-200 text-gray-700" onclick="switchLayout('matrix')">Layout Matrix</button>
+    <button id="btn-modern" class="layout-btn flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition bg-gray-200 text-gray-700" onclick="switchLayout('modern')">Layout Modern</button>
+  </div>
+
+  <div id="layout-default" class="layout-container block pt-20">
+    <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(120%_120%_at_50%_0%,rgba(255,255,255,0.72),transparent_60%)] dark:bg-[radial-gradient(120%_120%_at_50%_0%,rgba(15,23,42,0.85),transparent_58%)]"></div>
 
   <nav class="sticky top-4 z-50 mx-auto mb-10 flex max-w-6xl items-center justify-between rounded-full border border-white/50 bg-white/70 px-5 py-3 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/45 dark:shadow-black/30">
-    <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold tracking-[0.18em] uppercase text-slate-700 dark:text-slate-200">
+    <a href="power-washing-index.html" class="inline-flex items-center gap-2 text-sm font-semibold tracking-[0.18em] uppercase text-slate-700 dark:text-slate-200">
       <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(92,214,125,0.9)]"></span>
       dark mode demo
     </a>
-    <a href="index.html" class="rounded-full border border-slate-200 bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:border-white/10">Back to stxbandz</a>
+    <a href="power-washing-index.html" class="rounded-full border border-slate-200 bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black dark:border-white/10">Back to stxbandz</a>
   </nav>
 
   <main class="mx-auto max-w-6xl space-y-8">
@@ -106,9 +114,172 @@
           <p class="text-xs font-bold uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">Local Business Theme Demo</p>
           <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">A friendly preview of the bento layout, designed with warm spacing to connect with your community.</p>
         </div>
-        <a href="index.html" class="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black">Return to Editor</a>
+        <a href="power-washing-index.html" class="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black">Return to Editor</a>
       </div>
     </footer>
-  </main>
+    </main>
+  </div>
+
+  <!-- Layout Matrix (Linktree Inspired) -->
+  <div id="layout-matrix" class="layout-container hidden pt-24">
+    <main class="mx-auto max-w-4xl space-y-6">
+      <section class="rounded-[36px] border border-white/60 bg-white/80 p-8 shadow-[0_28px_90px_rgba(15,23,42,0.14)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+        <!-- Avatar -->
+        <div class="mx-auto mb-5 h-24 w-24 rounded-full border-4 border-emerald-200 bg-[radial-gradient(circle_at_30%_25%,#bbf2cc_0%,#5cd67d_35%,#0f172a_100%)] shadow-[0_0_35px_rgba(92,214,125,0.4)]"></div>
+        <div class="text-center">
+          <h2 class="text-3xl font-black tracking-tight">Summit &amp; Soil Landscaping</h2>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Family-owned landscaping with premium design, installation, and weekly care.</p>
+          <p class="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Drop your logo + intro text here</p>
+        </div>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <!-- Primary CTA -->
+          <a href="tel:&&&&&&&&&&" class="rounded-2xl bg-slate-950 px-6 py-4 text-center text-sm font-semibold text-white shadow-lg shadow-slate-950/25 transition hover:-translate-y-0.5 hover:bg-black">Tap to Call Us</a>
+          <a href="#" class="rounded-2xl border border-slate-200 bg-white/80 px-6 py-4 text-center text-sm font-semibold text-slate-900 dark:border-white/10 dark:bg-slate-900/40 dark:text-slate-100">Book a Site Visit</a>
+        </div>
+      </section>
+
+      <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-[28px] border border-white/60 bg-white/80 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Before/After</p>
+          <div class="mt-3 h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Insert yard photo</div>
+        </div>
+        <div class="rounded-[28px] border border-white/60 bg-white/80 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Recent Project</p>
+          <div class="mt-3 h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Insert patio photo</div>
+        </div>
+        <div class="rounded-[28px] border border-white/60 bg-white/80 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55 sm:col-span-2 lg:col-span-1">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Crew at Work</p>
+          <div class="mt-3 h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Insert team photo</div>
+        </div>
+      </section>
+
+      <section class="space-y-4 rounded-[36px] border border-white/60 bg-white/80 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+        <h3 class="text-xl font-black tracking-tight">Popular Service Packages</h3>
+        <div class="space-y-3">
+          <div class="rounded-2xl border border-slate-200 bg-white/80 px-5 py-4 dark:border-white/10 dark:bg-slate-900/40">
+            <span class="block text-sm font-bold">Essential Weekly Care</span>
+            <span class="mt-1 block text-sm text-slate-600 dark:text-slate-300">Mow, edge, blow, and monthly health checks for a clean lawn every week.</span>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/80 px-5 py-4 dark:border-white/10 dark:bg-slate-900/40">
+            <span class="block text-sm font-bold">Outdoor Upgrade Bundle</span>
+            <span class="mt-1 block text-sm text-slate-600 dark:text-slate-300">Landscape design, bed refresh, plant install, and hardscape accents.</span>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/80 px-5 py-4 dark:border-white/10 dark:bg-slate-900/40">
+            <span class="block text-sm font-bold">Seasonal Protection Plan</span>
+            <span class="mt-1 block text-sm text-slate-600 dark:text-slate-300">Spring prep, fall cleanup, mulching, and winter-ready yard protection.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Layout Modern (Shopify Inspired) -->
+  <div id="layout-modern" class="layout-container hidden pt-24">
+    <main class="mx-auto max-w-6xl space-y-6">
+      <!-- E-com Style Hero -->
+      <div class="grid gap-6 rounded-[36px] border border-white/60 bg-white/75 p-8 shadow-[0_28px_90px_rgba(15,23,42,0.14)] backdrop-blur-3xl lg:grid-cols-[1.1fr_0.9fr] dark:border-white/10 dark:bg-slate-900/55">
+        <div>
+          <h2 class="text-4xl font-black tracking-tight">Premium results.</h2>
+          <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300">Top-tier local landscaping built to elevate your property's value immediately.</p>
+          <a href="tel:&&&&&&&&&&" class="mt-6 inline-flex rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-black">Get Your Quote</a>
+          <div class="mt-4 text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Swap this headline + CTA with your offer</div>
+        </div>
+        <div class="min-h-52 rounded-[28px] border border-emerald-400/25 bg-[radial-gradient(circle_at_20%_20%,rgba(92,214,125,0.35),transparent_42%),radial-gradient(circle_at_75%_70%,rgba(162,247,239,0.25),transparent_46%),linear-gradient(160deg,#0f172a_0%,#1e293b_100%)] p-4">
+          <div class="h-full rounded-2xl border border-dashed border-white/30 bg-black/20 text-center text-xs font-semibold uppercase tracking-[0.16em] leading-[11rem] text-white/80">Drop hero project image</div>
+        </div>
+      </div>
+
+      <!-- E-com Style Features -->
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-[30px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <h3 class="text-xl font-bold tracking-tight">Design + Planting</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">Professional, clean, and reliable execution from layout planning to final install.</p>
+        </div>
+        <div class="rounded-[30px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <h3 class="text-xl font-bold tracking-tight">Hardscape + Cleanup</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">Heavy duty outdoor upgrades and seasonal care that stay sharp year after year.</p>
+        </div>
+      </div>
+
+      <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div class="rounded-[32px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <h3 class="text-2xl font-black tracking-tight">Portfolio Showcase</h3>
+          <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Use these blocks to upload transformed yards, patios, and retaining wall installations.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Project Photo 01</div>
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Project Photo 02</div>
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Project Photo 03</div>
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500 dark:border-white/15 dark:bg-slate-800/50 dark:text-slate-300">Project Photo 04</div>
+          </div>
+        </div>
+        <div class="space-y-6 rounded-[32px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Why homeowners choose us</p>
+            <ul class="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-200">
+              <li>Licensed and insured local crew</li>
+              <li>Transparent itemized estimates</li>
+              <li>On-time service with cleanup included</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/80 p-4 text-sm dark:border-white/10 dark:bg-slate-900/40">
+            <p class="font-semibold">"Our yard now feels like a private retreat. The team made everything easy."</p>
+            <p class="mt-2 text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Verified Client</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid gap-6 lg:grid-cols-2">
+        <div class="rounded-[32px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl dark:border-white/10 dark:bg-slate-900/55">
+          <h3 class="text-2xl font-black tracking-tight">Frequently Asked Questions</h3>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="rounded-2xl border border-slate-200 bg-white/80 p-4 dark:border-white/10 dark:bg-slate-900/40"><p class="font-semibold">How quickly can you start?</p><p class="mt-1 text-slate-600 dark:text-slate-300">Most projects start within 7-10 days depending on scope and weather.</p></div>
+            <div class="rounded-2xl border border-slate-200 bg-white/80 p-4 dark:border-white/10 dark:bg-slate-900/40"><p class="font-semibold">Can I customize service bundles?</p><p class="mt-1 text-slate-600 dark:text-slate-300">Yes, each package is fully tailored to your goals and property size.</p></div>
+          </div>
+        </div>
+        <div class="rounded-[32px] border border-white/60 bg-slate-950 p-6 text-white shadow-[0_22px_70px_rgba(2,6,23,0.55)] backdrop-blur-3xl dark:border-white/10">
+          <h3 class="text-2xl font-black tracking-tight">Request a Quote</h3>
+          <p class="mt-2 text-sm text-white/75">Use this area for your contact embed or lead form script.</p>
+          <div class="mt-4 grid gap-3 text-sm">
+            <div class="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white/70">Name field placeholder</div>
+            <div class="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white/70">Email field placeholder</div>
+            <div class="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white/70">Service details placeholder</div>
+          </div>
+          <a href="tel:&&&&&&&&&&" class="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900">Call Now</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function switchLayout(layoutName) {
+      // 1. Hide all layout containers
+      document.querySelectorAll('.layout-container').forEach(function (el) {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+
+      // 2. Reset all buttons to inactive state
+      document.querySelectorAll('.layout-btn').forEach(function (btn) {
+        btn.classList.remove('bg-green-500', 'text-white', 'shadow-md');
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+
+      // 3. Show the targeted layout container
+      var targetLayout = document.getElementById('layout-' + layoutName);
+      if (targetLayout) {
+        targetLayout.classList.remove('hidden');
+        targetLayout.classList.add('block');
+      }
+
+      // 4. Highlight the active button
+      var activeBtn = document.getElementById('btn-' + layoutName);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+        activeBtn.classList.add('bg-green-500', 'text-white', 'shadow-md');
+      }
+    }
+
+    switchLayout('default');
+  </script>
 </body>
 </html>

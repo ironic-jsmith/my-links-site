@@ -6,14 +6,22 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#f5f5f7] text-slate-900 antialiased relative min-h-screen p-4 lg:p-12">
-  <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(120%_120%_at_50%_0%,rgba(255,255,255,0.72),transparent_62%),radial-gradient(90%_90%_at_12%_8%,rgba(92,214,125,0.16),transparent_55%),radial-gradient(90%_90%_at_88%_16%,rgba(59,130,246,0.12),transparent_58%)]"></div>
+  <!-- Layout Switcher Bar -->
+  <div class="fixed top-4 left-1/2 z-[70] flex w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 gap-2 rounded-full border border-white/60 bg-white/85 p-2 shadow-[0_20px_50px_rgba(15,23,42,0.18)] backdrop-blur-3xl">
+    <button id="btn-default" class="layout-btn flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition bg-green-500 text-white shadow-md" onclick="switchLayout('default')">Default</button>
+    <button id="btn-matrix" class="layout-btn flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition bg-gray-200 text-gray-700" onclick="switchLayout('matrix')">Layout Matrix</button>
+    <button id="btn-modern" class="layout-btn flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition bg-gray-200 text-gray-700" onclick="switchLayout('modern')">Layout Modern</button>
+  </div>
+
+  <div id="layout-default" class="layout-container block pt-20">
+    <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(120%_120%_at_50%_0%,rgba(255,255,255,0.72),transparent_62%),radial-gradient(90%_90%_at_12%_8%,rgba(92,214,125,0.16),transparent_55%),radial-gradient(90%_90%_at_88%_16%,rgba(59,130,246,0.12),transparent_58%)]"></div>
 
   <nav class="sticky top-4 z-50 mx-auto mb-10 flex max-w-6xl items-center justify-between rounded-full border border-white/50 bg-white/70 px-5 py-3 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl">
-    <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
+    <a href="power-washing-index.html" class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-700">
       <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(92,214,125,0.9)]"></span>
       white mode demo
     </a>
-    <a href="index.html" class="rounded-full border border-slate-200 bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black">Back to stxbandz</a>
+    <a href="power-washing-index.html" class="rounded-full border border-slate-200 bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black">Back to stxbandz</a>
   </nav>
 
   <main class="mx-auto max-w-6xl space-y-8">
@@ -113,9 +121,172 @@
           <p class="text-xs font-bold uppercase tracking-[0.28em] text-slate-500">Enterprise Theme Demo</p>
           <p class="mt-1 text-sm text-slate-600">A refined preview of the corporate layout, optimized for clarity, structure, and professional appeal.</p>
         </div>
-        <a href="index.html" class="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black">Return to Editor</a>
+        <a href="power-washing-index.html" class="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black">Return to Editor</a>
       </div>
     </footer>
-  </main>
+    </main>
+  </div>
+
+  <!-- Layout Matrix (Linktree Inspired) -->
+  <div id="layout-matrix" class="layout-container hidden pt-24">
+    <main class="mx-auto max-w-4xl space-y-6">
+      <section class="rounded-[36px] border border-white/60 bg-white/80 p-8 shadow-[0_28px_90px_rgba(15,23,42,0.14)] backdrop-blur-3xl">
+        <!-- Avatar -->
+        <div class="mx-auto mb-5 h-24 w-24 rounded-full border-4 border-sky-200 bg-[radial-gradient(circle_at_30%_25%,#7dd3fc_0%,#38bdf8_32%,#0f172a_100%)] shadow-[0_0_35px_rgba(56,189,248,0.4)]"></div>
+        <div class="text-center">
+          <h2 class="text-3xl font-black tracking-tight">BlueLine Power Washing</h2>
+          <p class="mt-2 text-sm text-slate-600">Exterior cleaning specialists trusted for spotless curb appeal and safe treatment methods.</p>
+          <p class="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">Insert your logo + short pitch here</p>
+        </div>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <!-- Primary CTA -->
+          <a href="tel:&&&&&&&&&&" class="rounded-2xl bg-slate-950 px-6 py-4 text-center text-sm font-semibold text-white shadow-lg shadow-slate-950/25 transition hover:-translate-y-0.5 hover:bg-black">Tap to Call Us</a>
+          <a href="#" class="rounded-2xl border border-slate-200 bg-white/80 px-6 py-4 text-center text-sm font-semibold text-slate-900">Request Fast Estimate</a>
+        </div>
+      </section>
+
+      <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-[28px] border border-white/60 bg-white/80 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Driveway Results</p>
+          <div class="mt-3 h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Insert before/after</div>
+        </div>
+        <div class="rounded-[28px] border border-white/60 bg-white/80 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-500">House Soft Wash</p>
+          <div class="mt-3 h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Insert siding photo</div>
+        </div>
+        <div class="rounded-[28px] border border-white/60 bg-white/80 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-3xl sm:col-span-2 lg:col-span-1">
+          <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Commercial Work</p>
+          <div class="mt-3 h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Insert storefront photo</div>
+        </div>
+      </section>
+
+      <section class="space-y-4 rounded-[36px] border border-white/60 bg-white/80 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl">
+        <h3 class="text-xl font-black tracking-tight">Top Service Packages</h3>
+        <div class="space-y-3">
+          <div class="rounded-2xl border border-slate-200 bg-white/80 px-5 py-4">
+            <span class="block text-sm font-bold">Home Refresh Package</span>
+            <span class="mt-1 block text-sm text-slate-600">House wash, driveway clean, and patio rinse with environmentally safe products.</span>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/80 px-5 py-4">
+            <span class="block text-sm font-bold">Commercial Frontage Plan</span>
+            <span class="mt-1 block text-sm text-slate-600">Scheduled storefront and walkway cleaning for a polished first impression.</span>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/80 px-5 py-4">
+            <span class="block text-sm font-bold">Seasonal Deep Clean</span>
+            <span class="mt-1 block text-sm text-slate-600">Heavy-duty grime removal for high-traffic surfaces before peak season.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Layout Modern (Shopify Inspired) -->
+  <div id="layout-modern" class="layout-container hidden pt-24">
+    <main class="mx-auto max-w-6xl space-y-6">
+      <!-- E-com Style Hero -->
+      <div class="grid gap-6 rounded-[36px] border border-white/60 bg-white/75 p-8 shadow-[0_28px_90px_rgba(15,23,42,0.14)] backdrop-blur-3xl lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <h2 class="text-4xl font-black tracking-tight">Premium results.</h2>
+          <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-600">Top-tier local exterior cleaning built to elevate your property's value immediately.</p>
+          <a href="tel:&&&&&&&&&&" class="mt-6 inline-flex rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-black">Get Your Quote</a>
+          <div class="mt-4 text-xs uppercase tracking-[0.2em] text-slate-500">Replace copy and offer for your business</div>
+        </div>
+        <div class="min-h-52 rounded-[28px] border border-sky-400/25 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.35),transparent_42%),radial-gradient(circle_at_75%_70%,rgba(147,197,253,0.25),transparent_46%),linear-gradient(160deg,#0f172a_0%,#1e293b_100%)] p-4">
+          <div class="h-full rounded-2xl border border-dashed border-white/30 bg-black/20 text-center text-xs font-semibold uppercase tracking-[0.16em] leading-[11rem] text-white/80">Drop hero image here</div>
+        </div>
+      </div>
+
+      <!-- E-com Style Features -->
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-[30px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl">
+          <h3 class="text-xl font-bold tracking-tight">Residential Power Wash</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">Professional, clean, and reliable execution for siding, patios, and entryways.</p>
+        </div>
+        <div class="rounded-[30px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl">
+          <h3 class="text-xl font-bold tracking-tight">Commercial Surface Care</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">Heavy duty solutions that keep storefronts and facilities sharp through every season.</p>
+        </div>
+      </div>
+
+      <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div class="rounded-[32px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl">
+          <h3 class="text-2xl font-black tracking-tight">Project Gallery</h3>
+          <p class="mt-2 text-sm text-slate-600">Upload your strongest before/after photos to instantly build trust with visitors.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Gallery Photo 01</div>
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Gallery Photo 02</div>
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Gallery Photo 03</div>
+            <div class="h-32 rounded-2xl border border-dashed border-slate-300 bg-slate-100/80 text-center text-xs font-semibold leading-[8rem] text-slate-500">Gallery Photo 04</div>
+          </div>
+        </div>
+        <div class="space-y-6 rounded-[32px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl">
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Why clients book us</p>
+            <ul class="mt-3 space-y-2 text-sm text-slate-700">
+              <li>Fully insured cleaning specialists</li>
+              <li>Material-safe detergents and methods</li>
+              <li>Fast scheduling and dependable arrivals</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white/80 p-4 text-sm">
+            <p class="font-semibold">"Our storefront looked brand new after one visit. Great communication and perfect cleanup."</p>
+            <p class="mt-2 text-xs uppercase tracking-[0.18em] text-slate-500">Verified Client</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid gap-6 lg:grid-cols-2">
+        <div class="rounded-[32px] border border-white/60 bg-white/75 p-6 shadow-[0_22px_70px_rgba(15,23,42,0.12)] backdrop-blur-3xl">
+          <h3 class="text-2xl font-black tracking-tight">Frequently Asked Questions</h3>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="rounded-2xl border border-slate-200 bg-white/80 p-4"><p class="font-semibold">Will pressure washing damage surfaces?</p><p class="mt-1 text-slate-600">We select proper pressure and detergent combinations for each surface type.</p></div>
+            <div class="rounded-2xl border border-slate-200 bg-white/80 p-4"><p class="font-semibold">Do you service commercial sites?</p><p class="mt-1 text-slate-600">Yes, we support storefronts, office complexes, and multi-unit properties.</p></div>
+          </div>
+        </div>
+        <div class="rounded-[32px] border border-white/60 bg-slate-950 p-6 text-white shadow-[0_22px_70px_rgba(2,6,23,0.55)] backdrop-blur-3xl">
+          <h3 class="text-2xl font-black tracking-tight">Get a Fast Quote</h3>
+          <p class="mt-2 text-sm text-white/75">Place your booking form or call widget in this panel.</p>
+          <div class="mt-4 grid gap-3 text-sm">
+            <div class="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white/70">Name field placeholder</div>
+            <div class="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white/70">Property address placeholder</div>
+            <div class="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white/70">Requested service placeholder</div>
+          </div>
+          <a href="tel:&&&&&&&&&&" class="mt-5 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900">Call Now</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function switchLayout(layoutName) {
+      // 1. Hide all layout containers
+      document.querySelectorAll('.layout-container').forEach(function (el) {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+
+      // 2. Reset all buttons to inactive state
+      document.querySelectorAll('.layout-btn').forEach(function (btn) {
+        btn.classList.remove('bg-green-500', 'text-white', 'shadow-md');
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+
+      // 3. Show the targeted layout container
+      var targetLayout = document.getElementById('layout-' + layoutName);
+      if (targetLayout) {
+        targetLayout.classList.remove('hidden');
+        targetLayout.classList.add('block');
+      }
+
+      // 4. Highlight the active button
+      var activeBtn = document.getElementById('btn-' + layoutName);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+        activeBtn.classList.add('bg-green-500', 'text-white', 'shadow-md');
+      }
+    }
+
+    switchLayout('default');
+  </script>
 </body>
 </html>
