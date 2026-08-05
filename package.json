@@ -1,6 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "test:analytics": "node --no-warnings scripts/test-analytics.mjs"
+    "test:analytics": "node --no-warnings scripts/test-analytics.mjs",
+    "test:landing": "node --no-warnings scripts/test-landing.mjs",
+    "test:ascii": "node --no-warnings scripts/test-ascii-logo.mjs",
+    "test:site": "npm run test:analytics && npm run test:landing && npm run test:ascii"
   }
 }

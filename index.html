@@ -1,79 +1,1675 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>stxbandz - Website Builder</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>stxbandz — Signal-grade website architecture</title>
+  <meta name="description" content="A story-driven landing page for stxbandz featuring a bento-grid package layout, ROI calculator, live template preview, and responsive terminal-grade UI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: "Inter", sans-serif; }
-    .hero-bg { position: relative; overflow: hidden; background: radial-gradient(120% 120% at 50% 0%, #0f172a 0%, #020617 70%); }
-    .hero-grid { position: absolute; inset: -50% 0 0 0; background-image: linear-gradient(to right, rgba(92,214,125,0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(92,214,125,0.10) 1px, transparent 1px); background-size: 44px 44px; transform: perspective(420px) rotateX(60deg); transform-origin: top center; mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 65%); -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 65%); animation: gridScroll 12s linear infinite; }
-    @keyframes gridScroll { from { background-position: 0 0; } to { background-position: 0 44px; } }
-    .hero-beam { position: absolute; top: -30%; width: 38vw; height: 140%; filter: blur(70px); opacity: 0.5; border-radius: 9999px; pointer-events: none; mix-blend-mode: screen; }
-    .hero-beam--1 { left: 8%; background: radial-gradient(circle, rgba(92,214,125,0.45), transparent 60%); animation: drift1 9s ease-in-out infinite; }
-    .hero-beam--2 { right: 6%; background: radial-gradient(circle, rgba(129,140,248,0.35), transparent 60%); animation: drift2 11s ease-in-out infinite; }
-    @keyframes drift1 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(28px) scale(1.08); } }
-    @keyframes drift2 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-24px) scale(1.12); } }
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-    .reveal.is-visible { opacity: 1; transform: none; }
-    .pricing-card { position: relative; backdrop-filter: blur(48px) saturate(150%); -webkit-backdrop-filter: blur(48px) saturate(150%); border: 1px solid rgba(255,255,255,0.10); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 34px 110px rgba(2,6,23,0.60); }
-    .pricing-card:hover { border-color: rgba(187,242,204,0.35); transform: translateY(-4px); box-shadow: 0 42px 130px rgba(2,6,23,0.72); }
-    .feature-dot { width: 9px; height: 9px; border-radius: 9999px; margin-top: 0.45rem; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.25); background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.55), rgba(148,163,184,0.18) 62%, rgba(2,6,23,0.06) 100%); }
-    .btn-primary { background: linear-gradient(135deg, #5cd67d 0%, #3aadd5 100%); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(92,214,125,0.3); }
-    .btn-secondary { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-    .btn-secondary:hover { background: rgba(255,255,255,0.12); border-color: rgba(92,214,125,0.5); transform: translateY(-2px); }
-    @media (prefers-reduced-motion: reduce) { .reveal { transition: none; opacity: 1; transform: none; } .hero-grid, .hero-beam { animation: none; } }
+    :root {
+      color-scheme: dark;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --radius-sm: 14px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --shadow-xl: 0 24px 80px rgba(1, 6, 17, 0.46);
+      --shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.22);
+      --font-sans: "Inter", sans-serif;
+      --font-mono: "Geist Mono", monospace;
+
+      --color-primary-50: oklch(0.97 0.03 152);
+      --color-primary-100: oklch(0.93 0.05 152);
+      --color-primary-200: oklch(0.88 0.08 152);
+      --color-primary-300: oklch(0.81 0.12 152);
+      --color-primary-400: oklch(0.72 0.15 152);
+      --color-primary-500: oklch(0.64 0.18 152);
+      --color-primary-600: oklch(0.55 0.16 152);
+      --color-primary-700: oklch(0.46 0.13 152);
+      --color-primary-800: oklch(0.36 0.1 152);
+      --color-primary-900: oklch(0.25 0.07 152);
+      --color-primary-950: oklch(0.16 0.04 152);
+
+      --color-neutral-50: oklch(0.98 0.004 240);
+      --color-neutral-100: oklch(0.95 0.006 240);
+      --color-neutral-200: oklch(0.89 0.01 240);
+      --color-neutral-300: oklch(0.81 0.014 245);
+      --color-neutral-400: oklch(0.72 0.018 245);
+      --color-neutral-500: oklch(0.58 0.02 248);
+      --color-neutral-600: oklch(0.47 0.018 250);
+      --color-neutral-700: oklch(0.37 0.016 252);
+      --color-neutral-800: oklch(0.27 0.014 255);
+      --color-neutral-900: oklch(0.19 0.012 257);
+      --color-neutral-950: oklch(0.13 0.01 258);
+
+      --semantic-background: var(--color-neutral-950);
+      --semantic-surface: color-mix(in oklch, var(--color-neutral-900) 86%, transparent);
+      --semantic-surface-strong: color-mix(in oklch, var(--color-neutral-800) 88%, transparent);
+      --semantic-foreground: var(--color-neutral-50);
+      --semantic-muted: var(--color-neutral-300);
+      --semantic-muted-2: var(--color-neutral-400);
+      --semantic-border: color-mix(in oklch, var(--color-neutral-300) 18%, transparent);
+      --semantic-accent: var(--color-primary-500);
+      --semantic-accent-strong: var(--color-primary-300);
+      --semantic-accent-ink: var(--color-primary-950);
+      --semantic-grid: color-mix(in oklch, var(--color-primary-500) 20%, transparent);
+      --semantic-glow-a: color-mix(in oklch, var(--color-primary-500) 48%, transparent);
+      --semantic-glow-b: oklch(0.6 0.12 230);
+      --semantic-danger: oklch(0.63 0.2 24);
+      --semantic-warning: oklch(0.78 0.16 88);
+      --semantic-success: oklch(0.73 0.15 152);
+      --hero-scale: 1;
+      --hero-shift: 0px;
+    }
+
+    [data-theme="light"] {
+      color-scheme: light;
+      --semantic-background: oklch(0.985 0.003 240);
+      --semantic-surface: color-mix(in oklch, white 92%, var(--color-primary-50) 8%);
+      --semantic-surface-strong: white;
+      --semantic-foreground: oklch(0.2 0.016 257);
+      --semantic-muted: oklch(0.37 0.016 252);
+      --semantic-muted-2: oklch(0.47 0.018 250);
+      --semantic-border: color-mix(in oklch, var(--color-neutral-700) 20%, transparent);
+      --semantic-accent: var(--color-primary-600);
+      --semantic-accent-strong: var(--color-primary-700);
+      --semantic-accent-ink: white;
+      --semantic-grid: color-mix(in oklch, var(--color-primary-600) 14%, transparent);
+      --semantic-glow-a: color-mix(in oklch, var(--color-primary-400) 22%, transparent);
+      --semantic-glow-b: color-mix(in oklch, oklch(0.73 0.09 240) 40%, transparent);
+      --shadow-xl: 0 24px 60px rgba(15, 23, 42, 0.1);
+      --shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--semantic-background);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 18%, color-mix(in oklch, var(--semantic-glow-a) 42%, transparent), transparent 26%),
+        radial-gradient(circle at 86% 6%, color-mix(in oklch, var(--semantic-glow-b) 36%, transparent), transparent 28%),
+        radial-gradient(circle at 50% -6%, color-mix(in oklch, var(--semantic-glow-a) 16%, transparent), transparent 34%),
+        var(--semantic-background);
+      color: var(--semantic-foreground);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    img, iframe { display: block; max-width: 100%; }
+
+    .site-shell {
+      position: relative;
+      min-height: 100vh;
+      overflow: clip;
+    }
+
+    .hero-grid,
+    .hero-grid::after {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+    }
+
+    .hero-grid {
+      background-image:
+        linear-gradient(to right, var(--semantic-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--semantic-grid) 1px, transparent 1px);
+      background-size: 46px 46px;
+      transform: perspective(580px) rotateX(72deg) translateY(-14%);
+      transform-origin: top center;
+      opacity: 0.85;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent 72%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent 72%);
+      animation: gridScroll 15s linear infinite;
+    }
+
+    .hero-grid::after {
+      background: linear-gradient(to bottom, transparent, color-mix(in oklch, var(--semantic-background) 76%, transparent) 80%, var(--semantic-background));
+    }
+
+    .hero-beam {
+      position: absolute;
+      top: -26%;
+      width: 42vw;
+      height: 120vh;
+      border-radius: 999px;
+      filter: blur(88px);
+      opacity: 0.42;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      will-change: transform;
+    }
+
+    .hero-beam--1 {
+      left: -4vw;
+      background: radial-gradient(circle, color-mix(in oklch, var(--semantic-accent) 44%, transparent), transparent 60%);
+      animation: driftOne 13s ease-in-out infinite;
+    }
+
+    .hero-beam--2 {
+      right: -6vw;
+      background: radial-gradient(circle, color-mix(in oklch, var(--semantic-glow-b) 62%, transparent), transparent 62%);
+      animation: driftTwo 16s ease-in-out infinite;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.05;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: min(1460px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0 80px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 36px;
+      padding: 12px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      background: rgba(10, 15, 25, 0.4);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      contain: layout paint style;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--semantic-accent-ink);
+      background: linear-gradient(135deg, var(--semantic-accent-strong), var(--semantic-accent));
+      box-shadow: 0 0 0 6px color-mix(in oklch, var(--semantic-accent) 10%, transparent);
+      flex-shrink: 0;
+    }
+
+    .brand-mark-word {
+      width: clamp(320px, 48vw, 680px);
+      height: 60px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      margin-top: 5px;
+      overflow: visible;
+      place-items: center start;
+    }
+
+    .brand-mark-text {
+      display: block;
+      width: 100%;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(30px, 4.2vw, 54px);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+      color: #c6ffbc;
+      text-shadow:
+        0 0 3px rgba(198, 255, 188, 0.95),
+        0 0 8px rgba(102, 255, 110, 0.96),
+        0 0 18px rgba(73, 255, 98, 0.92),
+        0 0 34px rgba(53, 214, 78, 0.78),
+        0 0 58px rgba(39, 176, 63, 0.6);
+      filter: saturate(1.08);
+      white-space: nowrap;
+      transform: translateY(2px) scale(1.02, 1.02);
+    }
+
+    .ascii-logo-shell {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: pre;
+      line-height: 0.84;
+      letter-spacing: -0.12em;
+      user-select: none;
+    }
+
+    .ascii-logo-art {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: pre;
+    }
+
+    .brand-copy {
+      min-width: 0;
+      margin-left: 4px;
+    }
+
+    .eyebrow,
+    .pill,
+    .metric-label,
+    .section-label,
+    .mini-label,
+    .slider-label,
+    .preview-tabs button,
+    .radio-chip,
+    .footer-meta,
+    .toggle {
+      font-family: var(--font-mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-copy span {
+      display: block;
+      font-size: 10px;
+      color: var(--semantic-muted-2);
+      margin-top: 1px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .link-chip,
+    .toggle,
+    .button,
+    .preview-tabs button,
+    .viewport-toggle button,
+    .radio-chip,
+    .calculator-output,
+    .status-badge {
+      border: 1px solid var(--semantic-border);
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--semantic-surface-strong) 82%, transparent);
+      color: var(--semantic-foreground);
+    }
+
+    .link-chip,
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      min-width: 132px;
+      padding: 0 20px;
+      font-size: 10px;
+      text-decoration: none;
+      transition: transform 0.25s var(--ease), background 0.25s var(--ease), border-color 0.25s var(--ease), color 0.25s var(--ease);
+    }
+
+    .toggle { cursor: pointer; }
+
+    .link-chip:hover,
+    .link-chip:focus-visible,
+    .toggle:hover,
+    .toggle:focus-visible,
+    .button:hover,
+    .button:focus-visible,
+    .preview-tabs button:hover,
+    .preview-tabs button:focus-visible,
+    .viewport-toggle button:hover,
+    .viewport-toggle button:focus-visible,
+    .radio-chip:hover,
+    .radio-chip:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      border-color: color-mix(in oklch, var(--semantic-accent) 58%, var(--semantic-border));
+      background: color-mix(in oklch, var(--semantic-surface-strong) 68%, transparent);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .hero-copy {
+      padding: 28px 8px 0 2px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in oklch, var(--semantic-accent) 42%, transparent);
+      background: color-mix(in oklch, var(--semantic-accent) 12%, transparent);
+      color: var(--semantic-accent-strong);
+      font-size: 10px;
+    }
+
+    .pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--semantic-accent);
+      box-shadow: 0 0 12px color-mix(in oklch, var(--semantic-accent) 72%, transparent);
+    }
+
+    .hero h1 {
+      margin: 18px 0 18px;
+      font-size: clamp(3.4rem, 9vw, 7rem);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
+      font-weight: 840;
+      transform: translateY(var(--hero-shift)) scale(var(--hero-scale));
+      transform-origin: left center;
+      transition: transform 0.12s linear;
+      font-variation-settings: "opsz" 32, "wght" 820;
+      max-width: 7.2ch;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 59ch;
+      color: var(--semantic-muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 18px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.25s var(--ease), border-color 0.25s var(--ease), background 0.25s var(--ease), color 0.25s var(--ease);
+    }
+
+    .button .label,
+    .button .loading {
+      transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .button .loading {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(6px);
+      pointer-events: none;
+    }
+
+    .button.is-loading .label {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    .button.is-loading .loading {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, color-mix(in oklch, var(--semantic-accent) 88%, white 12%), color-mix(in oklch, var(--semantic-glow-b) 52%, var(--semantic-accent) 48%));
+      color: var(--semantic-accent-ink);
+      border-color: color-mix(in oklch, var(--semantic-accent) 60%, transparent);
+      box-shadow: 0 16px 30px color-mix(in oklch, var(--semantic-accent) 28%, transparent);
+    }
+
+    .button-secondary {
+      color: var(--semantic-foreground);
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid color-mix(in oklch, currentColor 25%, transparent);
+      border-top-color: currentColor;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .hero-note {
+      margin-top: 16px;
+      color: var(--semantic-muted-2);
+      font-size: 0.93rem;
+    }
+
+    .signals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .status-badge {
+      padding: 9px 12px;
+      font-size: 10px;
+      color: var(--semantic-muted);
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .card {
+      position: relative;
+      padding: 22px;
+      border: 1px solid var(--semantic-border);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(180deg, color-mix(in oklch, var(--semantic-surface-strong) 95%, transparent), color-mix(in oklch, var(--semantic-surface) 90%, transparent)),
+        color-mix(in oklch, var(--semantic-surface) 82%, transparent);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      box-shadow: var(--shadow-xl);
+      will-change: transform;
+      contain: layout paint style;
+      transform: translateZ(0);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(130deg, color-mix(in oklch, var(--semantic-accent) 11%, transparent), transparent 40%, color-mix(in oklch, white 8%, transparent));
+      opacity: 0.9;
+    }
+
+    .card > * { position: relative; z-index: 1; }
+
+    .card.featured { padding: 28px; }
+    .span-7 { grid-column: span 7; }
+    .span-5 { grid-column: span 5; }
+    .span-4 { grid-column: span 4; }
+    .span-3 { grid-column: span 3; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: 1 / -1; }
+
+    .section-label {
+      margin: 0 0 16px;
+      color: var(--semantic-accent-strong);
+      font-size: 10px;
+    }
+
+    .card h2,
+    .card h3 {
+      margin: 0;
+      letter-spacing: -0.04em;
+      line-height: 1.04;
+    }
+
+    .card h2 {
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      max-width: 12ch;
+    }
+
+    .card h3 {
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+    }
+
+    .copy-muted,
+    .feature-list li,
+    .metric-sub,
+    .calculator-copy,
+    .brief-copy,
+    .preview-caption,
+    .cta-copy,
+    .footer-meta {
+      color: var(--semantic-muted);
+    }
+
+    .pricing-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px;
+      margin: 20px 0 18px;
+    }
+
+    .price {
+      font-size: clamp(3rem, 5vw, 4.6rem);
+      line-height: 0.9;
+      font-weight: 850;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, color-mix(in oklch, var(--semantic-accent-strong) 92%, white 8%), color-mix(in oklch, var(--semantic-glow-b) 52%, var(--semantic-accent) 48%));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .mini-label {
+      color: var(--semantic-muted-2);
+      font-size: 10px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature-list li {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      gap: 12px;
+      align-items: start;
+      line-height: 1.6;
+    }
+
+    .feature-list li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-top: 0.35em;
+      background: radial-gradient(circle at 34% 34%, color-mix(in oklch, white 66%, var(--semantic-accent) 34%), color-mix(in oklch, var(--semantic-accent) 66%, transparent) 64%, transparent 65%);
+      box-shadow: 0 0 0 1px color-mix(in oklch, var(--semantic-accent) 30%, transparent);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--semantic-border);
+      border-radius: var(--radius-md);
+      background: color-mix(in oklch, var(--semantic-background) 22%, transparent);
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--semantic-muted-2);
+      font-size: 9px;
+    }
+
+    .metric-value {
+      display: block;
+      font-size: clamp(1.3rem, 2.2vw, 2rem);
+      line-height: 1;
+      font-weight: 750;
+      letter-spacing: -0.04em;
+    }
+
+    .metric-sub {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.87rem;
+      line-height: 1.5;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .radio-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 14px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: transform 0.22s var(--ease), border-color 0.22s var(--ease), background 0.22s var(--ease), color 0.22s var(--ease);
+    }
+
+    .radio-chip input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-chip.active {
+      border-color: color-mix(in oklch, var(--semantic-accent) 70%, transparent);
+      background: color-mix(in oklch, var(--semantic-accent) 14%, transparent);
+      color: var(--semantic-accent-strong);
+    }
+
+    .slider-stack {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .slider-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .slider-label,
+    .slider-value {
+      font-size: 10px;
+      color: var(--semantic-muted-2);
+    }
+
+    .slider-value strong {
+      color: var(--semantic-foreground);
+      font-size: 12px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      margin: 0;
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--semantic-border) 70%, transparent);
+      accent-color: color-mix(in oklch, var(--semantic-accent) 84%, white 16%);
+    }
+
+    .calculator-output {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: var(--radius-md);
+    }
+
+    .calculator-output strong {
+      display: block;
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      letter-spacing: -0.05em;
+    }
+
+    .calculator-output span {
+      display: block;
+      margin-top: 6px;
+      color: var(--semantic-muted);
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .preview-surface {
+      margin-top: 18px;
+      border: 1px solid var(--semantic-border);
+      border-radius: 22px;
+      overflow: clip;
+      background: color-mix(in oklch, var(--semantic-background) 36%, transparent);
+    }
+
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid var(--semantic-border);
+      background: color-mix(in oklch, var(--semantic-surface) 92%, transparent);
+      flex-wrap: wrap;
+    }
+
+    .preview-tabs,
+    .viewport-toggle {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .preview-tabs button,
+    .viewport-toggle button {
+      min-height: 36px;
+      padding: 0 12px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .preview-tabs button.active,
+    .viewport-toggle button.active {
+      color: var(--semantic-accent-strong);
+      border-color: color-mix(in oklch, var(--semantic-accent) 70%, transparent);
+      background: color-mix(in oklch, var(--semantic-accent) 14%, transparent);
+    }
+
+    .preview-frame-wrap {
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 440px;
+    }
+
+    .preview-device {
+      width: min(100%, 780px);
+      border-radius: 26px;
+      padding: 14px;
+      background: linear-gradient(180deg, color-mix(in oklch, white 10%, transparent), color-mix(in oklch, black 30%, transparent));
+      border: 1px solid color-mix(in oklch, var(--semantic-border) 85%, transparent);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+      transition: width 0.3s var(--ease);
+    }
+
+    .preview-device.mobile { width: min(100%, 360px); }
+
+    .preview-device.is-fullscreen {
+      width: min(100vw - 24px, 1320px);
+      max-height: calc(100vh - 24px);
+    }
+
+    .preview-device.is-fullscreen .preview-frame {
+      height: calc(100vh - 128px);
+      max-height: calc(100vh - 128px);
+    }
+
+    .preview-chrome {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--semantic-muted-2);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .preview-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: color-mix(in oklch, var(--semantic-muted-2) 60%, transparent);
+    }
+
+    .preview-frame {
+      width: 100%;
+      height: 420px;
+      border: 0;
+      border-radius: 18px;
+      background: white;
+    }
+
+    .preview-caption {
+      margin-top: 12px;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    .bar-chart {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 96px 1fr auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: color-mix(in oklch, var(--semantic-border) 74%, transparent);
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--w, 50%);
+      border-radius: inherit;
+      background: linear-gradient(90deg, color-mix(in oklch, var(--semantic-accent) 92%, white 8%), color-mix(in oklch, var(--semantic-glow-b) 50%, var(--semantic-accent) 50%));
+      transition: width 0.6s var(--ease);
+    }
+
+    .bar-label,
+    .bar-value {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--semantic-muted-2);
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .proof-block {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--semantic-border);
+      background: color-mix(in oklch, var(--semantic-background) 18%, transparent);
+    }
+
+    .proof-block strong {
+      display: block;
+      font-size: 1.55rem;
+      letter-spacing: -0.05em;
+    }
+
+    .proof-block span {
+      display: block;
+      margin-top: 8px;
+      color: var(--semantic-muted);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .feature-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .feature-detail {
+      border: 1px solid var(--semantic-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      background: color-mix(in oklch, var(--semantic-background) 18%, transparent);
+    }
+
+    .feature-detail h4 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .feature-detail p {
+      margin: 0;
+      color: var(--semantic-muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .brief-form {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      color: var(--semantic-muted-2);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field select {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--semantic-border);
+      background: color-mix(in oklch, var(--semantic-background) 20%, transparent);
+      color: var(--semantic-foreground);
+      padding: 0 14px;
+      outline: none;
+      transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.2s var(--ease), background 0.2s var(--ease);
+    }
+
+    .field input::placeholder { color: var(--semantic-muted-2); }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: color-mix(in oklch, var(--semantic-accent) 80%, transparent);
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--semantic-accent) 16%, transparent);
+      transform: translateY(-1px);
+    }
+
+    .field.valid input,
+    .field.valid select {
+      border-color: color-mix(in oklch, var(--semantic-success) 80%, transparent);
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--semantic-success) 16%, transparent);
+    }
+
+    .field.invalid input,
+    .field.invalid select {
+      border-color: color-mix(in oklch, var(--semantic-danger) 86%, transparent);
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--semantic-danger) 18%, transparent);
+      animation: shake 0.24s linear 1;
+    }
+
+    .field-help,
+    .form-message {
+      min-height: 1.2em;
+      font-size: 0.9rem;
+      color: var(--semantic-muted);
+    }
+
+    .field-help.error,
+    .form-message.error { color: var(--semantic-danger); }
+    .form-message.success { color: var(--semantic-success); }
+
+    .cta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .cta-strip .hero-actions { margin-top: 0; }
+
+    .footer {
+      margin-top: 22px;
+      padding: 18px 4px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .footer-meta {
+      font-size: 10px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      z-index: 40;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--semantic-accent);
+      color: var(--semantic-accent-ink);
+      text-decoration: none;
+      transform: translateY(-160%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    @media (prefers-contrast: more) {
+      :root {
+        --semantic-border: color-mix(in oklch, var(--semantic-foreground) 30%, transparent);
+        --semantic-muted: color-mix(in oklch, var(--semantic-foreground) 78%, transparent);
+        --semantic-muted-2: color-mix(in oklch, var(--semantic-foreground) 68%, transparent);
+      }
+
+      .hero-grid,
+      .hero-beam,
+      .card::before { opacity: 0.16 !important; }
+
+      .button-primary {
+        background: var(--color-primary-700);
+        color: white;
+        border-width: 2px;
+        border-color: white;
+      }
+
+      .toggle,
+      .link-chip,
+      .card,
+      .preview-tabs button,
+      .viewport-toggle button,
+      .radio-chip,
+      .calculator-output,
+      .status-badge,
+      .field input,
+      .field select {
+        border-width: 2px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      .hero-grid { background-position: center center; }
+      .hero-beam { transform: translateY(0) scale(1); opacity: 0.25; }
+      .hero h1 { transform: none !important; }
+    }
+
+    @media (max-width: 1080px) {
+      .hero { grid-template-columns: 1fr; }
+      .span-7, .span-5, .span-4, .span-3, .span-8 { grid-column: span 12; }
+      .preview-frame-wrap { min-height: 360px; }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: min(100% - 18px, 1240px); padding-top: 16px; }
+      .topbar {
+        border-radius: 22px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .topbar-actions { width: 100%; justify-content: stretch; }
+      .topbar-actions > * { flex: 1 1 140px; }
+      .card, .card.featured { padding: 18px; }
+      .proof-grid,
+      .feature-detail-grid,
+      .metric-grid { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 1fr; }
+      .cta-strip { flex-direction: column; align-items: flex-start; }
+      .preview-toolbar { flex-direction: column; align-items: stretch; }
+      .preview-tabs, .viewport-toggle { width: 100%; }
+      .preview-tabs button, .viewport-toggle button { flex: 1; }
+      .preview-frame { height: 360px; }
+      .hero-copy { padding-top: 12px; }
+      .hero h1 { max-width: none; }
+    }
+
+    @media (max-width: 520px) {
+      .container { width: calc(100% - 12px); }
+      .topbar { top: 8px; }
+      .button, .link-chip, .toggle { width: 100%; }
+      .hero-actions { flex-direction: column; }
+      .signals, .radio-group { flex-direction: column; }
+      .status-badge, .radio-chip { width: 100%; justify-content: center; }
+      .preview-frame { height: 320px; }
+    }
+
+    @keyframes gridScroll {
+      from { background-position: 0 0; }
+      to { background-position: 0 46px; }
+    }
+
+    @keyframes driftOne {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(30px) scale(1.08); }
+    }
+
+    @keyframes driftTwo {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-26px) scale(1.1); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      33% { transform: translateX(-4px); }
+      66% { transform: translateX(4px); }
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-white antialiased">
-  <div class="hero-bg min-h-screen flex items-center justify-center pt-20 pb-20 px-4">
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-shell">
     <div class="hero-grid" aria-hidden="true"></div>
     <div class="hero-beam hero-beam--1" aria-hidden="true"></div>
     <div class="hero-beam hero-beam--2" aria-hidden="true"></div>
-    <div class="relative max-w-2xl w-full mx-auto text-center">
-      <div class="mb-12">
-        <span class="reveal inline-block py-1 px-3 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold tracking-widest uppercase mb-6 border border-emerald-500/30">Signal-grade digital presence</span>
-        <h1 class="reveal text-5xl sm:text-7xl font-extrabold tracking-tight mb-6 leading-tight" style="transition-delay:.08s">stxbandz</h1>
-        <p class="reveal text-lg sm:text-xl text-slate-300 leading-relaxed" style="transition-delay:.16s">Absolute ownership. Precision architecture. Built to move when you move.</p>
-      </div>
-      <div class="reveal pricing-card bg-white/5 rounded-3xl p-8 sm:p-12 mb-8" style="transition-delay:.24s">
-        <div class="mb-8">
-          <h2 class="text-3xl sm:text-4xl font-black mb-6 text-white">Complete Website Package</h2>
-          <div class="space-y-4">
-            <div class="flex items-center justify-center gap-3">
-              <span class="text-5xl sm:text-6xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">$25</span>
-              <span class="text-slate-400 text-sm">one-time price</span>
+    <div class="noise" aria-hidden="true"></div>
+
+    <div class="container px-4">
+      <header class="topbar reveal">
+        <a class="brand" href="profile.html" aria-label="Back to stxbandz profile">
+          <div class="brand-mark brand-mark-word" aria-label="STXBANDZ neon logo">
+            <span class="brand-mark-text">STXBANDZ</span>
+          </div>
+        </a>
+
+        <!-- Blank Spacer forcing the actions to the right -->
+        <div style="flex-grow: 1;"></div>
+
+        <div class="topbar-actions">
+          <a class="link-chip" href="profile.html">Profile</a>
+          <a class="link-chip" href="dashboard.html">Dashboard</a>
+          <button class="toggle" id="themeToggle" type="button" aria-pressed="false">Editorial light</button>
+        </div>
+      </header>
+
+      <main id="main">
+        <section class="hero max-w-7xl mx-auto w-full">
+          <div class="hero-copy reveal">
+            <span class="pill" id="heroBadge">Signal-grade digital presence</span>
+            <h1 id="heroTitle" class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">stxbandz.</h1>
+            <p id="heroBody">A product-led web presence built for operators who want ownership, speed, and a landing surface that feels as polished as the product behind it.</p>
+
+            <div class="hero-actions">
+              <a class="button button-primary" href="power-washing-index.html" data-loading-nav>
+                <span class="label">Preview templates →</span>
+                <span class="loading"><span class="spinner" aria-hidden="true"></span>Launching preview</span>
+              </a>
+              <a class="button button-secondary" href="model-a-landing.html" data-loading-nav>
+                <span class="label">View licensing & terms</span>
+                <span class="loading"><span class="spinner" aria-hidden="true"></span>Opening terms</span>
+              </a>
             </div>
-            <div class="mt-8 space-y-3 text-left">
-              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Zero recurring fees. Pure autonomy.</span></div>
-              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Seamless architectural transfer.</span></div>
-              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Production-grade templates. Ready to deploy.</span></div>
-              <div class="flex items-start gap-3"><span class="feature-dot" aria-hidden="true"></span><span class="text-slate-100">Host. Customize. Dominate.</span></div>
+
+            <div class="hero-note" id="heroNote">Adaptive copy layer ready. Use ?audience=agency, ?audience=portfolio, or ?audience=startup to segment the landing message.</div>
+
+            <div class="signals" aria-label="Operational signals">
+              <div class="status-badge">One-time ownership model</div>
+              <div class="status-badge">Responsive by default</div>
+              <div class="status-badge">No runtime CSS compiler</div>
             </div>
           </div>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-4 mt-10">
-          <a href="power-washing-index.html" class="btn-primary flex-1 px-6 py-4 rounded-lg font-semibold text-base text-center transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-900">
-            Preview Templates →
-          </a>
-          <a href="model-a-landing.html" class="btn-secondary flex-1 px-6 py-4 rounded-lg font-semibold text-base flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900">View Licensing & Terms</a>
-        </div>
-      </div>
-      <div class="reveal flex items-center justify-center gap-4 flex-wrap" style="transition-delay:.32s">
-        <a href="profile.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105 text-sm">← Back to Profile</a>
-        <a href="dashboard.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/40 border border-slate-700 text-slate-300 hover:text-emerald-300 hover:border-emerald-400 hover:bg-slate-800/60 transition-all transform hover:scale-105 text-sm">Dashboard →</a>
-      </div>
+
+          <div class="bento grid-cols-1 lg:grid-cols-12">
+            <article class="card featured span-12 reveal" style="transition-delay:.04s">
+              <div class="section-label">Core package / conversion anchor</div>
+              <h2 class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Complete website package with a one-time $25 entry point.</h2>
+              <p class="copy-muted">Built for creators, solo brands, startups, and agencies that want a cinematic surface without subscription drag, bloated tooling, or handoff friction.</p>
+
+              <div class="pricing-row">
+                <span class="price pr-4 tracking-tight">$25</span>
+                <span class="mini-label">one-time / deploy-ready handoff</span>
+              </div>
+
+              <ul class="feature-list">
+                <li>Zero recurring platform fees once the project is delivered.</li>
+                <li>Seamless architectural transfer with editable static files you fully control.</li>
+                <li>Template-grade landing systems that re-stack cleanly across mobile, tablet, and desktop.</li>
+                <li>Visual language engineered to match the stxbandz profile, dashboard, and globe surface.</li>
+              </ul>
+
+              <div class="hero-actions" style="margin-top:22px">
+                <a class="button button-primary" href="#previewCard">See live demo</a>
+                <a class="button button-secondary" href="#featureDeep">View technical detail</a>
+              </div>
+            </article>
+
+            <article class="card span-12 reveal" style="transition-delay:.1s">
+              <div class="section-label">Audience fit / personalized CTA</div>
+              <h3 class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Who is this page shaping itself for?</h3>
+              <p class="copy-muted">Switch the surface intent. The hero copy and primary CTA adapt instantly so the message stays aligned with the visitor’s context.</p>
+
+              <div class="radio-group" id="audienceSwitch" role="radiogroup" aria-label="Audience intent selector">
+                <label class="radio-chip active"><input type="radio" name="audience" value="agency" checked>Agency</label>
+                <label class="radio-chip"><input type="radio" name="audience" value="portfolio">Portfolio</label>
+                <label class="radio-chip"><input type="radio" name="audience" value="startup">Startup</label>
+                <label class="radio-chip"><input type="radio" name="audience" value="personal">Personal brand</label>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric">
+                  <span class="metric-label">Audience route</span>
+                  <span class="metric-value" id="audienceMetric">Agency</span>
+                  <span class="metric-sub">Optimized for fast lead capture, case-study framing, and white-label delivery.</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Primary CTA mode</span>
+                  <span class="metric-value" id="ctaMetric">Preview</span>
+                  <span class="metric-sub">Conversion language updates before the user ever leaves the first fold.</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="bento" aria-label="Landing page capabilities">
+          <article class="card span-4 reveal" style="transition-delay:.06s">
+            <div class="section-label">ROI calculator / savings signal</div>
+            <h3 class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Turn recurring builder spend into a hard-number savings case.</h3>
+            <p class="calculator-copy">Show buyers how much subscription gravity disappears when they switch to a one-time delivery model.</p>
+
+            <div class="slider-stack">
+              <div class="slider-row">
+                <div class="slider-head">
+                  <span class="slider-label">Competitor monthly fee</span>
+                  <span class="slider-value"><strong id="monthlyValue">$24</strong> / month</span>
+                </div>
+                <input id="monthlyRange" type="range" min="10" max="90" step="1" value="24">
+              </div>
+
+              <div class="slider-row">
+                <div class="slider-head">
+                  <span class="slider-label">Comparison window</span>
+                  <span class="slider-value"><strong id="monthsValue">24</strong> months</span>
+                </div>
+                <input id="monthsRange" type="range" min="6" max="48" step="1" value="24">
+              </div>
+            </div>
+
+            <div class="calculator-output" aria-live="polite">
+              <strong id="savingsValue">$551 saved</strong>
+              <span id="savingsCopy">Against a $24/month builder over 24 months, stxbandz keeps the spend grounded while preserving full ownership.</span>
+            </div>
+          </article>
+
+          <article class="card span-8 reveal" id="previewCard" style="transition-delay:.12s">
+            <div class="section-label">Interactive preview / product-led motion</div>
+            <h3 class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Explore a live template surface without leaving the landing page.</h3>
+            <p class="preview-caption" id="previewDescription">Services preview is fixed here for consistency. Use the viewport controls and fullscreen mode to inspect desktop and mobile behavior clearly.</p>
+
+            <div class="preview-surface">
+              <div class="preview-toolbar">
+                <div class="preview-tabs" role="tablist" aria-label="Preview surfaces">
+                  <button type="button" class="active" aria-current="true">Services</button>
+                </div>
+
+                <div class="viewport-toggle" aria-label="Preview viewport">
+                  <button type="button" class="active" data-viewport="desktop">Desktop</button>
+                  <button type="button" data-viewport="mobile">Mobile</button>
+                  <button type="button" id="previewFullscreen" aria-pressed="false">Full screen</button>
+                </div>
+              </div>
+
+              <div class="preview-frame-wrap">
+                <div class="preview-device" id="previewDevice">
+                  <div class="preview-chrome">
+                    <span class="preview-dot"></span>
+                    <span class="preview-dot"></span>
+                    <span class="preview-dot"></span>
+                    <span style="margin-left:auto">Template preview channel</span>
+                  </div>
+                  <iframe id="previewFrame" class="preview-frame" src="power-washing-index.html" title="Live template preview" loading="lazy"></iframe>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card span-12 reveal" id="featureDeep" style="transition-delay:.2s">
+            <div class="section-label">Core technical detail</div>
+            <h3 class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Structural proof and interaction architecture in one high-detail feature box.</h3>
+            <p class="copy-muted">This unified feature panel combines your requested proof points so nothing becomes cramped on widescreen layouts, while staying clear on mobile.</p>
+
+            <div class="bar-chart">
+              <div class="bar-row">
+                <span class="bar-label">CSS runtime</span>
+                <div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div>
+                <span class="bar-value">0 CDN compilers</span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Mobile parity</span>
+                <div class="bar-track"><div class="bar-fill" style="--w:94%"></div></div>
+                <span class="bar-value">High</span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">Interaction cues</span>
+                <div class="bar-track"><div class="bar-fill" style="--w:88%"></div></div>
+                <span class="bar-value">Active</span>
+              </div>
+            </div>
+
+            <div class="feature-detail-grid">
+              <article class="feature-detail">
+                <h4>Motion with purpose</h4>
+                <p>Functional micro-interactions, not decorative noise. Buttons report loading, inputs validate in place, preview panes respond to direct control, and scroll motion adds depth without blocking clarity.</p>
+              </article>
+              <article class="feature-detail">
+                <h4>Token system</h4>
+                <p>OKLCH-driven color science for richer contrast and easier theming. Dark and editorial themes are mapped through semantic variables, not brittle utility swaps, keeping the whole page themeable in one attribute change.</p>
+              </article>
+              <article class="feature-detail" style="grid-column: 1 / -1;">
+                <h4>Accessibility layer</h4>
+                <p>Built to react to system contrast and reduced-motion preferences. Higher contrast users get stronger outlines and denser emphasis, while motion-sensitive users receive a static but still balanced version of the scene.</p>
+              </article>
+            </div>
+          </article>
+
+          <article class="card span-12 reveal" style="transition-delay:.28s">
+            <div class="cta-strip">
+              <div>
+                <div class="section-label">Final CTA / next move</div>
+                <h3 class="italic antialiased text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Choose a route: inspect the live work, review terms, or return to the profile shell.</h3>
+                <p class="cta-copy">The upgraded landing surface is now modular, mobile-safe, and ready to scale without leaning on a browser-side CSS compiler.</p>
+              </div>
+
+              <div class="hero-actions">
+                <a class="button button-primary" href="power-washing-index.html" data-loading-nav>
+                  <span class="label" id="finalCtaLabel">Preview agency templates →</span>
+                  <span class="loading"><span class="spinner" aria-hidden="true"></span>Opening route</span>
+                </a>
+                <a class="button button-secondary" href="profile.html">Back to profile</a>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <footer class="footer reveal">
+        <div class="footer-meta">© 2026 stxbandz — static architecture, responsive by default, locally themeable.</div>
+        <div class="footer-meta">Built with HTML, CSS, and vanilla JS only.</div>
+      </footer>
     </div>
   </div>
+
   <script>
     (function () {
-      var items = document.querySelectorAll(".reveal");
-      if (!("IntersectionObserver" in window)) { items.forEach(function (el) { el.classList.add("is-visible"); }); return; }
-      var io = new IntersectionObserver(function (entries) { entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } }); }, { threshold: 0.15 });
-      items.forEach(function (el) { io.observe(el); });
+      var THEME_KEY = "stx_theme_pref";
+      var AUDIENCE_CONFIG = {
+        agency: {
+          badge: "Signal-grade acquisition stack",
+          title: "stxbandz for agencies.",
+          body: "Ship a premium client-facing surface faster, preserve white-label flexibility, and keep your handoff package lightweight enough to move without a framework tax.",
+          note: "Agency mode emphasizes white-label launch speed, case-study proof, and fast service conversion.",
+          metric: "Agency",
+          ctaMetric: "Preview",
+          cta: "Preview agency templates →",
+          primaryHref: "power-washing-index.html"
+        },
+        portfolio: {
+          badge: "Portfolio-ready launch system",
+          title: "stxbandz for portfolios.",
+          body: "Lead with visual credibility, clean motion, and focused conversion paths that keep your work front and center without template bloat.",
+          note: "Portfolio mode leans toward proof, presentation, and a lighter editorial conversion tone.",
+          metric: "Portfolio",
+          ctaMetric: "Showcase",
+          cta: "Preview portfolio templates →",
+          primaryHref: "model-a-landing.html"
+        },
+        startup: {
+          badge: "Launch-grade product surface",
+          title: "stxbandz for startups.",
+          body: "Turn a static pitch into an interactive product story with modular cards, ROI framing, and tighter narrative control from first view to call-to-action.",
+          note: "Startup mode focuses the page on traction, speed, and investor-friendly clarity.",
+          metric: "Startup",
+          ctaMetric: "Launch",
+          cta: "Launch your startup site →",
+          primaryHref: "power-washing-index.html"
+        },
+        personal: {
+          badge: "Personal brand operating surface",
+          title: "stxbandz for personal brands.",
+          body: "Build a high-signal personal hub that feels custom, remains easy to update, and keeps the whole brand presence mobile-clean and ownership-first.",
+          note: "Personal brand mode prioritizes identity, clarity, and one-page conversion without noise.",
+          metric: "Personal",
+          ctaMetric: "Identity",
+          cta: "Build your brand site →",
+          primaryHref: "profile.html"
+        }
+      };
+      var PREVIEW_FILE = "power-washing-index.html";
+
+      function $(id) { return document.getElementById(id); }
+
+      function byQuery(selector) {
+        return Array.prototype.slice.call(document.querySelectorAll(selector));
+      }
+
+      function formatUSD(value) {
+        return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
+      }
+
+      function detectAudience() {
+        var params = new URLSearchParams(location.search);
+        var fromQuery = params.get("audience");
+        if (fromQuery && AUDIENCE_CONFIG[fromQuery]) return fromQuery;
+
+        var ref = (document.referrer || "").toLowerCase();
+        if (ref.indexOf("dribbble") >= 0 || ref.indexOf("behance") >= 0) return "portfolio";
+        if (ref.indexOf("producthunt") >= 0 || ref.indexOf("indiehackers") >= 0) return "startup";
+        if (ref.indexOf("instagram") >= 0 || ref.indexOf("tiktok") >= 0) return "personal";
+        return "agency";
+      }
+
+      function applyAudience(audience) {
+        var config = AUDIENCE_CONFIG[audience] || AUDIENCE_CONFIG.agency;
+        $("heroBadge").textContent = config.badge;
+        $("heroTitle").textContent = config.title;
+        $("heroBody").textContent = config.body;
+        $("heroNote").textContent = config.note;
+        $("audienceMetric").textContent = config.metric;
+        $("ctaMetric").textContent = config.ctaMetric;
+        $("finalCtaLabel").textContent = config.cta;
+
+        var primaryActions = byQuery("a[data-loading-nav]");
+        primaryActions.forEach(function (link, index) {
+          if (index === 0 || index === primaryActions.length - 1) {
+            link.href = config.primaryHref;
+          }
+        });
+
+        byQuery(".radio-chip").forEach(function (chip) {
+          var input = chip.querySelector("input");
+          var active = !!input && input.value === audience;
+          chip.classList.toggle("active", active);
+          if (input) input.checked = active;
+        });
+      }
+
+      function initAudienceSwitch() {
+        var current = detectAudience();
+        applyAudience(current);
+        byQuery(".radio-chip input").forEach(function (input) {
+          input.addEventListener("change", function () {
+            applyAudience(input.value);
+          });
+        });
+      }
+
+      function initTheme() {
+        var toggle = $("themeToggle");
+        var stored = localStorage.getItem(THEME_KEY);
+        var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+        var theme = stored || (prefersLight ? "light" : "dark");
+
+        function apply(themeName) {
+          document.documentElement.setAttribute("data-theme", themeName);
+          toggle.setAttribute("aria-pressed", String(themeName === "light"));
+          toggle.textContent = themeName === "light" ? "Return to dark" : "Editorial light";
+          localStorage.setItem(THEME_KEY, themeName);
+        }
+
+        apply(theme);
+        toggle.addEventListener("click", function () {
+          apply(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
+        });
+      }
+
+      function initReveal() {
+        var items = byQuery(".reveal");
+        if (!("IntersectionObserver" in window)) {
+          items.forEach(function (el) { el.classList.add("is-visible"); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.14, rootMargin: "0px 0px -8% 0px" });
+        items.forEach(function (el) { io.observe(el); });
+      }
+
+      function initKineticHeader() {
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        var ticking = false;
+
+        function update() {
+          ticking = false;
+          var y = Math.max(0, window.scrollY || window.pageYOffset || 0);
+          var ratio = Math.min(y / 500, 1);
+          document.documentElement.style.setProperty("--hero-scale", (1 + ratio * 0.04).toFixed(4));
+          document.documentElement.style.setProperty("--hero-shift", (-ratio * 4).toFixed(2) + "px");
+        }
+
+        window.addEventListener("scroll", function () {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(update);
+        }, { passive: true });
+        update();
+      }
+
+      function initCalculator() {
+        var monthlyRange = $("monthlyRange");
+        var monthsRange = $("monthsRange");
+
+        function render() {
+          var monthly = Number(monthlyRange.value);
+          var months = Number(monthsRange.value);
+          var competitor = monthly * months;
+          var savings = Math.max(0, competitor - 25);
+          $("monthlyValue").textContent = formatUSD(monthly);
+          $("monthsValue").textContent = String(months);
+          $("savingsValue").textContent = formatUSD(savings) + " saved";
+          $("savingsCopy").textContent = "Against a " + formatUSD(monthly) + "/month builder over " + months + " months, stxbandz keeps the spend grounded while preserving full ownership.";
+        }
+
+        monthlyRange.addEventListener("input", render);
+        monthsRange.addEventListener("input", render);
+        render();
+      }
+
+      function initPreview() {
+        var frame = $("previewFrame");
+        var device = $("previewDevice");
+        var fullscreenBtn = $("previewFullscreen");
+        frame.src = PREVIEW_FILE;
+
+        byQuery(".viewport-toggle button").forEach(function (btn) {
+          if (btn.id === "previewFullscreen") return;
+          btn.addEventListener("click", function () {
+            var mode = btn.getAttribute("data-viewport");
+            device.classList.toggle("mobile", mode === "mobile");
+            byQuery(".viewport-toggle button").forEach(function (b) {
+              if (b.id !== "previewFullscreen") b.classList.toggle("active", b === btn);
+            });
+          });
+        });
+
+        function inFullscreen() {
+          return document.fullscreenElement === device;
+        }
+
+        function syncFullscreenUi() {
+          var active = inFullscreen();
+          device.classList.toggle("is-fullscreen", active);
+          if (fullscreenBtn) {
+            fullscreenBtn.classList.toggle("active", active);
+            fullscreenBtn.setAttribute("aria-pressed", String(active));
+            fullscreenBtn.textContent = active ? "Exit full" : "Full screen";
+          }
+        }
+
+        if (fullscreenBtn) {
+          fullscreenBtn.addEventListener("click", async function () {
+            try {
+              if (!inFullscreen()) await device.requestFullscreen();
+              else await document.exitFullscreen();
+            } catch (err) {
+              /* no-op: fullscreen can be blocked by browser policy */
+            }
+            syncFullscreenUi();
+          });
+          document.addEventListener("fullscreenchange", syncFullscreenUi);
+          syncFullscreenUi();
+        }
+      }
+
+      function setButtonLoading(btn, active) {
+        btn.classList.toggle("is-loading", active);
+        if (active) btn.setAttribute("aria-busy", "true");
+        else btn.removeAttribute("aria-busy");
+      }
+
+      function initLoadingLinks() {
+        byQuery("a[data-loading-nav]").forEach(function (link) {
+          link.addEventListener("click", function (e) {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            var href = link.getAttribute("href");
+            if (!href) return;
+            e.preventDefault();
+            setButtonLoading(link, true);
+            window.setTimeout(function () {
+              window.location.href = href;
+            }, 420);
+          });
+        });
+      }
+
+      initTheme();
+      initAudienceSwitch();
+      initReveal();
+      initKineticHeader();
+      initCalculator();
+      initPreview();
+      initLoadingLinks();
     })();
   </script>
 </body>
