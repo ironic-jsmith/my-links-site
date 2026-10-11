@@ -1285,6 +1285,7 @@ const SECTIONS = [
     label: "AI Coding Agent",
     priority: true,
     links: [
+      { icon: "", title: "Max Options Trading", subtitle: "affiliate link", url: "https://www.maxoptionstrading.com/?ref=8MY37A34", affiliate: true, featured: true, disclosure: "affiliate" },
       { icon: "", title: "Kilo AI Agent", subtitle: "referral link", url: "https://share.kilo.ai/mzVGXwE", affiliate: true, featured: true }
     ]
   },
@@ -1410,6 +1411,7 @@ SECTIONS.forEach((section, i) => {
     const a = document.createElement("a");
     a.className = "link-row";
     if (link.featured || section.priority) a.classList.add("link-featured");
+    if (link.disclosure === "affiliate") a.dataset.disclosure = "affiliate";
     a.href = link.url;
     if (!link.url.startsWith("mailto:")) {
       a.target = "_blank";
@@ -1883,6 +1885,9 @@ function trackEvent(eventName, data) {
   analytics.trackEvent(eventName, data);
 }
 
+const AFFILIATE_DISCLOSURE_SESSION_KEY = "affiliate_disclosure_seen";
+const AFFILIATE_DISCLOSURE_MESSAGE = "📢 Affiliate Disclosure: Some links I share are affiliate links, meaning I may earn a commission if you make a purchase through them. I may receive compensation for recommending products or services. All opinions are my own. Please do your own research before making any financial or trading decisions.";
+
 /* Dashboard access (press Shift+D to open) */
 window.addEventListener("keydown", function (e) {
   if (e.shiftKey && (e.key === "D" || e.key === "d")) {
@@ -1921,6 +1926,21 @@ ${clicksByCategory || "No clicks yet"}
 document.addEventListener("click", function (e) {
   const link = e.target.closest("a.link-row");
   if (link) {
+    const needsDisclosure = link.dataset.disclosure === "affiliate";
+    const seenDisclosure = sessionStorage.getItem(AFFILIATE_DISCLOSURE_SESSION_KEY) === "1";
+    if (needsDisclosure && !seenDisclosure) {
+      e.preventDefault();
+      sessionStorage.setItem(AFFILIATE_DISCLOSURE_SESSION_KEY, "1");
+      alert(AFFILIATE_DISCLOSURE_MESSAGE);
+      const href = link.getAttribute("href") || "";
+      if (href && href !== "#") {
+        if (link.target === "_blank") {
+          window.open(href, "_blank", "noopener,noreferrer");
+        } else {
+          window.location.href = href;
+        }
+      }
+    }
     const title = link.querySelector(".link-title")?.textContent || "unknown";
     const section = link.closest(".section")?.querySelector(".chapter-label")?.textContent || "unknown";
     trackClick(section, title);
